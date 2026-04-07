@@ -7,7 +7,7 @@ Architecture notes:
 - All routers are included BEFORE StaticFiles mount (Pitfall 2 prevention).
 - CORS allows local origins only (127.0.0.1 and localhost with any port).
 - StaticFiles mount is guarded: only mounted when frontend/dist/ exists.
-- lifespan calls init_db() placeholder; actual DB setup in Plan 02.
+- lifespan calls init_db() from backend.db.base to create all tables.
 """
 from __future__ import annotations
 
@@ -18,17 +18,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from backend.db.base import init_db
+from backend.api import projects, stakeholders, phases
+
 FRONTEND_DIST = Path(__file__).parent.parent / "frontend" / "dist"
-
-
-async def _init_db() -> None:
-    """Placeholder for DB initialisation — implemented in Plan 02."""
-    pass
 
 
 @asynccontextmanager
 async def lifespan(application: FastAPI):
-    await _init_db()
+    await init_db()
     yield
 
 
@@ -46,6 +44,12 @@ app.add_middleware(
 @app.get("/api/health")
 def health() -> dict:
     return {"status": "ok"}
+
+
+# Routers MUST be included before StaticFiles mount.
+app.include_router(projects.router, prefix="/api")
+app.include_router(stakeholders.router, prefix="/api")
+app.include_router(phases.router, prefix="/api")
 
 
 # StaticFiles MUST be mounted last — after all API routers.
