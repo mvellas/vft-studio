@@ -17,6 +17,7 @@ dependencies = [
     "pydantic-settings",
     "python-dotenv",
     "anthropic>=0.91.0",
+    "sse-starlette>=1.8.0",
     "keyring",
 ]
 
