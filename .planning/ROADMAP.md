@@ -11,12 +11,14 @@
 
 **Requirements:** FOUND-01 a FOUND-14, PHASE-01 a PHASE-05
 
-**Plans:**
-1. **Project Scaffold** — `main.py`, `pyproject.toml`, FastAPI app factory, PyWebView config, `.env.example`, CORS, porta dinâmica
-2. **Database Layer** — SQLite setup, todos os modelos ORM (DATA-MODEL.md completo), Alembic migrations, BaseRepository pattern, Pydantic schemas frozen=True
-3. **Core APIs** — CRUD de projetos + stakeholders; Phase Engine (ProcessManager + 33 StepConfigs); endpoints GET current / POST complete
-4. **Frontend Foundation** — React/Vite/Tailwind setup, AppShell layout (sidebar + content + chat panel), ProjectList/ProjectCard/NewProjectWizard, Zustand stores, API client
-5. **AI Base + SSE Chat** — BaseAgent com invoke()/stream(), retry exponencial; POST /api/chat/message SSE; EventSource frontend; StepGuide + PhaseProgress components
+**Plans:** 5 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Project Scaffold (main.py, FastAPI, PyWebView, Vite/Tailwind)
+- [ ] 01-02-PLAN.md — Database Layer (SQLAlchemy ORM, BaseRepository, Alembic, Pydantic schemas)
+- [ ] 01-03-PLAN.md — Core APIs (Project/Stakeholder CRUD, ProcessManager 33 steps, Phase endpoints)
+- [ ] 01-04-PLAN.md — Frontend Foundation (Types, API client, Zustand stores, AppShell, ProjectList, StepGuide)
+- [ ] 01-05-PLAN.md — AI Base + SSE Chat (BaseAgent, SSE endpoint, frontend streaming)
 
 **Success criteria:**
 - `python main.py` abre janela nativa em <3s
