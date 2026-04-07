@@ -5,7 +5,7 @@
 
 ---
 
-## Phase 1 — Foundation
+## Phase 1: Foundation
 
 **Goal:** `python main.py` abre janela macOS nativa; backend/frontend conectados; banco de dados configurado com todas as tabelas; CRUD básico funcionando; base de agentes IA com SSE streaming.
 
@@ -25,7 +25,7 @@
 
 ---
 
-## Phase 2 — VFT Phase 1: Initial Decision Frame
+## Phase 2: VFT Phase 1 — Initial Decision Frame
 
 **Goal:** Usuário completa integralmente a Fase 1 do processo VFT com suporte do agente FRAME — do mapeamento de stakeholders ao Decision Statement validado.
 
@@ -44,7 +44,7 @@
 
 ---
 
-## Phase 3 — VFT Phase 2: Decision Objectives
+## Phase 3: VFT Phase 2 — Decision Objectives
 
 **Goal:** Usuário elicita valores/objetivos, aplica WITI Test e CoC, e gera Means-Ends Network e hierarquia de objetivos fundamentais com atributos.
 
@@ -63,7 +63,7 @@
 
 ---
 
-## Phase 4 — VFT Phase 3 + Chat Agents
+## Phase 4: VFT Phase 3 + Chat Agents
 
 **Goal:** Usuário define alternativas com suporte do agente NOVA; chat completo com ARIA, todos os especialistas e stakeholders; SCRIBE gera relatório em Markdown.
 
@@ -81,7 +81,7 @@
 
 ---
 
-## Phase 5 — Interview-Driven Flow + Proxy Documental
+## Phase 5: Interview-Driven Flow + Proxy Documental
 
 **Goal:** Sistema de entrevistas estruturadas por máquina de estados (RF-10) e análise de documentos como substituto de entrevistas (RF-13) com ANALYST multimodal.
 
@@ -100,7 +100,7 @@
 
 ---
 
-## Phase 6 — Visualizações, Diagramas e Export
+## Phase 6: Visualizacoes, Diagramas e Export
 
 **Goal:** 7 diagramas automáticos exportáveis como PNG, Graph View força-dirigido com D3.js, export completo Markdown + PDF com diagramas embutidos.
 
@@ -120,7 +120,7 @@
 
 ---
 
-## Phase 7 — Settings, Polish, Tests e Packaging
+## Phase 7: Settings, Polish, Tests e Packaging
 
 **Goal:** Settings com Keychain, auto-save, keyboard shortcuts, onboarding, testes com ≥70% coverage, e packaging como `.app` macOS.
 
