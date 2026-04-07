@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-07T20:00:18.893Z"
+last_updated: "2026-04-07T21:34:38.233Z"
 progress:
   total_phases: 7
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 5
-  completed_plans: 2
+  completed_plans: 5
 ---
 
 # Project State: VFT Studio
@@ -54,6 +54,8 @@ Next: 01-foundation 01-02 (database layer)
 - **01-01:** StaticFiles mount guarded by FRONTEND_DIST.exists() — backend runs without pre-built frontend in dev
 - [Phase 01-02]: All 13 tables use TEXT for UUIDs and timestamps; soft_delete() detects column set at runtime
 - [Phase 01-02]: Alembic env.py overrides URL with Path.home()/VFTStudio/db.sqlite — no per-machine config needed
+- [Phase 01-05]: ChatSession created directly (not via BaseRepository.create) because the model lacks updated_at column
+- [Phase 01-05]: sse-starlette 3.x used for SSE endpoint; anthropic SDK for AsyncAnthropic streaming with text_stream async generator
 
 ## Performance Metrics
 
@@ -61,6 +63,7 @@ Next: 01-foundation 01-02 (database layer)
 |-------|------|----------|-------|-------|
 | 01-foundation | 01 | 5min | 2 | 12 |
 | Phase 01-foundation P02 | 6min | 2 tasks | 11 files |
+| Phase 01-foundation P05 | 8min | 2 tasks | 8 files |
 
 ## Key Context
 

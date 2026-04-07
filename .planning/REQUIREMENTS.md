@@ -19,8 +19,8 @@
 - [ ] **FOUND-10**: ProjectList screen com ProjectCard e NewProjectWizard (3 passos)
 - [ ] **FOUND-11**: Zustand stores (projectStore, chatStore, uiStore) com immer middleware
 - [ ] **FOUND-12**: API client HTTP com base URL do servidor local e error interceptors
-- [ ] **FOUND-13**: BaseAgent com invoke() + stream() (AsyncGenerator SSE); retry 3x exponential
-- [ ] **FOUND-14**: POST /api/chat/message retorna SSE stream; EventSource no frontend
+- [x] **FOUND-13**: BaseAgent com invoke() + stream() (AsyncGenerator SSE); retry 3x exponential
+- [x] **FOUND-14**: POST /api/chat/message retorna SSE stream; EventSource no frontend
 
 ### VFT Phase Engine
 

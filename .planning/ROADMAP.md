@@ -11,14 +11,14 @@
 
 **Requirements:** FOUND-01 a FOUND-14, PHASE-01 a PHASE-05
 
-**Plans:** 2/5 plans executed
+**Plans:** 5/5 plans complete
 
 Plans:
 - [x] 01-01-PLAN.md — Project Scaffold (main.py, FastAPI, PyWebView, Vite/Tailwind)
 - [x] 01-02-PLAN.md — Database Layer (SQLAlchemy ORM, BaseRepository, Alembic, Pydantic schemas)
-- [ ] 01-03-PLAN.md — Core APIs (Project/Stakeholder CRUD, ProcessManager 33 steps, Phase endpoints)
-- [ ] 01-04-PLAN.md — Frontend Foundation (Types, API client, Zustand stores, AppShell, ProjectList, StepGuide)
-- [ ] 01-05-PLAN.md — AI Base + SSE Chat (BaseAgent, SSE endpoint, frontend streaming)
+- [x] 01-03-PLAN.md — Core APIs (Project/Stakeholder CRUD, ProcessManager 33 steps, Phase endpoints)
+- [x] 01-04-PLAN.md — Frontend Foundation (Types, API client, Zustand stores, AppShell, ProjectList, StepGuide)
+- [x] 01-05-PLAN.md — AI Base + SSE Chat (BaseAgent, SSE endpoint, frontend streaming)
 
 **Success criteria:**
 - `python main.py` abre janela nativa em <3s
