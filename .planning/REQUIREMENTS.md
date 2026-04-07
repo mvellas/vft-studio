@@ -9,10 +9,10 @@
 
 - [x] **FOUND-01**: `python main.py` inicia FastAPI na porta dinâmica e abre janela PyWebView nativa
 - [x] **FOUND-02**: Frontend React/Vite serve em dev mode; build produz `dist/` embutido no app
-- [ ] **FOUND-03**: SQLite criado em `~/VFTStudio/db.sqlite` com todas as tabelas no primeiro boot
-- [ ] **FOUND-04**: Alembic migrations versionadas; schema aplicado automaticamente
-- [ ] **FOUND-05**: BaseRepository genérico com get/list/create/update/soft_delete
-- [ ] **FOUND-06**: Pydantic schemas frozen=True para todas as entidades
+- [x] **FOUND-03**: SQLite criado em `~/VFTStudio/db.sqlite` com todas as tabelas no primeiro boot
+- [x] **FOUND-04**: Alembic migrations versionadas; schema aplicado automaticamente
+- [x] **FOUND-05**: BaseRepository genérico com get/list/create/update/soft_delete
+- [x] **FOUND-06**: Pydantic schemas frozen=True para todas as entidades
 - [ ] **FOUND-07**: CRUD completo de projetos (create/list/open/archive/duplicate/import/export)
 - [ ] **FOUND-08**: CRUD completo de stakeholders com campo `elicitation_mode`
 - [ ] **FOUND-09**: AppShell layout: sidebar + área de conteúdo + painel de chat lateral

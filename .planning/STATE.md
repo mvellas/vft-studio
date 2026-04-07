@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in_progress
-last_updated: "2026-04-07T19:53:12Z"
+status: unknown
+last_updated: "2026-04-07T20:00:18.893Z"
 progress:
   total_phases: 7
   completed_phases: 0
   total_plans: 5
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State: VFT Studio
@@ -52,12 +52,15 @@ Next: 01-foundation 01-02 (database layer)
 - **01-01:** Copied fda-jam-sim PyWebView+uvicorn threading pattern verbatim (loop=none prevents signal-handler crash in non-main thread)
 - **01-01:** Tailwind v4 via @tailwindcss/vite — no postcss.config, no tailwind.config (v4 Vite-native)
 - **01-01:** StaticFiles mount guarded by FRONTEND_DIST.exists() — backend runs without pre-built frontend in dev
+- [Phase 01-02]: All 13 tables use TEXT for UUIDs and timestamps; soft_delete() detects column set at runtime
+- [Phase 01-02]: Alembic env.py overrides URL with Path.home()/VFTStudio/db.sqlite — no per-machine config needed
 
 ## Performance Metrics
 
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
 | 01-foundation | 01 | 5min | 2 | 12 |
+| Phase 01-foundation P02 | 6min | 2 tasks | 11 files |
 
 ## Key Context
 
