@@ -7,8 +7,8 @@
 
 ### Foundation
 
-- [ ] **FOUND-01**: `python main.py` inicia FastAPI na porta dinâmica e abre janela PyWebView nativa
-- [ ] **FOUND-02**: Frontend React/Vite serve em dev mode; build produz `dist/` embutido no app
+- [x] **FOUND-01**: `python main.py` inicia FastAPI na porta dinâmica e abre janela PyWebView nativa
+- [x] **FOUND-02**: Frontend React/Vite serve em dev mode; build produz `dist/` embutido no app
 - [ ] **FOUND-03**: SQLite criado em `~/VFTStudio/db.sqlite` com todas as tabelas no primeiro boot
 - [ ] **FOUND-04**: Alembic migrations versionadas; schema aplicado automaticamente
 - [ ] **FOUND-05**: BaseRepository genérico com get/list/create/update/soft_delete

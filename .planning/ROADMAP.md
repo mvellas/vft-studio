@@ -11,10 +11,10 @@
 
 **Requirements:** FOUND-01 a FOUND-14, PHASE-01 a PHASE-05
 
-**Plans:** 5 plans
+**Plans:** 1/5 plans executed
 
 Plans:
-- [ ] 01-01-PLAN.md — Project Scaffold (main.py, FastAPI, PyWebView, Vite/Tailwind)
+- [x] 01-01-PLAN.md — Project Scaffold (main.py, FastAPI, PyWebView, Vite/Tailwind)
 - [ ] 01-02-PLAN.md — Database Layer (SQLAlchemy ORM, BaseRepository, Alembic, Pydantic schemas)
 - [ ] 01-03-PLAN.md — Core APIs (Project/Stakeholder CRUD, ProcessManager 33 steps, Phase endpoints)
 - [ ] 01-04-PLAN.md — Frontend Foundation (Types, API client, Zustand stores, AppShell, ProjectList, StepGuide)
