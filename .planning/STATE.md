@@ -3,24 +3,24 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-08T01:01:02.725Z"
+last_updated: "2026-04-08T01:14:11.117Z"
 progress:
   total_phases: 7
   completed_phases: 1
   total_plans: 10
-  completed_plans: 5
+  completed_plans: 8
 ---
 
 # Project State: VFT Studio
 
-**Last updated:** 2026-04-07 after 01-01 execution
+**Last updated:** 2026-04-08 after 02-03 execution
 
 ## Project Reference
 
 See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** O usuário completa o processo VFT completo (33 passos) com suporte de IA em cada etapa, gerando um relatório com diagramas exportáveis.
-**Current focus:** Phase 02 — vft-phase-1-initial-decision-frame (Plan 02 complete)
+**Current focus:** Phase 02 — vft-phase-1-initial-decision-frame (Plan 03 complete)
 
 ## Milestone
 
@@ -44,8 +44,8 @@ See: .planning/PROJECT.md (updated 2026-04-07)
 
 ## Stopped At
 
-Completed 02-vft-phase-1-initial-decision-frame-02-02-PLAN.md (2026-04-07T01:22:00Z)
-Next: 02-vft-phase-1-initial-decision-frame 02-03 (DecisionFrameForm frontend)
+Completed 02-vft-phase-1-initial-decision-frame-02-03-PLAN.md (2026-04-08T01:13:10Z)
+Next: 02-vft-phase-1-initial-decision-frame 02-04 (next plan in phase 02)
 
 ## Decisions
 
@@ -62,6 +62,8 @@ Next: 02-vft-phase-1-initial-decision-frame 02-03 (DecisionFrameForm frontend)
 - [Phase 02-02]: update_stakeholder_config called after every mutation — always-consistent project.stakeholder_config, no drift
 - [Phase 02-02]: Variant badge computed client-side from stakeholder array — instant feedback, no extra API call
 - [Phase 02-02]: is_decision_maker auto-set to 1 when role=decision_authority — prevents inconsistent DM state
+- [Phase 02-03]: generateSuggestion wraps SSE streamChatMessage in Promise — consistent with chat architecture
+- [Phase 02-03]: PUT decision-frame filters non-None fields server-side for safe partial IDF updates
 
 ## Performance Metrics
 
@@ -72,6 +74,7 @@ Next: 02-vft-phase-1-initial-decision-frame 02-03 (DecisionFrameForm frontend)
 | Phase 01-foundation P05 | 8min | 2 tasks | 8 files |
 | Phase 02 P01 | 8min | 2 tasks | 5 files |
 | Phase 02 P02 | 12min | 2 tasks | 4 files |
+| Phase 02 P03 | 15min | 2 tasks | 5 files |
 
 ## Key Context
 

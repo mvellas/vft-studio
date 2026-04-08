@@ -33,10 +33,10 @@
 ### Phase 1 — Initial Decision Frame
 
 - [ ] **P1-01**: Passo 1.1 — StakeholderMapper: adicionar stakeholders com tipo/perfil/interesses; validar ≥1 Decision Authority
-- [ ] **P1-02**: Passos 1.2–1.5 — DecisionFrameForm: Purpose/Perspective/Scope; adapta à variante (single/multi DM)
+- [x] **P1-02**: Passos 1.2–1.5 — DecisionFrameForm: Purpose/Perspective/Scope; adapta à variante (single/multi DM)
 - [ ] **P1-03**: Passo 1.6 — DocumentIDF: resumo formatado gerado e salvo com timestamp
 - [ ] **P1-04**: Passo 1.7 — DecisionStatement: campo + "Gerar com IA" (FRAME) + validação de estrutura
-- [ ] **P1-05**: FRAME agent (Phase 1 Specialist): IDF validation, DS generation, stakeholder suggestions
+- [x] **P1-05**: FRAME agent (Phase 1 Specialist): IDF validation, DS generation, stakeholder suggestions
 - [ ] **P1-06**: Workshop Mode (Apêndice B): wizard dos 7 passos para múltiplos DMs
 - [ ] **P1-07**: Phase 1 completion gate: só avança para Fase 2 se IDF completo + DS válido
 
