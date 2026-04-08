@@ -33,12 +33,14 @@ Plans:
 
 **Requirements:** P1-01 a P1-07
 
-**Plans:**
-1. **FRAME Agent** — `phase1_specialist.py` + prompt `phase1_specialist.md`; context injection (IDF draft, stakeholders list); IDF validation, DS generation, stakeholder suggestions
-2. **StakeholderMapper** — Passo 1.1: cadastro com tipo/perfil/interesses/elicitation_mode; validação ≥1 Decision Authority; variante auto-selecionada (1.2/1.3/1.4/1.5)
-3. **DecisionFrameForm** — Passos 1.2–1.5: campos Purpose/Perspective/Scope; "Gerar sugestão com IA" (FRAME); tooltips com exemplos; auto-save debounce 2s
-4. **Decision Statement + IDF Docs** — Passo 1.6 (resumo formatado + timestamp); Passo 1.7 (campo DS + geração IA + validação estrutura); Workshop Mode Apêndice B
-5. **Phase 1 Gate** — Completion gate com checklist visual; mensagem ARIA ao completar; transição para Fase 2
+**Plans:** 5 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — FRAME Agent (Phase1SpecialistAgent + system prompt + /frame endpoints + chat integration)
+- [ ] 02-02-PLAN.md — StakeholderMapper (Step 1.1 UI + compute_stakeholder_config + frontend API client)
+- [ ] 02-03-PLAN.md — DecisionFrameForm (Steps 1.2/1.3/1.5 IDF form + GET/PUT /decision-frame endpoints + auto-save debounce)
+- [ ] 02-04-PLAN.md — DocumentIDF + WorkshopMode (Step 1.6 read-only review + Step 1.4 7-step facilitation wizard)
+- [ ] 02-05-PLAN.md — DecisionStatement + Phase 1 Gate (Step 1.7 DS input + AI gen + self-certification + completion gate)
 
 **Success criteria:**
 - Usuário cria stakeholders, preenche IDF, gera Decision Statement com IA, e avança para Fase 2
