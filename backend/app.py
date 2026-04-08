@@ -19,7 +19,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from backend.db.base import init_db
-from backend.api import projects, stakeholders, phases, chat
+from backend.api import projects, stakeholders, phases, chat, frame
 
 FRONTEND_DIST = Path(__file__).parent.parent / "frontend" / "dist"
 
@@ -51,6 +51,7 @@ app.include_router(projects.router, prefix="/api")
 app.include_router(stakeholders.router, prefix="/api")
 app.include_router(phases.router, prefix="/api")
 app.include_router(chat.router, prefix="/api")
+app.include_router(frame.router, prefix="/api")
 
 
 # StaticFiles MUST be mounted last — after all API routers.

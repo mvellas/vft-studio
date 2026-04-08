@@ -20,6 +20,7 @@ from backend.db.models import ChatMessage, ChatSession
 from backend.db.repository import BaseRepository
 from backend.schemas.chat import ChatMessageRequest
 from backend.agents.base_agent import BaseAgent
+from backend.agents.phase1_specialist import Phase1SpecialistAgent
 
 router = APIRouter(tags=["chat"])
 
@@ -33,6 +34,11 @@ AGENT_CONFIGS: dict[str, dict] = {
             "Respond in Portuguese (PT-BR)."
         ),
     },
+    "phase1_specialist": {
+        "model": "claude-sonnet-4-6",
+        "name": "FRAME",
+        "system": "",  # dynamically loaded from DB via Phase1SpecialistAgent.from_project_id
+    },
 }
 
 
@@ -42,7 +48,17 @@ async def chat_message(
     session: AsyncSession = Depends(get_session),
 ) -> EventSourceResponse:
     config = AGENT_CONFIGS.get(body.agent_type, AGENT_CONFIGS["facilitator"])
-    agent = BaseAgent(model=config["model"], system=config["system"])
+
+    # Phase 1 specialist uses project-context-aware agent loaded from DB
+    if body.agent_type == "phase1_specialist":
+        try:
+            agent = await Phase1SpecialistAgent.from_project_id(
+                body.project_id, session, model=config["model"]
+            )
+        except ValueError:
+            agent = BaseAgent(model=config["model"], system=config["system"])
+    else:
+        agent = BaseAgent(model=config["model"], system=config["system"])
 
     msg_repo: BaseRepository[ChatMessage] = BaseRepository(ChatMessage, session)
     session_repo: BaseRepository[ChatSession] = BaseRepository(ChatSession, session)
