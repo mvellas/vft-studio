@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-07T21:41:59.875Z"
+last_updated: "2026-04-08T01:01:02.725Z"
 progress:
   total_phases: 7
   completed_phases: 1
-  total_plans: 5
+  total_plans: 10
   completed_plans: 5
 ---
 
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** O usuário completa o processo VFT completo (33 passos) com suporte de IA em cada etapa, gerando um relatório com diagramas exportáveis.
-**Current focus:** Phase 01 — foundation
+**Current focus:** Phase 02 — vft-phase-1-initial-decision-frame (Plan 01 complete)
 
 ## Milestone
 
@@ -35,7 +35,7 @@ See: .planning/PROJECT.md (updated 2026-04-07)
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 1 | Foundation | ◑ In Progress | 1/5 |
-| 2 | VFT Phase 1: Initial Decision Frame | ○ Pending | 0/5 |
+| 2 | VFT Phase 1: Initial Decision Frame | ◑ In Progress | 1/5 |
 | 3 | VFT Phase 2: Decision Objectives | ○ Pending | 0/5 |
 | 4 | VFT Phase 3 + Chat Agents | ○ Pending | 0/5 |
 | 5 | Interview-Driven Flow + Proxy Documental | ○ Pending | 0/5 |
@@ -44,8 +44,8 @@ See: .planning/PROJECT.md (updated 2026-04-07)
 
 ## Stopped At
 
-Completed 01-foundation-01-01-PLAN.md (2026-04-07T19:53:12Z)
-Next: 01-foundation 01-02 (database layer)
+Completed 02-vft-phase-1-initial-decision-frame-02-01-PLAN.md (2026-04-08T01:03:00Z)
+Next: 02-vft-phase-1-initial-decision-frame 02-02 (DecisionFrameForm frontend)
 
 ## Decisions
 
@@ -56,6 +56,9 @@ Next: 01-foundation 01-02 (database layer)
 - [Phase 01-02]: Alembic env.py overrides URL with Path.home()/VFTStudio/db.sqlite — no per-machine config needed
 - [Phase 01-05]: ChatSession created directly (not via BaseRepository.create) because the model lacks updated_at column
 - [Phase 01-05]: sse-starlette 3.x used for SSE endpoint; anthropic SDK for AsyncAnthropic streaming with text_stream async generator
+- [Phase 02-01]: FRAME prompt stored in .md file (backend/prompts/) not inline — enables iterative prompt engineering without code deploys
+- [Phase 02-01]: from_project_id classmethod makes agents stateless — context assembled fresh from DB on each request
+- [Phase 02-01]: 500-char per-field truncation in from_project_id prevents token overflow for verbose project descriptions
 
 ## Performance Metrics
 
@@ -64,6 +67,7 @@ Next: 01-foundation 01-02 (database layer)
 | 01-foundation | 01 | 5min | 2 | 12 |
 | Phase 01-foundation P02 | 6min | 2 tasks | 11 files |
 | Phase 01-foundation P05 | 8min | 2 tasks | 8 files |
+| Phase 02 P01 | 8min | 2 tasks | 5 files |
 
 ## Key Context
 

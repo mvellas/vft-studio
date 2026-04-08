@@ -33,10 +33,10 @@ Plans:
 
 **Requirements:** P1-01 a P1-07
 
-**Plans:** 5 plans
+**Plans:** 1/5 plans executed
 
 Plans:
-- [ ] 02-01-PLAN.md — FRAME Agent (Phase1SpecialistAgent + system prompt + /frame endpoints + chat integration)
+- [x] 02-01-PLAN.md — FRAME Agent (Phase1SpecialistAgent + system prompt + /frame endpoints + chat integration)
 - [ ] 02-02-PLAN.md — StakeholderMapper (Step 1.1 UI + compute_stakeholder_config + frontend API client)
 - [ ] 02-03-PLAN.md — DecisionFrameForm (Steps 1.2/1.3/1.5 IDF form + GET/PUT /decision-frame endpoints + auto-save debounce)
 - [ ] 02-04-PLAN.md — DocumentIDF + WorkshopMode (Step 1.6 read-only review + Step 1.4 7-step facilitation wizard)
