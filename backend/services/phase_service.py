@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.db.models import Project, StepCompletion
 from backend.db.repository import BaseRepository
 from backend.engine.process_manager import ProcessManager
+from backend.services.phase1_service import check_phase1_gate
 from backend.schemas.phase import (
     CurrentStepResponse,
     StepCompleteResponse,
@@ -116,28 +117,39 @@ class PhaseService:
                 detail=f"Step {step_id!r} does not exist.",
             )
 
-        # Check if already completed (idempotent)
+        # IDF/DS steps (1.2–1.7) allow re-completion; others are idempotent (409)
+        _REVISABLE_STEPS = {"1.2", "1.3", "1.4", "1.5", "1.6", "1.7"}
+
         existing_result = await self._session.execute(
             select(StepCompletion).where(
                 StepCompletion.project_id == project_id,
                 StepCompletion.step_id == step_id,
             )
         )
-        if existing_result.scalar_one_or_none() is not None:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail=f"Step {step_id!r} is already completed.",
-            )
+        existing_sc = existing_result.scalar_one_or_none()
 
-        # Persist step completion
-        sc_repo = BaseRepository(StepCompletion, self._session)
-        await sc_repo.create(
-            project_id=project_id,
-            step_id=step_id,
-            completed_at=__import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
-            data_json=json.dumps(data),
-            notes=notes,
-        )
+        if existing_sc is not None:
+            if step_id in _REVISABLE_STEPS:
+                # Update existing record in-place (ORM tracks the mutation)
+                import datetime as _dt
+                existing_sc.data_json = json.dumps(data)
+                existing_sc.notes = notes
+                existing_sc.completed_at = _dt.datetime.now(_dt.timezone.utc).isoformat()
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail=f"Step {step_id!r} is already completed.",
+                )
+        else:
+            # Persist new step completion
+            sc_repo = BaseRepository(StepCompletion, self._session)
+            await sc_repo.create(
+                project_id=project_id,
+                step_id=step_id,
+                completed_at=__import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+                data_json=json.dumps(data),
+                notes=notes,
+            )
 
         # Determine next step
         next_config = _process_manager.get_next_step(
@@ -153,6 +165,12 @@ class PhaseService:
         else:
             # All steps completed — update phase_status
             await project_repo.update(project_id, phase_status=4)
+
+        # Phase 1 gate: when completing step 1.7, verify all Phase 1 criteria
+        if step_id == "1.7":
+            gate_passed = await check_phase1_gate(project_id, self._session)
+            if gate_passed:
+                await project_repo.update(project_id, phase1_completed=1)
 
         await self._session.commit()
 
