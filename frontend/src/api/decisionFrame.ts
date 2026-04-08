@@ -21,6 +21,13 @@ export const decisionFrameApi = {
   save: (projectId: string, data: IDFUpdate): Promise<unknown> =>
     apiClient.put(`/api/projects/${projectId}/decision-frame`, data).then(r => r.data),
 
+  document: (projectId: string): Promise<{ ok: boolean; idf_documented_at: string }> =>
+    apiClient
+      .post<{ ok: boolean; idf_documented_at: string }>(
+        `/api/projects/${projectId}/decision-frame/document`,
+      )
+      .then(r => r.data),
+
   /**
    * Generate an IDF field suggestion via the FRAME agent (phase1_specialist).
    * Uses the SSE chat endpoint and accumulates the full streamed response into a string.

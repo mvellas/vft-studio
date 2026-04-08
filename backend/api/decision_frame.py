@@ -1,6 +1,8 @@
 """FastAPI router for Decision Frame (IDF) GET/PUT under a project."""
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -48,3 +50,36 @@ async def update_decision_frame(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found.")
     await session.commit()
     return {"ok": True}
+
+
+@router.post("/document", response_model=dict)
+async def document_decision_frame(
+    project_id: str,
+    session: AsyncSession = Depends(get_session),
+) -> dict:
+    """Stamp idf_documented_at on the project, confirming the IDF is complete."""
+    repo = BaseRepository(Project, session)
+    project = await repo.get(project_id)
+    if project is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found.")
+
+    missing = [
+        field
+        for field in ("idf_purpose", "idf_perspective", "idf_scope")
+        if not getattr(project, field, "").strip()
+    ]
+    if missing:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=(
+                "IDF incompleto: todos os campos (purpose, perspective, scope) "
+                "devem estar preenchidos."
+            ),
+        )
+
+    timestamp = datetime.now(timezone.utc).isoformat()
+    updated = await repo.update(project_id, idf_documented_at=timestamp)
+    if updated is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found.")
+    await session.commit()
+    return {"ok": True, "idf_documented_at": timestamp}
