@@ -9,6 +9,7 @@ from backend.db.base import get_session
 from backend.db.models import Project, Stakeholder
 from backend.db.repository import BaseRepository
 from backend.schemas.stakeholder import StakeholderCreate, StakeholderResponse, StakeholderUpdate
+from backend.services.phase1_service import update_stakeholder_config
 
 router = APIRouter(
     prefix="/projects/{project_id}/stakeholders",
@@ -60,6 +61,8 @@ async def create_stakeholder(
         elicitation_mode=body.elicitation_mode,
     )
     await session.commit()
+    await update_stakeholder_config(project_id, session)
+    await session.commit()
     await session.refresh(stakeholder)
     return StakeholderResponse.model_validate(stakeholder)
 
@@ -84,6 +87,8 @@ async def update_stakeholder(
     if updated is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stakeholder not found.")
     await session.commit()
+    await update_stakeholder_config(project_id, session)
+    await session.commit()
     return StakeholderResponse.model_validate(updated)
 
 
@@ -100,4 +105,6 @@ async def delete_stakeholder(
     if existing is None or existing.project_id != project_id:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stakeholder not found.")
     await session.delete(existing)
+    await session.commit()
+    await update_stakeholder_config(project_id, session)
     await session.commit()
