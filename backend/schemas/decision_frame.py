@@ -9,6 +9,8 @@ class IDFUpdate(BaseModel):
     idf_purpose: str | None = None
     idf_perspective: str | None = None
     idf_scope: str | None = None
+    decision_statement: str | None = None
+    decision_statement_validated: int | None = None
 
 
 class IDFResponse(BaseModel):
@@ -18,3 +20,5 @@ class IDFResponse(BaseModel):
     idf_perspective: str
     idf_scope: str
     idf_documented_at: str | None
+    decision_statement: str
+    decision_statement_validated: int

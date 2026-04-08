@@ -31,6 +31,8 @@ async def get_decision_frame(
         idf_perspective=project.idf_perspective,
         idf_scope=project.idf_scope,
         idf_documented_at=project.idf_documented_at,
+        decision_statement=project.decision_statement,
+        decision_statement_validated=project.decision_statement_validated,
     )
 
 

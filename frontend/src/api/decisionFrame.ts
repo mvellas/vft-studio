@@ -6,6 +6,8 @@ export interface IDFData {
   idf_perspective: string
   idf_scope: string
   idf_documented_at: string | null
+  decision_statement: string
+  decision_statement_validated: number
 }
 
 export interface IDFUpdate {
@@ -20,6 +22,19 @@ export const decisionFrameApi = {
 
   save: (projectId: string, data: IDFUpdate): Promise<unknown> =>
     apiClient.put(`/api/projects/${projectId}/decision-frame`, data).then(r => r.data),
+
+  generateDS: (projectId: string, hint: string = ''): Promise<{ decision_statement: string }> =>
+    apiClient
+      .post<{ decision_statement: string }>(`/api/projects/${projectId}/frame/generate-ds`, { hint })
+      .then(r => r.data),
+
+  saveDS: (projectId: string, decision_statement: string, validated: boolean): Promise<unknown> =>
+    apiClient
+      .put(`/api/projects/${projectId}/decision-frame`, {
+        decision_statement,
+        decision_statement_validated: validated ? 1 : 0,
+      } as IDFUpdate)
+      .then(r => r.data),
 
   document: (projectId: string): Promise<{ ok: boolean; idf_documented_at: string }> =>
     apiClient
