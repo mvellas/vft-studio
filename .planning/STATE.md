@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** O usuário completa o processo VFT completo (33 passos) com suporte de IA em cada etapa, gerando um relatório com diagramas exportáveis.
-**Current focus:** Phase 02 — vft-phase-1-initial-decision-frame (Plan 01 complete)
+**Current focus:** Phase 02 — vft-phase-1-initial-decision-frame (Plan 02 complete)
 
 ## Milestone
 
@@ -44,8 +44,8 @@ See: .planning/PROJECT.md (updated 2026-04-07)
 
 ## Stopped At
 
-Completed 02-vft-phase-1-initial-decision-frame-02-01-PLAN.md (2026-04-08T01:03:00Z)
-Next: 02-vft-phase-1-initial-decision-frame 02-02 (DecisionFrameForm frontend)
+Completed 02-vft-phase-1-initial-decision-frame-02-02-PLAN.md (2026-04-07T01:22:00Z)
+Next: 02-vft-phase-1-initial-decision-frame 02-03 (DecisionFrameForm frontend)
 
 ## Decisions
 
@@ -59,6 +59,9 @@ Next: 02-vft-phase-1-initial-decision-frame 02-02 (DecisionFrameForm frontend)
 - [Phase 02-01]: FRAME prompt stored in .md file (backend/prompts/) not inline — enables iterative prompt engineering without code deploys
 - [Phase 02-01]: from_project_id classmethod makes agents stateless — context assembled fresh from DB on each request
 - [Phase 02-01]: 500-char per-field truncation in from_project_id prevents token overflow for verbose project descriptions
+- [Phase 02-02]: update_stakeholder_config called after every mutation — always-consistent project.stakeholder_config, no drift
+- [Phase 02-02]: Variant badge computed client-side from stakeholder array — instant feedback, no extra API call
+- [Phase 02-02]: is_decision_maker auto-set to 1 when role=decision_authority — prevents inconsistent DM state
 
 ## Performance Metrics
 
@@ -68,6 +71,7 @@ Next: 02-vft-phase-1-initial-decision-frame 02-02 (DecisionFrameForm frontend)
 | Phase 01-foundation P02 | 6min | 2 tasks | 11 files |
 | Phase 01-foundation P05 | 8min | 2 tasks | 8 files |
 | Phase 02 P01 | 8min | 2 tasks | 5 files |
+| Phase 02 P02 | 12min | 2 tasks | 4 files |
 
 ## Key Context
 
