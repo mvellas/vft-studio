@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-08T01:18:59.203Z"
+last_updated: "2026-04-08T01:24:01.035Z"
 progress:
   total_phases: 7
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State: VFT Studio
@@ -66,6 +66,7 @@ Next: 02-vft-phase-1-initial-decision-frame 02-05 (next plan in phase 02)
 - [Phase 02-03]: PUT decision-frame filters non-None fields server-side for safe partial IDF updates
 - [Phase Phase 02-04]: DocumentIDF validates IDF completeness client-side (button disabled) and server-side (422) — defense in depth
 - [Phase Phase 02-04]: WorkshopMode Proxima button requires checkbox completion for explicit facilitator acknowledgment, not just textarea content
+- [Phase 02-05]: Re-completion for IDF steps 1.2-1.7 updates existing StepCompletion record in-place; Phase 1 gate sets phase1_completed=1 without blocking step advancement to 2.1
 
 ## Performance Metrics
 
@@ -78,6 +79,7 @@ Next: 02-vft-phase-1-initial-decision-frame 02-05 (next plan in phase 02)
 | Phase 02 P02 | 12min | 2 tasks | 4 files |
 | Phase 02 P03 | 15min | 2 tasks | 5 files |
 | Phase 02-vft-phase-1-initial-decision-frame P04 | 8min | 2 tasks | 4 files |
+| Phase 02-vft-phase-1-initial-decision-frame P05 | 8min | 2 tasks | 6 files |
 
 ## Key Context
 
