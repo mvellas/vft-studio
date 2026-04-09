@@ -8,12 +8,18 @@ export interface IDFData {
   idf_documented_at: string | null
   decision_statement: string
   decision_statement_validated: number
+  qualitative_modeling_tech: string
+  org_documents_text: string
 }
 
 export interface IDFUpdate {
   idf_purpose?: string
   idf_perspective?: string
   idf_scope?: string
+  decision_statement?: string
+  decision_statement_validated?: number
+  qualitative_modeling_tech?: string
+  org_documents_text?: string
 }
 
 export const decisionFrameApi = {

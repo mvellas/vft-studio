@@ -11,6 +11,8 @@ class IDFUpdate(BaseModel):
     idf_scope: str | None = None
     decision_statement: str | None = None
     decision_statement_validated: int | None = None
+    qualitative_modeling_tech: str | None = None
+    org_documents_text: str | None = None
 
 
 class IDFResponse(BaseModel):
@@ -22,3 +24,5 @@ class IDFResponse(BaseModel):
     idf_documented_at: str | None
     decision_statement: str
     decision_statement_validated: int
+    qualitative_modeling_tech: str
+    org_documents_text: str

@@ -33,6 +33,8 @@ async def get_decision_frame(
         idf_documented_at=project.idf_documented_at,
         decision_statement=project.decision_statement,
         decision_statement_validated=project.decision_statement_validated,
+        qualitative_modeling_tech=project.qualitative_modeling_tech,
+        org_documents_text=project.org_documents_text,
     )
 
 
