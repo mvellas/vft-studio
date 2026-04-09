@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-09T17:47:18.473Z"
+last_updated: "2026-04-09T17:57:38.818Z"
 progress:
   total_phases: 7
   completed_phases: 2
   total_plans: 15
-  completed_plans: 11
+  completed_plans: 12
 ---
 
 # Project State: VFT Studio
@@ -70,6 +70,8 @@ Next: 03-vft-phase-2-decision-objectives 03-02 (next plan in phase 03)
 - [Phase 03-01]: Phase2SpecialistAgent uses claude-opus-4-6 default (socrático, rigoroso); StakeholderSimulationAgent uses claude-sonnet-4-6 (cheaper for conversational)
 - [Phase 03-01]: DFS cycle detection in _has_cycle prevents circular objective causal graphs before DB insert
 - [Phase 03-01]: axiom/suggest-category returns suggestion only (no DB write) — user decides the final type
+- [Phase 03-02]: IDFUpdate/IDFResponse extended with qualitative_modeling_tech + org_documents_text — fields existed in DB, schemas just needed exposing
+- [Phase 03-02]: StakeholderConsolidationPanel exclusion toggle is local state only — no DB delete on toggle, only hides from consolidation view
 
 ## Performance Metrics
 
@@ -84,6 +86,7 @@ Next: 03-vft-phase-2-decision-objectives 03-02 (next plan in phase 03)
 | Phase 02-vft-phase-1-initial-decision-frame P04 | 8min | 2 tasks | 4 files |
 | Phase 02-vft-phase-1-initial-decision-frame P05 | 8min | 2 tasks | 6 files |
 | Phase 03 P01 | 36min | 2 tasks | 14 files |
+| Phase 03-vft-phase-2-decision-objectives P02 | 4 | 3 tasks | 9 files |
 
 ## Key Context
 

@@ -44,11 +44,11 @@
 
 - [x] **P2-01**: CRUD completo de objetivos com WITI fields e causal_links
 - [x] **P2-02**: AXIOM agent (Phase 2 Specialist): elicitação, WITI, CoC, hierarquia, atributos
-- [ ] **P2-03**: Passo 2.1 — Seleção de técnica qualitativa (Platinum/Gold/Silver/Combined)
-- [ ] **P2-04**: Passos 2.2–2.3 — Upload/paste de docs organizacionais; IA extrai valores (Gold/Combined)
-- [ ] **P2-05**: Passos 2.5–2.7 — WishList + VFT Devices (10 dispositivos) para stakeholder único
-- [ ] **P2-06**: Passos 2.8–2.12 — VFB para múltiplos stakeholders: individuais + consolidação + workshop
-- [ ] **P2-07**: Passo 2.13 — Categorização de objetivos com AXIOM sugerindo categorias
+- [x] **P2-03**: Passo 2.1 — Seleção de técnica qualitativa (Platinum/Gold/Silver/Combined)
+- [x] **P2-04**: Passos 2.2–2.3 — Upload/paste de docs organizacionais; IA extrai valores (Gold/Combined)
+- [x] **P2-05**: Passos 2.5–2.7 — WishList + VFT Devices (10 dispositivos) para stakeholder único
+- [x] **P2-06**: Passos 2.8–2.12 — VFB para múltiplos stakeholders: individuais + consolidação + workshop
+- [x] **P2-07**: Passo 2.13 — Categorização de objetivos com AXIOM sugerindo categorias
 - [ ] **P2-08**: Passo 2.14 — WITI Test: modal por objetivo; classifica MEANS/FUNDAMENTAL/STRATEGIC; cria causal links
 - [ ] **P2-09**: Passo 2.15 — Control of Consequences: 2 perguntas + refinamento de enunciado
 - [ ] **P2-10**: Passo 2.16 — Means-Ends Objectives Network: react-flow + dagre; zoom/pan; PNG export
