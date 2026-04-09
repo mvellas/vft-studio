@@ -69,80 +69,28 @@ Plans:
 
 ---
 
-## Phase 4: VFT Phase 3 + Chat Agents
+## Phase 4: MVP Completion
 
-**Goal:** Usuário define alternativas com suporte do agente NOVA; chat completo com ARIA, todos os especialistas e stakeholders; SCRIBE gera relatório em Markdown.
+**Goal:** VFT Phase 3 completa (NOVA + alternativas + matriz de consequências), chat com todos os agentes, relatório Markdown via SCRIBE, export básico, Settings com Keychain, e packaging como `VFT Studio.app`.
 
-**Requirements:** P3-01 a P3-05, CHAT-01 a CHAT-05
+**Requirements:** P3-01..05, CHAT-01..05, VIZ-01..03, SET-01..03, TEST-01, TEST-03
 
-**Plans:**
-1. **NOVA Agent + Alternatives API** — `phase3_specialist.py` + CRUD de alternativas; procedimento Keeney (objetivo→pares→trios); AlternativesList + AlternativeCard
-2. **Consequences Matrix** — tabela alternativas × atributos; células editáveis; IA preenche sugestões; ConsequencesMatrix component
-3. **ARIA Facilitador Completo** — `facilitator.py` com todos os cenários do AGENTS-SPEC; contexto completo do projeto; integração Phase Engine
-4. **Chat Completo** — AgentSelector (ARIA/FRAME/AXIOM/NOVA/stakeholder); QuickActions parser; ChatHistory persistida; export Markdown do histórico
-5. **SCRIBE Documentation Agent** — `documentation_agent.py`; relatório completo com todas as seções; template acadêmico
-
-**Success criteria:**
-- Usuário completa Fase 3, conversa com cada agente no chat, salva objetivos via QuickActions, e exporta relatório Markdown completo
-
----
-
-## Phase 5: Interview-Driven Flow + Proxy Documental
-
-**Goal:** Sistema de entrevistas estruturadas por máquina de estados (RF-10) e análise de documentos como substituto de entrevistas (RF-13) com ANALYST multimodal.
-
-**Requirements:** INT-01 a INT-08, DOC-01 a DOC-07
+> Plano detalhado original das fases 4-7 preservado em Obsidian:  
+> `Claude Knowledge/vft-studio/phases-4-7-original.md`
 
 **Plans:**
-1. **Interview State Machine** — `interview_engine.py`; tabelas `interview_sessions` + `interview_turns`; estados IDLE→BRIEFING→QUESTIONING→FOLLOW_UP→SYNTHESIS→COMPLETED; API endpoints (start/answer/synthesis/confirm/transcript)
-2. **Interview UI** — InterviewMode component (progresso, pergunta IA, campo resposta, análise inline); InterviewSynthesis screen (revisão antes de salvar); WITI como entrevista conversacional
-3. **CoC Entrevista + AXIOM/FRAME Interview Methods** — CoCInterview conversacional; agentes com `generate_interview_question()` + `analyze_answer()` + extração de valores com follow-up automático
-4. **ANALYST Agent + Document Upload** — `document_analyst.py`; tabela `stakeholder_documents`; upload PDF/PNG/TXT; processamento via API multimodal Claude; transcript virtual Q&A com citações
-5. **Document Review UI + Rastreabilidade** — tela revisão item a item (aceitar/editar/rejeitar); indicadores visuais no StakeholderMapper; rastreabilidade no relatório (`[Fonte: análise documental]`)
+1. **NOVA Agent + Alternatives + Consequences Matrix** — `phase3_specialist.py`; CRUD alternativas; AlternativesList + AlternativeCard; tabela alternativas × atributos (ConsequencesMatrix); IA sugere consequências
+2. **ARIA + Chat Completo + SCRIBE** — `facilitator.py` com cenários do AGENTS-SPEC; AgentSelector (ARIA/FRAME/AXIOM/NOVA); QuickActions parser; ChatHistory persistida; `documentation_agent.py`; export relatório Markdown
+3. **Diagramas + Export** — html2canvas capture das 3 react-flow views já existentes (CausalRelationsMap, MeansEndsNetwork, ObjectivesHierarchy); 2 diagramas Mermaid (StakeholderMap + ProcessFlowchart); ExportService monta Markdown com PNG embutidos
+4. **Settings + Polish** — API Key via `keyring` (macOS Keychain); teste de conexão Claude; auto-save debounce global; error boundaries; onboarding 3 telas no primeiro boot
+5. **Tests + macOS Packaging** — pytest ≥60% coverage (engine + agents mock + endpoints críticos); PyInstaller `VFTStudio.spec`; `build.py`; frontend como assets estáticos; `VFT Studio.app` em `dist/`
 
 **Success criteria:**
-- Usuário conduz entrevista estruturada, pausa e retoma; síntese gerada e confirmada
-- Upload de documento PDF; ANALYST extrai valores com citações; usuário revisa e confirma
-
----
-
-## Phase 6: Visualizacoes, Diagramas e Export
-
-**Goal:** 7 diagramas automáticos exportáveis como PNG, Graph View força-dirigido com D3.js, export completo Markdown + PDF com diagramas embutidos.
-
-**Requirements:** VIZ-01 a VIZ-08
-
-**Plans:**
-1. **Diagram Export Service** — `diagramExport.ts`: `captureComponent(elementId)` → PNG base64 via html2canvas (2x DPR); Mermaid.js render pipeline client-side → PNG
-2. **Diagramas React-flow** — CausalRelationsMapDiagram, MeansEndsNetworkDiagram (dagre), FundamentalHierarchyDiagram; legendas automáticas; export individual
-3. **Diagramas Mermaid** — DecisionFrameDiagram (card estilizado), StakeholderMapDiagram (graph TD), ProcessFlowchartDiagram (fases + passos completados); DecisionFrameConceitual (block-beta)
-4. **Graph View D3.js** — ForceGraph component: force simulation, nós SVG por tipo, arestas com setas, zoom/pan, mini-map canvas; filtros + busca; toggle temporal (fase 1/2/3); export PNG
-5. **Export Markdown + PDF + .vft** — ExportService (Markdown + WeasyPrint PDF); ReportAssembler coleta PNGs dos 7 diagramas; template com figuras numeradas; import/export .vft bundle
-
-**Success criteria:**
-- Todos os 7 diagramas renderizados e exportados como PNG
-- Graph View mostra todas as entidades do projeto com force layout
-- Relatório PDF gerado com diagramas embutidos
-
----
-
-## Phase 7: Settings, Polish, Tests e Packaging
-
-**Goal:** Settings com Keychain, auto-save, keyboard shortcuts, onboarding, testes com ≥70% coverage, e packaging como `.app` macOS.
-
-**Requirements:** SET-01 a SET-05, TEST-01 a TEST-03
-
-**Plans:**
-1. **Settings Screen** — API Key (macOS Keychain via `keyring`); modelo por agente; idioma; toggle dark/light mode; teste de conexão Claude
-2. **Polish UX** — Auto-save debounce 2s + undo/redo (Zustand middleware); keyboard shortcuts (`⌘K`, `⌘G`, etc.); onboarding 3 telas (primeiro boot); error boundaries + offline mode graceful
-3. **Backend Tests** — pytest ≥70% coverage: engine (ProcessManager, WITITest, CoC), agents (mock Anthropic), API endpoints, services
-4. **Frontend Tests** — Vitest: StepGuide, ObjectiveCard, ChatMessage, InterviewMode, ForceGraph (unit); E2E flow crítico (criar projeto → completar fase 1)
-5. **macOS App Packaging** — PyInstaller config (`VFTStudio.spec`); `build.py`; frontend buildado como assets estáticos; app icon (.icns); `Info.plist`; `VFT Studio.app` em `dist/`
-
-**Success criteria:**
+- Usuário completa VFT Phase 3 (define alternativas, preenche matriz de consequências)
+- Chat funciona com ARIA, FRAME, AXIOM e NOVA; relatório Markdown exportado
+- Diagramas exportam como PNG; relatório inclui imagens
 - `VFT Studio.app` abre e funciona sem terminal
-- pytest: ≥70% cobertura backend
-- Onboarding funciona no primeiro boot
+- pytest ≥60% coverage backend
 
 ---
 
@@ -155,13 +103,7 @@ Phase 2 (VFT Phase 1)
   ↓
 Phase 3 (VFT Phase 2)
   ↓
-Phase 4 (VFT Phase 3 + Chat)
-  ↓                    ↓
-Phase 5               Phase 6
-(Interview +          (Viz + Export)
- Proxy Docs)              ↓
-      ↓               Phase 7
-      └──────────────→ (Polish + Tests + Packaging)
+Phase 4 (MVP Completion)
 ```
 
 ## Requirement Coverage
@@ -171,11 +113,12 @@ Phase 5               Phase 6
 | Phase 1 | FOUND-01..14, PHASE-01..05 | 19 |
 | Phase 2 | P1-01..07 | 7 |
 | Phase 3 | P2-01..13 | 13 |
-| Phase 4 | P3-01..05, CHAT-01..05 | 10 |
-| Phase 5 | INT-01..08, DOC-01..07 | 15 |
-| Phase 6 | VIZ-01..08 | 8 |
-| Phase 7 | SET-01..05, TEST-01..03 | 8 |
-| **Total** | | **80** |
+| Phase 4 | P3-01..05, CHAT-01..05, VIZ-01..03, SET-01..03, TEST-01, TEST-03 | 19 |
+| **Total MVP** | | **58** |
+
+> Requirements não incluídos no MVP (INT-01..08, DOC-01..07, VIZ-04..08, SET-04..05, TEST-02):  
+> Interview-Driven Flow, Proxy Documental, Graph View D3.js, PDF completo, Frontend E2E tests.  
+> Ver `Claude Knowledge/vft-studio/phases-4-7-original.md`.
 
 ---
 *Roadmap created: 2026-04-07*
