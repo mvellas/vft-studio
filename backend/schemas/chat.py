@@ -7,8 +7,9 @@ class ChatMessageRequest(BaseModel):
     model_config = ConfigDict(frozen=True)
     message: str
     project_id: str
-    agent_type: str = "facilitator"  # facilitator, phase1_specialist, etc.
+    agent_type: str = "facilitator"  # facilitator, phase1_specialist, phase2_specialist, stakeholder_simulation, etc.
     context: dict = {}
+    stakeholder_id: str | None = None
 
 
 class ChatMessageResponse(BaseModel):
