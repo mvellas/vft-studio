@@ -54,14 +54,14 @@ Plans:
 
 **Requirements:** P2-01 a P2-13
 
-**Plans:** 4/5 plans executed
+**Plans:** 5/5 plans complete
 
 Plans:
 - [x] 03-01-PLAN.md — AXIOM Agent + Stakeholder Agent + Objectives CRUD API + react-flow install
 - [x] 03-02-PLAN.md — Value Elicitation UI (TechniqueSelector, OrgDocPanel, ObjectivesList, ObjectiveCard, VFTDevicePanel)
 - [x] 03-03-PLAN.md — WITI Test Engine + WITITestModal + CausalRelationsMap (react-flow)
 - [x] 03-04-PLAN.md — Control of Consequences + MeansEndsNetwork + ObjectivesHierarchy (react-flow + dagre)
-- [ ] 03-05-PLAN.md — AttributeDefiner + Phase 2 Gate
+- [x] 03-05-PLAN.md — AttributeDefiner + Phase 2 Gate
 
 **Success criteria:**
 - Usuário completa entrevista de elicitação, aplica WITI em todos os objetivos, CoC nos candidatos a fundamental, e vê a Means-Ends Network renderizada

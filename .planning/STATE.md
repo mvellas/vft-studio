@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-09T18:06:19.593Z"
+last_updated: "2026-04-09T18:12:48.954Z"
 progress:
   total_phases: 7
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 15
-  completed_plans: 14
+  completed_plans: 15
 ---
 
 # Project State: VFT Studio
@@ -77,6 +77,8 @@ Next: 03-vft-phase-2-decision-objectives 03-02 (next plan in phase 03)
 - [Phase 03-03]: CausalRelationsMap useEffect syncs nodes/edges when store memos change — handles dynamic react-flow graph updates
 - [Phase 03-04]: CoCModal uses useEffect(step='evaluating') pattern to trigger API call — avoids React state batching issues
 - [Phase 03-04]: ObjectivesHierarchy builds edges from parent_id NOT causal_links (RESEARCH.md Pitfall 5) — hierarchy is orthogonal to causal graph
+- [Phase 03-05]: AttributeDefiner uses onStepComplete prop (not useNavigate) — react-router-dom not in package.json; matches existing Phase 1/2 component pattern
+- [Phase 03-05]: Auto-save debounce creates attribute on first flush if attributeId is null, then PUTs — prevents 409 IntegrityError from rapid saves
 
 ## Performance Metrics
 
@@ -94,6 +96,7 @@ Next: 03-vft-phase-2-decision-objectives 03-02 (next plan in phase 03)
 | Phase 03-vft-phase-2-decision-objectives P02 | 4 | 3 tasks | 9 files |
 | Phase 03 P03 | 2min | 2 tasks | 3 files |
 | Phase 03-vft-phase-2-decision-objectives P04 | 2 | 2 tasks | 4 files |
+| Phase 03-vft-phase-2-decision-objectives P05 | 4min | 2 tasks | 7 files |
 
 ## Key Context
 

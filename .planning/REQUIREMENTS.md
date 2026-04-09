@@ -53,7 +53,7 @@
 - [x] **P2-09**: Passo 2.15 — Control of Consequences: 2 perguntas + refinamento de enunciado
 - [x] **P2-10**: Passo 2.16 — Means-Ends Objectives Network: react-flow + dagre; zoom/pan; PNG export
 - [x] **P2-11**: Passo 2.17 — Fundamental Objectives Hierarchy: árvore interativa; 9 propriedades
-- [ ] **P2-12**: Passo 2.18 — AttributeDefiner: tipo (natural/constructed/proxy) + escala + 5 propriedades
+- [x] **P2-12**: Passo 2.18 — AttributeDefiner: tipo (natural/constructed/proxy) + escala + 5 propriedades
 - [x] **P2-13**: Stakeholder Agent: simula respostas com base no perfil; modo livre e guiado
 
 ### Phase 3 — Decision Alternatives
