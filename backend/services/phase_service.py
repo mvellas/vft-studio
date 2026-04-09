@@ -11,6 +11,7 @@ from backend.db.models import Project, StepCompletion
 from backend.db.repository import BaseRepository
 from backend.engine.process_manager import ProcessManager
 from backend.services.phase1_service import check_phase1_gate
+from backend.services.phase2_service import check_phase2_gate
 from backend.schemas.phase import (
     CurrentStepResponse,
     StepCompleteResponse,
@@ -171,6 +172,15 @@ class PhaseService:
             gate_passed = await check_phase1_gate(project_id, self._session)
             if gate_passed:
                 await project_repo.update(project_id, phase1_completed=1)
+
+        # Phase 2 gate: when completing step 2.18, verify all Phase 2 criteria
+        elif step_id == "2.18":
+            gate_passed = await check_phase2_gate(project_id, self._session)
+            if not gate_passed:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail="Phase 2 gate failed: all fundamental objectives must have attributes defined",
+                )
 
         await self._session.commit()
 
