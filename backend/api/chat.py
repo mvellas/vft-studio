@@ -21,6 +21,8 @@ from backend.db.repository import BaseRepository
 from backend.schemas.chat import ChatMessageRequest
 from backend.agents.base_agent import BaseAgent
 from backend.agents.phase1_specialist import Phase1SpecialistAgent
+from backend.agents.phase2_specialist import Phase2SpecialistAgent
+from backend.agents.stakeholder_agent import StakeholderSimulationAgent
 
 router = APIRouter(tags=["chat"])
 
@@ -39,6 +41,16 @@ AGENT_CONFIGS: dict[str, dict] = {
         "name": "FRAME",
         "system": "",  # dynamically loaded from DB via Phase1SpecialistAgent.from_project_id
     },
+    "phase2_specialist": {
+        "model": "claude-opus-4-6",
+        "name": "AXIOM",
+        "system": "",  # dynamically loaded from DB via Phase2SpecialistAgent.from_project_id
+    },
+    "stakeholder_simulation": {
+        "model": "claude-sonnet-4-6",
+        "name": "",  # name set dynamically from stakeholder record
+        "system": "",  # dynamically loaded from DB via StakeholderSimulationAgent.from_stakeholder_id
+    },
 }
 
 
@@ -49,11 +61,25 @@ async def chat_message(
 ) -> EventSourceResponse:
     config = AGENT_CONFIGS.get(body.agent_type, AGENT_CONFIGS["facilitator"])
 
-    # Phase 1 specialist uses project-context-aware agent loaded from DB
+    # Route to context-aware agents loaded from DB
     if body.agent_type == "phase1_specialist":
         try:
             agent = await Phase1SpecialistAgent.from_project_id(
                 body.project_id, session, model=config["model"]
+            )
+        except ValueError:
+            agent = BaseAgent(model=config["model"], system=config["system"])
+    elif body.agent_type == "phase2_specialist":
+        try:
+            agent = await Phase2SpecialistAgent.from_project_id(
+                body.project_id, session, model=config["model"]
+            )
+        except ValueError:
+            agent = BaseAgent(model=config["model"], system=config["system"])
+    elif body.agent_type == "stakeholder_simulation" and body.stakeholder_id:
+        try:
+            agent = await StakeholderSimulationAgent.from_stakeholder_id(
+                body.stakeholder_id, body.project_id, session, model=config["model"]
             )
         except ValueError:
             agent = BaseAgent(model=config["model"], system=config["system"])
