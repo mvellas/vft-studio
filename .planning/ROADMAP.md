@@ -54,12 +54,14 @@ Plans:
 
 **Requirements:** P2-01 a P2-13
 
-**Plans:**
-1. **AXIOM Agent + Stakeholder Agent** — `phase2_specialist.py` + `stakeholder_agent.py`; todos os VFT Devices (10 dispositivos); simulação de stakeholder por perfil
-2. **Value Elicitation UI** — Passos 2.1–2.12: seleção de técnica, org docs (Gold), WishList + VFT Devices (single stk), VFB (multi stk); ObjectivesList + ObjectiveCard com badges de tipo
-3. **WITI Test Engine + UI** — `witi_test.py`: classifica MEANS/FUNDAMENTAL/STRATEGIC/OTHER; WITITestModal com follow-ups; causal links criados automaticamente; CausalRelationsMap (react-flow)
-4. **Control of Consequences + Network** — `control_of_consequences.py`; CoC interface passo-a-passo; `objectives_network.py`; Means-Ends Network (react-flow + dagre); FundamentalObjectivesHierarchy
-5. **Attribute Definition + Phase 2 Gate** — AttributeDefiner: tipo + escala + 5 propriedades; completion gate: todos os obj. fundamentais com atributo
+**Plans:** 5 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — AXIOM Agent + Stakeholder Agent + Objectives CRUD API + react-flow install
+- [ ] 03-02-PLAN.md — Value Elicitation UI (TechniqueSelector, OrgDocPanel, ObjectivesList, ObjectiveCard, VFTDevicePanel)
+- [ ] 03-03-PLAN.md — WITI Test Engine + WITITestModal + CausalRelationsMap (react-flow)
+- [ ] 03-04-PLAN.md — Control of Consequences + MeansEndsNetwork + ObjectivesHierarchy (react-flow + dagre)
+- [ ] 03-05-PLAN.md — AttributeDefiner + Phase 2 Gate
 
 **Success criteria:**
 - Usuário completa entrevista de elicitação, aplica WITI em todos os objetivos, CoC nos candidatos a fundamental, e vê a Means-Ends Network renderizada
