@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-09T18:01:38.364Z"
+last_updated: "2026-04-09T18:06:19.593Z"
 progress:
   total_phases: 7
   completed_phases: 2
   total_plans: 15
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Project State: VFT Studio
@@ -75,6 +75,8 @@ Next: 03-vft-phase-2-decision-objectives 03-02 (next plan in phase 03)
 - [Phase 03-03]: parse_witi_response defaults classification to OTHER on unknown values — tolerant parser prevents crashes on unexpected LLM output
 - [Phase 03-03]: WITITestModal uses useObjectivesStore.setState directly for optimistic update after classify + fetchNetwork for causal links
 - [Phase 03-03]: CausalRelationsMap useEffect syncs nodes/edges when store memos change — handles dynamic react-flow graph updates
+- [Phase 03-04]: CoCModal uses useEffect(step='evaluating') pattern to trigger API call — avoids React state batching issues
+- [Phase 03-04]: ObjectivesHierarchy builds edges from parent_id NOT causal_links (RESEARCH.md Pitfall 5) — hierarchy is orthogonal to causal graph
 
 ## Performance Metrics
 
@@ -91,6 +93,7 @@ Next: 03-vft-phase-2-decision-objectives 03-02 (next plan in phase 03)
 | Phase 03 P01 | 36min | 2 tasks | 14 files |
 | Phase 03-vft-phase-2-decision-objectives P02 | 4 | 3 tasks | 9 files |
 | Phase 03 P03 | 2min | 2 tasks | 3 files |
+| Phase 03-vft-phase-2-decision-objectives P04 | 2 | 2 tasks | 4 files |
 
 ## Key Context
 
