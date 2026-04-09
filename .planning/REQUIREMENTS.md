@@ -49,7 +49,7 @@
 - [x] **P2-05**: Passos 2.5–2.7 — WishList + VFT Devices (10 dispositivos) para stakeholder único
 - [x] **P2-06**: Passos 2.8–2.12 — VFB para múltiplos stakeholders: individuais + consolidação + workshop
 - [x] **P2-07**: Passo 2.13 — Categorização de objetivos com AXIOM sugerindo categorias
-- [ ] **P2-08**: Passo 2.14 — WITI Test: modal por objetivo; classifica MEANS/FUNDAMENTAL/STRATEGIC; cria causal links
+- [x] **P2-08**: Passo 2.14 — WITI Test: modal por objetivo; classifica MEANS/FUNDAMENTAL/STRATEGIC; cria causal links
 - [ ] **P2-09**: Passo 2.15 — Control of Consequences: 2 perguntas + refinamento de enunciado
 - [ ] **P2-10**: Passo 2.16 — Means-Ends Objectives Network: react-flow + dagre; zoom/pan; PNG export
 - [ ] **P2-11**: Passo 2.17 — Fundamental Objectives Hierarchy: árvore interativa; 9 propriedades

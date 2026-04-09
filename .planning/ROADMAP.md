@@ -54,12 +54,12 @@ Plans:
 
 **Requirements:** P2-01 a P2-13
 
-**Plans:** 2/5 plans executed
+**Plans:** 3/5 plans executed
 
 Plans:
 - [x] 03-01-PLAN.md — AXIOM Agent + Stakeholder Agent + Objectives CRUD API + react-flow install
 - [x] 03-02-PLAN.md — Value Elicitation UI (TechniqueSelector, OrgDocPanel, ObjectivesList, ObjectiveCard, VFTDevicePanel)
-- [ ] 03-03-PLAN.md — WITI Test Engine + WITITestModal + CausalRelationsMap (react-flow)
+- [x] 03-03-PLAN.md — WITI Test Engine + WITITestModal + CausalRelationsMap (react-flow)
 - [ ] 03-04-PLAN.md — Control of Consequences + MeansEndsNetwork + ObjectivesHierarchy (react-flow + dagre)
 - [ ] 03-05-PLAN.md — AttributeDefiner + Phase 2 Gate
 
