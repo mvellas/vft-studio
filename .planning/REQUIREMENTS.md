@@ -42,8 +42,8 @@
 
 ### Phase 2 — Decision Objectives
 
-- [ ] **P2-01**: CRUD completo de objetivos com WITI fields e causal_links
-- [ ] **P2-02**: AXIOM agent (Phase 2 Specialist): elicitação, WITI, CoC, hierarquia, atributos
+- [x] **P2-01**: CRUD completo de objetivos com WITI fields e causal_links
+- [x] **P2-02**: AXIOM agent (Phase 2 Specialist): elicitação, WITI, CoC, hierarquia, atributos
 - [ ] **P2-03**: Passo 2.1 — Seleção de técnica qualitativa (Platinum/Gold/Silver/Combined)
 - [ ] **P2-04**: Passos 2.2–2.3 — Upload/paste de docs organizacionais; IA extrai valores (Gold/Combined)
 - [ ] **P2-05**: Passos 2.5–2.7 — WishList + VFT Devices (10 dispositivos) para stakeholder único
@@ -54,7 +54,7 @@
 - [ ] **P2-10**: Passo 2.16 — Means-Ends Objectives Network: react-flow + dagre; zoom/pan; PNG export
 - [ ] **P2-11**: Passo 2.17 — Fundamental Objectives Hierarchy: árvore interativa; 9 propriedades
 - [ ] **P2-12**: Passo 2.18 — AttributeDefiner: tipo (natural/constructed/proxy) + escala + 5 propriedades
-- [ ] **P2-13**: Stakeholder Agent: simula respostas com base no perfil; modo livre e guiado
+- [x] **P2-13**: Stakeholder Agent: simula respostas com base no perfil; modo livre e guiado
 
 ### Phase 3 — Decision Alternatives
 
