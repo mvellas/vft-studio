@@ -1,3 +1,6 @@
+import { apiClient } from './client'
+import type { ChatMessage } from '../types'
+
 const BASE_URL = import.meta.env.VITE_API_URL ?? window.location.origin
 
 /**
@@ -65,4 +68,14 @@ export function streamChatMessage(
     })
 
   return () => ctrl.abort()
+}
+
+export function loadChatHistory(
+  projectId: string,
+  agentType: string,
+  limit = 50,
+): Promise<ChatMessage[]> {
+  return apiClient
+    .get<ChatMessage[]>('/api/chat/history', { params: { project_id: projectId, agent_type: agentType, limit } })
+    .then(r => r.data)
 }

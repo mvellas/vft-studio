@@ -6,10 +6,11 @@ interface ChatState {
   messages: ChatMessage[]
   isStreaming: boolean
   activeAgent: string
+  activeAgentType: string
   addMessage: (message: ChatMessage) => void
   appendToLastMessage: (text: string) => void
   setStreaming: (streaming: boolean) => void
-  setActiveAgent: (agent: string) => void
+  setActiveAgent: (agentName: string, agentType: string) => void
   clearMessages: () => void
 }
 
@@ -18,13 +19,18 @@ export const useChatStore = create<ChatState>()(
     messages: [],
     isStreaming: false,
     activeAgent: 'ARIA',
+    activeAgentType: 'facilitator',
     addMessage: (message) => set((state) => { state.messages.push(message) }),
     appendToLastMessage: (text) => set((state) => {
       const last = state.messages[state.messages.length - 1]
       if (last) last.content += text
     }),
     setStreaming: (streaming) => set((state) => { state.isStreaming = streaming }),
-    setActiveAgent: (agent) => set((state) => { state.activeAgent = agent }),
+    setActiveAgent: (agentName, agentType) => set((state) => {
+      state.activeAgent = agentName
+      state.activeAgentType = agentType
+      state.messages = []
+    }),
     clearMessages: () => set((state) => { state.messages = [] }),
   }))
 )

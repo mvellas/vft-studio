@@ -246,7 +246,7 @@ export function ObjectivesHierarchy({ projectId }: ObjectivesHierarchyProps) {
   }
 
   return (
-    <div ref={containerRef} className="h-full w-full" style={{ minHeight: 500 }}>
+    <div id="objectives-hierarchy" ref={containerRef} className="h-full w-full" style={{ minHeight: 500 }}>
       <ReactFlow
         nodes={syncedNodes}
         edges={syncedEdges}

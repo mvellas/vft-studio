@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react'
 import { AppShell } from './components/layout/AppShell'
 import { ProjectList } from './components/project/ProjectList'
+import { SettingsView } from './components/project/SettingsView'
+import { OnboardingFlow } from './components/project/OnboardingFlow'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { StepGuide } from './components/phase/StepGuide'
 import { PhaseProgress } from './components/phase/PhaseProgress'
 import { useUiStore } from './stores/uiStore'
 import { useProjectStore } from './stores/projectStore'
 import { phasesApi } from './api/phases'
+import { apiClient } from './api/client'
 import type { CurrentStep } from './types'
 
 function ProjectDetailView() {
@@ -22,9 +26,7 @@ function ProjectDetailView() {
       .then((data) => {
         if (!cancelled) setCurrentStep(data)
       })
-      .catch(() => {
-        // step data unavailable — show placeholder
-      })
+      .catch(() => {})
       .finally(() => {
         if (!cancelled) setLoading(false)
       })
@@ -65,18 +67,34 @@ function ProjectDetailView() {
 
 function App() {
   const { currentView } = useUiStore()
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  const [onboardingChecked, setOnboardingChecked] = useState(false)
+
+  useEffect(() => {
+    apiClient
+      .get<{ completed: boolean }>('/api/settings/onboarding-completed')
+      .then(r => {
+        if (!r.data.completed) setShowOnboarding(true)
+      })
+      .catch(() => {})
+      .finally(() => setOnboardingChecked(true))
+  }, [])
+
+  if (!onboardingChecked) return null
 
   return (
-    <AppShell>
-      {currentView === 'project-list' && <ProjectList />}
-      {currentView === 'project-detail' && <ProjectDetailView />}
-      {currentView === 'settings' && (
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Configurações</h1>
-          <p className="text-gray-500 text-sm">Em desenvolvimento.</p>
-        </div>
+    <>
+      {showOnboarding && (
+        <OnboardingFlow onComplete={() => setShowOnboarding(false)} />
       )}
-    </AppShell>
+      <AppShell>
+        <ErrorBoundary>
+          {currentView === 'project-list' && <ProjectList />}
+          {currentView === 'project-detail' && <ProjectDetailView />}
+          {currentView === 'settings' && <SettingsView />}
+        </ErrorBoundary>
+      </AppShell>
+    </>
   )
 }
 

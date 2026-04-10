@@ -6,7 +6,7 @@ import type { ChatMessage } from '../types'
 
 export function useChat() {
   const abortRef = useRef<(() => void) | null>(null)
-  const { addMessage, appendToLastMessage, setStreaming, activeAgent } = useChatStore()
+  const { addMessage, appendToLastMessage, setStreaming, activeAgent, activeAgentType } = useChatStore()
   const activeProjectId = useProjectStore((s) => s.activeProjectId)
 
   const sendMessage = useCallback(
@@ -45,7 +45,7 @@ export function useChat() {
       abortRef.current = streamChatMessage(
         text,
         activeProjectId,
-        'facilitator',
+        activeAgentType,
         (delta) => appendToLastMessage(delta),
         () => setStreaming(false),
         (error) => {
@@ -54,7 +54,7 @@ export function useChat() {
         },
       )
     },
-    [activeProjectId, activeAgent, addMessage, appendToLastMessage, setStreaming],
+    [activeProjectId, activeAgent, activeAgentType, addMessage, appendToLastMessage, setStreaming],
   )
 
   const cancelStream = useCallback(() => {

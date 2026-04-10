@@ -187,7 +187,7 @@ export function MeansEndsNetwork({ projectId }: MeansEndsNetworkProps) {
   }
 
   return (
-    <div ref={containerRef} className="h-full w-full" style={{ minHeight: 500 }}>
+    <div id="means-ends-network" ref={containerRef} className="h-full w-full" style={{ minHeight: 500 }}>
       <ReactFlow
         nodes={syncedNodes}
         edges={syncedEdges}

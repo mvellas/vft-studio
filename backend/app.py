@@ -11,6 +11,7 @@ Architecture notes:
 """
 from __future__ import annotations
 
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -19,13 +20,27 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from backend.db.base import init_db
-from backend.api import projects, stakeholders, phases, chat, frame, decision_frame, objectives, axiom, attributes
+from backend.api import projects, stakeholders, phases, chat, frame, decision_frame, objectives, axiom, attributes, alternatives, export, settings
 
 FRONTEND_DIST = Path(__file__).parent.parent / "frontend" / "dist"
 
 
+def _load_api_key_from_keychain() -> None:
+    """On startup: load API key from macOS Keychain into env if not already set."""
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        return
+    try:
+        import keyring
+        key = keyring.get_password("vft-studio", "anthropic-api-key")
+        if key:
+            os.environ["ANTHROPIC_API_KEY"] = key
+    except Exception:
+        pass
+
+
 @asynccontextmanager
 async def lifespan(application: FastAPI):
+    _load_api_key_from_keychain()
     await init_db()
     yield
 
@@ -56,6 +71,9 @@ app.include_router(decision_frame.router, prefix="/api")
 app.include_router(objectives.router, prefix="/api")
 app.include_router(axiom.router, prefix="/api")
 app.include_router(attributes.router, prefix="/api")
+app.include_router(alternatives.router, prefix="/api")
+app.include_router(export.router, prefix="/api")
+app.include_router(settings.router, prefix="/api")
 
 
 # StaticFiles MUST be mounted last — after all API routers.

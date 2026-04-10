@@ -4,13 +4,25 @@ import { X, Send, Square, Loader2 } from 'lucide-react'
 import { useChatStore } from '../../stores/chatStore'
 import { useUiStore } from '../../stores/uiStore'
 import { useChat } from '../../hooks/useChat'
+import { AgentSelector } from './AgentSelector'
+import { loadChatHistory } from '../../api/chat'
+import { useProjectStore } from '../../stores/projectStore'
 
 export function ChatPanel() {
-  const { messages, isStreaming, activeAgent } = useChatStore()
+  const { messages, isStreaming, activeAgent, activeAgentType, addMessage } = useChatStore()
   const { setChatPanelOpen } = useUiStore()
   const { sendMessage, cancelStream } = useChat()
+  const { activeProjectId } = useProjectStore()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [inputValue, setInputValue] = useState('')
+
+  // Load chat history when agent changes
+  useEffect(() => {
+    if (!activeProjectId) return
+    loadChatHistory(activeProjectId, activeAgentType).then(history => {
+      for (const msg of history) addMessage(msg)
+    }).catch(() => {})
+  }, [activeAgentType, activeProjectId])
 
   // Auto-scroll to bottom on new message or new streaming content
   useEffect(() => {
@@ -34,20 +46,25 @@ export function ChatPanel() {
   return (
     <aside className="h-screen w-96 bg-white border-l border-gray-200 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 shrink-0">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-gray-900 text-sm">{activeAgent}</span>
-          <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
-            Facilitador IA
-          </span>
+      <div className="border-b border-gray-200 shrink-0">
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-gray-900 text-sm">{activeAgent}</span>
+            <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
+              Agente IA
+            </span>
+          </div>
+          <button
+            onClick={() => setChatPanelOpen(false)}
+            className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded"
+            aria-label="Close chat panel"
+          >
+            <X size={18} />
+          </button>
         </div>
-        <button
-          onClick={() => setChatPanelOpen(false)}
-          className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded"
-          aria-label="Close chat panel"
-        >
-          <X size={18} />
-        </button>
+        <div className="pb-2">
+          <AgentSelector />
+        </div>
       </div>
 
       {/* Messages */}

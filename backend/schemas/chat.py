@@ -13,9 +13,13 @@ class ChatMessageRequest(BaseModel):
 
 
 class ChatMessageResponse(BaseModel):
-    model_config = ConfigDict(frozen=True)
+    model_config = ConfigDict(frozen=True, from_attributes=True)
     id: str
+    session_id: str
+    project_id: str
     role: str
     agent_name: str
     content: str
     timestamp: str
+    phase: int | None = None
+    step: str | None = None
