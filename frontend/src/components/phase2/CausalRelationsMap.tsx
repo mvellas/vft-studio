@@ -168,7 +168,7 @@ export function CausalRelationsMap({ projectId }: CausalRelationsMapProps) {
   }
 
   return (
-    <div className="h-full w-full" style={{ minHeight: 400 }}>
+    <div id="causal-relations-map" className="h-full w-full" style={{ minHeight: 400 }}>
       <ReactFlow
         nodes={syncedNodes}
         edges={syncedEdges}

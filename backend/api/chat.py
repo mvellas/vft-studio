@@ -9,8 +9,9 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sse_starlette.sse import EventSourceResponse, ServerSentEvent
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import uuid
@@ -18,10 +19,12 @@ import uuid
 from backend.db.base import get_session
 from backend.db.models import ChatMessage, ChatSession
 from backend.db.repository import BaseRepository
-from backend.schemas.chat import ChatMessageRequest
+from backend.schemas.chat import ChatMessageRequest, ChatMessageResponse
 from backend.agents.base_agent import BaseAgent
 from backend.agents.phase1_specialist import Phase1SpecialistAgent
+from backend.agents.facilitator import FacilitatorAgent
 from backend.agents.phase2_specialist import Phase2SpecialistAgent
+from backend.agents.phase3_specialist import Phase3SpecialistAgent
 from backend.agents.stakeholder_agent import StakeholderSimulationAgent
 
 router = APIRouter(tags=["chat"])
@@ -46,6 +49,11 @@ AGENT_CONFIGS: dict[str, dict] = {
         "name": "AXIOM",
         "system": "",  # dynamically loaded from DB via Phase2SpecialistAgent.from_project_id
     },
+    "phase3_specialist": {
+        "model": "claude-sonnet-4-6",
+        "name": "NOVA",
+        "system": "",  # dynamically loaded from DB via Phase3SpecialistAgent.from_project_id
+    },
     "stakeholder_simulation": {
         "model": "claude-sonnet-4-6",
         "name": "",  # name set dynamically from stakeholder record
@@ -62,7 +70,14 @@ async def chat_message(
     config = AGENT_CONFIGS.get(body.agent_type, AGENT_CONFIGS["facilitator"])
 
     # Route to context-aware agents loaded from DB
-    if body.agent_type == "phase1_specialist":
+    if body.agent_type == "facilitator":
+        try:
+            agent = await FacilitatorAgent.from_project_id(
+                body.project_id, session, model=config["model"]
+            )
+        except ValueError:
+            agent = BaseAgent(model=config["model"], system=config["system"])
+    elif body.agent_type == "phase1_specialist":
         try:
             agent = await Phase1SpecialistAgent.from_project_id(
                 body.project_id, session, model=config["model"]
@@ -72,6 +87,13 @@ async def chat_message(
     elif body.agent_type == "phase2_specialist":
         try:
             agent = await Phase2SpecialistAgent.from_project_id(
+                body.project_id, session, model=config["model"]
+            )
+        except ValueError:
+            agent = BaseAgent(model=config["model"], system=config["system"])
+    elif body.agent_type == "phase3_specialist":
+        try:
+            agent = await Phase3SpecialistAgent.from_project_id(
                 body.project_id, session, model=config["model"]
             )
         except ValueError:
@@ -143,3 +165,38 @@ async def chat_message(
         yield ServerSentEvent(data="[DONE]", event="done")
 
     return EventSourceResponse(generate())
+
+
+@router.get("/chat/history", response_model=list[ChatMessageResponse])
+async def chat_history(
+    project_id: str = Query(...),
+    agent_type: str = Query(default="facilitator"),
+    limit: int = Query(default=50, le=200),
+    session: AsyncSession = Depends(get_session),
+) -> list[ChatMessageResponse]:
+    """Return the last N chat messages for a project/agent combination."""
+    config = AGENT_CONFIGS.get(agent_type, AGENT_CONFIGS["facilitator"])
+    agent_name = config["name"]
+
+    # Load messages: user messages + messages from this agent
+    result = await session.execute(
+        select(ChatMessage)
+        .where(
+            ChatMessage.project_id == project_id,
+            # Include user messages and this agent's messages
+        )
+        .order_by(ChatMessage.timestamp.desc())
+        .limit(limit * 2)  # fetch extra to filter
+    )
+    all_messages = result.scalars().all()
+
+    # Filter to messages belonging to this agent conversation
+    filtered = [
+        m for m in all_messages
+        if m.role == "user" or m.agent_name == agent_name
+    ][:limit]
+
+    # Return in chronological order
+    filtered.reverse()
+
+    return [ChatMessageResponse.model_validate(m) for m in filtered]

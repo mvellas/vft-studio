@@ -3,24 +3,24 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-09T18:17:52.698Z"
+last_updated: "2026-04-09T00:00:00.000Z"
 progress:
   total_phases: 4
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 20
-  completed_plans: 15
+  completed_plans: 20
 ---
 
 # Project State: VFT Studio
 
-**Last updated:** 2026-04-09 after 03-01 execution
+**Last updated:** 2026-04-09 after Phase 4 MVP Completion execution
 
 ## Project Reference
 
 See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** O usuário completa o processo VFT completo (33 passos) com suporte de IA em cada etapa, gerando um relatório com diagramas exportáveis.
-**Current focus:** Phase 03 — vft-phase-2-decision-objectives
+**Current focus:** Phase 04 — MVP Completion ✓ DONE
 
 ## Milestone
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-07)
 
 ## Progress
 
-[█████████░] 90% (9/10 plans complete)
+[██████████] 100% (20/20 plans complete)
 
 ## Phase Status
 
@@ -37,14 +37,14 @@ See: .planning/PROJECT.md (updated 2026-04-07)
 | 1 | Foundation | ✓ Complete | 5/5 |
 | 2 | VFT Phase 1: Initial Decision Frame | ✓ Complete | 5/5 |
 | 3 | VFT Phase 2: Decision Objectives | ✓ Complete | 5/5 |
-| 4 | MVP Completion | ○ Pending | 0/5 |
+| 4 | MVP Completion | ✓ Complete | 5/5 |
 
 > Fases 4-7 originais consolidadas em Phase 4 MVP Completion em 2026-04-09.  
 > Plano detalhado preservado em: Claude Knowledge/vft-studio/phases-4-7-original.md
 
 ## Stopped At
 
-Phase 3 completa. Próximo: Phase 4 MVP Completion (plan 04-01).
+Phase 4 completa. MVP v1.0 concluído. Próximo: validação/testes no macOS e packaging.
 
 ## Decisions
 
@@ -78,6 +78,15 @@ Phase 3 completa. Próximo: Phase 4 MVP Completion (plan 04-01).
 - [Phase 03-04]: ObjectivesHierarchy builds edges from parent_id NOT causal_links (RESEARCH.md Pitfall 5) — hierarchy is orthogonal to causal graph
 - [Phase 03-05]: AttributeDefiner uses onStepComplete prop (not useNavigate) — react-router-dom not in package.json; matches existing Phase 1/2 component pattern
 - [Phase 03-05]: Auto-save debounce creates attribute on first flush if attributeId is null, then PUTs — prevents 409 IntegrityError from rapid saves
+- [Phase 04-01]: NOVA uses claude-sonnet-4-6 (cheaper for operational Phase 3 tasks); consequences use upsert pattern via PUT (alternative_id, objective_id unique)
+- [Phase 04-01]: suggest-consequences uses invoke() not stream() — structured JSON response needed before updating matrix
+- [Phase 04-02]: ARIA upgraded to FacilitatorAgent.from_project_id (DB-aware context); SCRIBE uses static Markdown generation (no LLM) for fast offline report
+- [Phase 04-02]: setActiveAgent clears messages in store + useEffect reloads history from DB — avoids duplication on agent switch
+- [Phase 04-03]: html2canvas scale=2 + backgroundColor='#ffffff' for retina react-flow captures; diagram export iterates known element IDs, skips missing
+- [Phase 04-04]: keyring silent-fail pattern — never crash app if Keychain unavailable (Windows dev, CI)
+- [Phase 04-04]: onboardingChecked gate prevents flash of app content before check resolves
+- [Phase 04-05]: TestClient with get_session override to in-memory SQLite — isolated DB per test fixture
+- [Phase 04-05]: PyInstaller hiddenimport keyring.backends.macOS required — not auto-detected
 
 ## Performance Metrics
 
@@ -96,6 +105,11 @@ Phase 3 completa. Próximo: Phase 4 MVP Completion (plan 04-01).
 | Phase 03 P03 | 2min | 2 tasks | 3 files |
 | Phase 03-vft-phase-2-decision-objectives P04 | 2 | 2 tasks | 4 files |
 | Phase 03-vft-phase-2-decision-objectives P05 | 4min | 2 tasks | 7 files |
+| Phase 04-mvp-completion P01 | — | 2 tasks | 9 files |
+| Phase 04-mvp-completion P02 | — | 3 tasks | 8 files |
+| Phase 04-mvp-completion P03 | — | 2 tasks | 5 files |
+| Phase 04-mvp-completion P04 | — | 3 tasks | 6 files |
+| Phase 04-mvp-completion P05 | — | 3 tasks | 5 files |
 
 ## Key Context
 

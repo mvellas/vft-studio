@@ -24,3 +24,16 @@ dependencies = [
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["backend*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "--tb=short -q"
+
+[tool.coverage.run]
+source = ["backend"]
+omit = ["backend/db/migrations/*", "alembic/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 60
