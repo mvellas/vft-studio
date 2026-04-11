@@ -48,6 +48,8 @@ async def create_project(
         description=body.description,
         context_notes=body.context_notes,
     )
+    await session.commit()
+    await session.refresh(project)
     return _project_response(project)
 
 

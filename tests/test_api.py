@@ -105,7 +105,7 @@ class TestProjectsCRUD:
     def test_update_project(self, client):
         r = client.post("/api/projects", json={"name": "Original"})
         project_id = r.json()["id"]
-        r2 = client.put(f"/api/projects/{project_id}", json={"name": "Updated"})
+        r2 = client.patch(f"/api/projects/{project_id}", json={"name": "Updated"})
         assert r2.status_code == 200
         assert r2.json()["name"] == "Updated"
 
@@ -130,7 +130,7 @@ class TestPhases:
 
     def test_get_current_step(self, client):
         project_id = self._create_project(client)
-        r = client.get(f"/api/projects/{project_id}/steps/current")
+        r = client.get(f"/api/projects/{project_id}/phase/current")
         assert r.status_code == 200
         data = r.json()
         assert "step" in data
@@ -139,7 +139,7 @@ class TestPhases:
         assert "progress_percent" in data
 
     def test_current_step_nonexistent_project_404(self, client):
-        r = client.get("/api/projects/nonexistent/steps/current")
+        r = client.get("/api/projects/nonexistent/phase/current")
         assert r.status_code == 404
 
 
