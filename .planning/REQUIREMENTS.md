@@ -13,26 +13,26 @@
 - [x] **FOUND-04**: Alembic migrations versionadas; schema aplicado automaticamente
 - [x] **FOUND-05**: BaseRepository genérico com get/list/create/update/soft_delete
 - [x] **FOUND-06**: Pydantic schemas frozen=True para todas as entidades
-- [ ] **FOUND-07**: CRUD completo de projetos (create/list/open/archive/duplicate/import/export)
-- [ ] **FOUND-08**: CRUD completo de stakeholders com campo `elicitation_mode`
-- [ ] **FOUND-09**: AppShell layout: sidebar + área de conteúdo + painel de chat lateral
-- [ ] **FOUND-10**: ProjectList screen com ProjectCard e NewProjectWizard (3 passos)
-- [ ] **FOUND-11**: Zustand stores (projectStore, chatStore, uiStore) com immer middleware
-- [ ] **FOUND-12**: API client HTTP com base URL do servidor local e error interceptors
+- [x] **FOUND-07**: CRUD completo de projetos (create/list/open/archive/duplicate/import/export)
+- [x] **FOUND-08**: CRUD completo de stakeholders com campo `elicitation_mode`
+- [x] **FOUND-09**: AppShell layout: sidebar + área de conteúdo + painel de chat lateral
+- [x] **FOUND-10**: ProjectList screen com ProjectCard e NewProjectWizard (3 passos)
+- [x] **FOUND-11**: Zustand stores (projectStore, chatStore, uiStore) com immer middleware
+- [x] **FOUND-12**: API client HTTP com base URL do servidor local e error interceptors
 - [x] **FOUND-13**: BaseAgent com invoke() + stream() (AsyncGenerator SSE); retry 3x exponential
 - [x] **FOUND-14**: POST /api/chat/message retorna SSE stream; EventSource no frontend
 
 ### VFT Phase Engine
 
-- [ ] **PHASE-01**: ProcessManager com 33 StepConfigs completos (id, name, why, how, reference, form_type, conditions)
-- [ ] **PHASE-02**: GET /api/projects/{id}/phase/current — retorna passo atual com metadata
-- [ ] **PHASE-03**: POST /api/projects/{id}/phase/step/complete — valida, persiste, avança
-- [ ] **PHASE-04**: StepGuide component: card O QUÊ/POR QUÊ/COMO para qualquer passo
-- [ ] **PHASE-05**: PhaseProgress component: barra 3 fases + passos individuais + passo atual
+- [x] **PHASE-01**: ProcessManager com 33 StepConfigs completos (id, name, why, how, reference, form_type, conditions)
+- [x] **PHASE-02**: GET /api/projects/{id}/phase/current — retorna passo atual com metadata
+- [x] **PHASE-03**: POST /api/projects/{id}/phase/step/complete — valida, persiste, avança
+- [x] **PHASE-04**: StepGuide component: card O QUÊ/POR QUÊ/COMO para qualquer passo
+- [x] **PHASE-05**: PhaseProgress component: barra 3 fases + passos individuais + passo atual
 
 ### Phase 1 — Initial Decision Frame
 
-- [ ] **P1-01**: Passo 1.1 — StakeholderMapper: adicionar stakeholders com tipo/perfil/interesses; validar ≥1 Decision Authority
+- [x] **P1-01**: Passo 1.1 — StakeholderMapper: adicionar stakeholders com tipo/perfil/interesses; validar ≥1 Decision Authority
 - [x] **P1-02**: Passos 1.2–1.5 — DecisionFrameForm: Purpose/Perspective/Scope; adapta à variante (single/multi DM)
 - [x] **P1-03**: Passo 1.6 — DocumentIDF: resumo formatado gerado e salvo com timestamp
 - [x] **P1-04**: Passo 1.7 — DecisionStatement: campo + "Gerar com IA" (FRAME) + validação de estrutura
@@ -58,19 +58,19 @@
 
 ### Phase 3 — Decision Alternatives
 
-- [ ] **P3-01**: CRUD completo de alternativas com consequences por atributo
-- [ ] **P3-02**: NOVA agent (Phase 3 Specialist): elicita alternativas pelo procedimento de Keeney
-- [ ] **P3-03**: Passos 3.1/3.4 — AlternativesList: lista inicial com consequências por atributo
+- [x] **P3-01**: CRUD completo de alternativas com consequences por atributo
+- [x] **P3-02**: NOVA agent (Phase 3 Specialist): elicita alternativas pelo procedimento de Keeney
+- [x] **P3-03**: Passos 3.1/3.4 — AlternativesList: lista inicial com consequências por atributo
 - [ ] **P3-04**: Passos 3.2/3.5 — AlternativeElicitor: NOVA sugere alternativas (objetivo por objetivo → pares → trios)
-- [ ] **P3-05**: ConsequencesMatrix: tabela alternativas × atributos; células editáveis; IA preenche sugestões
+- [x] **P3-05**: ConsequencesMatrix: tabela alternativas × atributos; células editáveis; IA preenche sugestões
 
 ### Chat & Agents
 
-- [ ] **CHAT-01**: ARIA agent (Facilitador): contexto completo do projeto; todos os cenários do AGENTS-SPEC
-- [ ] **CHAT-02**: AgentSelector: usuário seleciona agente no chat; avatar + nome mudam
+- [x] **CHAT-01**: ARIA agent (Facilitador): contexto completo do projeto; todos os cenários do AGENTS-SPEC
+- [x] **CHAT-02**: AgentSelector: usuário seleciona agente no chat; avatar + nome mudam
 - [ ] **CHAT-03**: QuickActions: parser de marcadores na resposta da IA; botões "Salvar como objetivo/valor/alternativa"
-- [ ] **CHAT-04**: ChatHistory persistida por projeto com timestamps; exportável como Markdown
-- [ ] **CHAT-05**: SCRIBE agent (Documentation): gera relatório completo em Markdown com todos os dados
+- [x] **CHAT-04**: ChatHistory persistida por projeto com timestamps; exportável como Markdown
+- [x] **CHAT-05**: SCRIBE agent (Documentation): gera relatório completo em Markdown com todos os dados
 
 ### Interview-Driven Flow (RF-10)
 
@@ -96,27 +96,27 @@
 ### Visualizações e Export
 
 - [ ] **VIZ-01**: 7 diagramas automáticos: IDF Card, Causal Map, Means-Ends Network, Hierarchy, Stakeholder Map, Process Flowchart, Decision Frame Conceitual
-- [ ] **VIZ-02**: Diagramas de grafo (react-flow + dagre): Causal Map, Means-Ends, Hierarchy — export PNG via html2canvas
-- [ ] **VIZ-03**: Diagramas estruturados (Mermaid.js): Stakeholder Map, Process Flowchart, Decision Frame Card
+- [x] **VIZ-02**: Diagramas de grafo (react-flow + dagre): Causal Map, Means-Ends, Hierarchy — export PNG via html2canvas
+- [ ] **VIZ-03**: Diagramas estruturados (Mermaid.js): Stakeholder Map, Process Flowchart
 - [ ] **VIZ-04**: Graph View D3.js force-directed: todas as entidades + relações; filtros; busca; mini-map
 - [ ] **VIZ-05**: Graph View: click em nó → painel lateral com detalhes; toggle de evolução temporal (fase 1/2/3)
-- [ ] **VIZ-06**: Export Markdown — relatório completo bem formatado com seções e hierarquias
+- [x] **VIZ-06**: Export Markdown — relatório completo bem formatado com seções e hierarquias
 - [ ] **VIZ-07**: Export PDF — WeasyPrint; diagramas PNG embutidos; figuras numeradas
 - [ ] **VIZ-08**: Export .vft bundle — projeto completo como JSON comprimido; importável
 
 ### Settings e Polish
 
-- [ ] **SET-01**: Settings screen: ANTHROPIC_API_KEY (macOS Keychain via keyring); modelo por agente; idioma
+- [x] **SET-01**: Settings screen: ANTHROPIC_API_KEY (macOS Keychain via keyring); modelo por agente; idioma
 - [ ] **SET-02**: Dark Mode + Light Mode via CSS vars; toggle nas configurações
 - [ ] **SET-03**: Auto-save com debounce 2s; undo/redo em formulários
 - [ ] **SET-04**: Keyboard shortcuts: ⌘K command palette, ⌘G Graph View, etc.
-- [ ] **SET-05**: Onboarding de 3 telas no primeiro boot
+- [x] **SET-05**: Onboarding de 3 telas no primeiro boot
 
 ### Tests e Packaging
 
-- [ ] **TEST-01**: pytest backend ≥70% coverage: engine, agents (mock), API, services
+- [x] **TEST-01**: pytest backend ≥70% coverage: engine, agents (mock), API, services
 - [ ] **TEST-02**: Vitest frontend: componentes críticos (StepGuide, ObjectiveCard, ChatMessage)
-- [ ] **TEST-03**: `python build.py` produz `VFT Studio.app` em `dist/` via PyInstaller
+- [x] **TEST-03**: `python build.py` produz `VFT Studio.app` em `dist/` via PyInstaller
 
 ## v2 Requirements
 
@@ -141,28 +141,45 @@
 | OAuth / auth de usuário | Single-user local |
 | Integração Notion/Obsidian | v2.0 |
 | VFT quantitativo (funções de valor, MAUT) | Fora do escopo do framework Vieira et al. (2024) |
+| Interview-Driven Flow (INT-01..08) | Diferido para v2.0 |
+| Proxy Documental (DOC-01..07) | Diferido para v2.0 |
+| Graph View D3.js (VIZ-04..05) | Diferido para v2.0 |
+| Export PDF WeasyPrint (VIZ-07) | Diferido para v2.0 |
+| Vitest frontend (TEST-02) | Diferido para v2.0 |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 a FOUND-14 | Phase 1 | Pending |
-| PHASE-01 a PHASE-05 | Phase 1 | Pending |
-| P1-01 a P1-07 | Phase 2 | Pending |
-| P2-01 a P2-13 | Phase 3 | Pending |
-| P3-01 a P3-05 | Phase 4 | Pending |
-| CHAT-01 a CHAT-05 | Phase 4 | Pending |
-| INT-01 a INT-08 | Phase 5 | Pending |
-| DOC-01 a DOC-07 | Phase 5 | Pending |
-| VIZ-01 a VIZ-08 | Phase 6 | Pending |
-| SET-01 a SET-05 | Phase 7 | Pending |
-| TEST-01 a TEST-03 | Phase 7 | Pending |
+| FOUND-01..14 | Phase 1 | ✅ Complete |
+| PHASE-01..05 | Phase 1 | ✅ Complete |
+| P1-01..07 | Phase 2 | ✅ Complete |
+| P2-01..13 | Phase 3 | ✅ Complete |
+| P3-01, P3-03, P3-05 | Phase 4 | ✅ Complete |
+| P3-02 (NOVA agent) | Phase 4 | ✅ Complete |
+| P3-04 (AlternativeElicitor full flow) | Phase 4 | ⚠️ Partial — NOVA suggest exists; structured obj-by-obj elicitation not confirmed |
+| CHAT-01, 02, 04, 05 | Phase 4 | ✅ Complete |
+| CHAT-03 (QuickActions) | Phase 4 | ❌ Not built — not in 04-02 summary |
+| VIZ-02, VIZ-06 | Phase 4 | ✅ Complete |
+| VIZ-01 (7 diagrams) | Phase 4 | ⚠️ Partial — 3 react-flow done; IDF Card + StakeholderMap + ProcessFlowchart not confirmed |
+| VIZ-03 (Mermaid) | Phase 4 | ❌ Not confirmed in summaries |
+| SET-01, SET-05 | Phase 4 | ✅ Complete |
+| SET-02 (Dark Mode) | Phase 4 | ❌ Not built |
+| SET-03 (Auto-save global) | Phase 4 | ❌ Not built (only per-field debounce in AttributeDefiner) |
+| SET-04 (Keyboard shortcuts) | Phase 4 | ❌ Not built — deferred |
+| TEST-01, TEST-03 | Phase 4 | ✅ Complete |
+| TEST-02 (Vitest) | — | ❌ Deferred to v2 |
+| INT-01..08 | — | ❌ Deferred to v2 |
+| DOC-01..07 | — | ❌ Deferred to v2 |
+| VIZ-04..08 | — | ❌ Deferred to v2 |
 
-**Coverage:**
-- v1 requirements: 68 total
-- Mapped to phases: 68
-- Unmapped: 0 ✓
+**Coverage v1.0 MVP (shipped):**
+- Planned for MVP: 58 requirements
+- Fully shipped: 47
+- Partial/unconfirmed: 3 (P3-04, VIZ-01, VIZ-03)
+- Not built (within MVP scope): 3 (CHAT-03, SET-02, SET-03)
+- Explicitly deferred to v2: 5 groups (INT, DOC, VIZ-04+, SET-04, TEST-02)
 
 ---
 *Requirements defined: 2026-04-07*
-*Last updated: 2026-04-07 after initial definition*
+*Last updated: 2026-04-11 after v1.0 execution audit*

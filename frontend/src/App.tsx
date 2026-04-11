@@ -6,6 +6,7 @@ import { OnboardingFlow } from './components/project/OnboardingFlow'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { StepGuide } from './components/phase/StepGuide'
 import { PhaseProgress } from './components/phase/PhaseProgress'
+import { Phase3View } from './components/phase3/Phase3View'
 import { useUiStore } from './stores/uiStore'
 import { useProjectStore } from './stores/projectStore'
 import { phasesApi } from './api/phases'
@@ -52,6 +53,8 @@ function ProjectDetailView() {
     )
   }
 
+  const isPhase3 = currentStep.step.id.startsWith('3.')
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <PhaseProgress
@@ -60,7 +63,10 @@ function ProjectDetailView() {
         totalSteps={currentStep.total_steps}
         progressPercent={currentStep.progress_percent}
       />
-      <StepGuide step={currentStep.step} />
+      {isPhase3 && activeProjectId
+        ? <Phase3View projectId={activeProjectId} />
+        : <StepGuide step={currentStep.step} />
+      }
     </div>
   )
 }
