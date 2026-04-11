@@ -1,0 +1,161 @@
+<h1 id="guia-de-colaboração-vft-studio-com-claude-code">Guia de
+Colaboração — VFT Studio com Claude Code</h1>
+<hr />
+<h2 id="setup-inicial-pesquisador-novo">1. Setup inicial (pesquisador
+novo)</h2>
+<h3 id="pré-requisitos">Pré-requisitos</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Python via Anaconda (obrigatório — o projeto usa /opt/anaconda3/bin/python)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Node.js 18+</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Claude Code CLI</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-g</span> @anthropic-ai/claude-code</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># GitHub CLI</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install gh <span class="kw">&amp;&amp;</span> <span class="ex">gh</span> auth login</span></code></pre></div>
+<h3 id="clonar-e-configurar">Clonar e configurar</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/mvellas/vft-studio.git</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> vft-studio</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Backend</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">/opt/anaconda3/bin/pip</span> install <span class="at">-r</span> backend/requirements.txt</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Frontend</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> install</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Criar pasta de dados</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/VFTStudio</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Rodar</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ex">/opt/anaconda3/bin/python</span> main.py</span></code></pre></div>
+<hr />
+<h2 id="workflow-de-colaboração-no-github">2. Workflow de colaboração no
+GitHub</h2>
+<h3 id="regra-principal-nunca-commitar-direto-no-master">Regra
+principal: nunca commitar direto no <code>master</code></h3>
+<p>Cada pesquisador trabalha em branch própria:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feat/nome-da-feature</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ... faz o trabalho ...</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin feat/nome-da-feature</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> pr create <span class="at">--title</span> <span class="st">&quot;Descrição clara&quot;</span> <span class="at">--body</span> <span class="st">&quot;O que foi feito e por quê&quot;</span></span></code></pre></div>
+<p>O outro pesquisador revisa e faz merge via PR.</p>
+<h3 id="divisão-de-trabalho-sugerida">Divisão de trabalho sugerida</h3>
+<p>Usem o ROADMAP em <code>.planning/ROADMAP.md</code> como fonte da
+verdade. Cada plan (<code>04-01</code>, <code>04-02</code>, etc.) é uma
+unidade atômica — um pesquisador assume um plan por vez para evitar
+conflitos.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ver o estado atual</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> .planning/STATE.md</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> .planning/ROADMAP.md</span></code></pre></div>
+<hr />
+<h2 id="usando-claude-code-juntos">3. Usando Claude Code juntos</h2>
+<h3 id="cada-pesquisador-roda-sua-própria-sessão-claude-code">Cada
+pesquisador roda sua própria sessão Claude Code</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> vft-studio</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span>  <span class="co"># abre sessão interativa</span></span></code></pre></div>
+<h3 id="comandos-gsd-essenciais">Comandos GSD essenciais</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Comando</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>/gsd:progress</code></td>
+<td>Ver onde o projeto está</td>
+</tr>
+<tr class="even">
+<td><code>/gsd:plan-phase 4</code></td>
+<td>Planejar o próximo conjunto de tasks</td>
+</tr>
+<tr class="odd">
+<td><code>/gsd:execute-phase 4</code></td>
+<td>Executar os plans da fase</td>
+</tr>
+<tr class="even">
+<td><code>/gsd:verify-work 4</code></td>
+<td>Validar o que foi feito</td>
+</tr>
+</tbody>
+</table>
+<h3 id="antes-de-começar-qualquer-sessão">Antes de começar qualquer
+sessão</h3>
+<pre><code>/gsd:progress   → sincronizar com o estado atual</code></pre>
+<h3 id="antes-de-encerrar-qualquer-sessão">Antes de encerrar qualquer
+sessão</h3>
+<pre><code>/gsd:pause-work  → cria handoff com contexto para o próximo</code></pre>
+<p>O arquivo de handoff fica em <code>.planning/</code> e vai junto no
+commit — o outro pesquisador lê antes de continuar.</p>
+<hr />
+<h2 id="evitar-conflitos">4. Evitar conflitos</h2>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Situação</th>
+<th>O que fazer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Dois trabalhando no mesmo arquivo</td>
+<td>Dividir por plan — um faz backend, outro frontend</td>
+</tr>
+<tr class="even">
+<td>Conflito de merge</td>
+<td><code>git pull --rebase origin master</code> antes de push</td>
+</tr>
+<tr class="odd">
+<td>STATE.md ou ROADMAP.md divergiu</td>
+<td>Pull + revisar manualmente — esses arquivos são a fonte da
+verdade</td>
+</tr>
+<tr class="even">
+<td>Dúvida sobre o que está feito</td>
+<td>Ler <code>.planning/phases/</code> — cada <code>*-SUMMARY.md</code>
+documenta o que foi executado</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="referências-do-projeto">5. Referências do projeto</h2>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Recurso</th>
+<th>Localização</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Spec completo</td>
+<td>Vault Mestrado → <code>PSM/VFT Software/</code></td>
+</tr>
+<tr class="even">
+<td>Plano detalhado fases 4-7</td>
+<td>Obsidian →
+<code>Claude Knowledge/vft-studio/phases-4-7-original.md</code></td>
+</tr>
+<tr class="odd">
+<td>Decisões arquiteturais</td>
+<td><code>.planning/STATE.md</code> → seção Decisions</td>
+</tr>
+<tr class="even">
+<td>Roadmap simplificado</td>
+<td><code>.planning/ROADMAP.md</code></td>
+</tr>
+</tbody>
+</table>

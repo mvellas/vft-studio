@@ -41,10 +41,10 @@ async def check_phase2_gate(project_id: str, session: AsyncSession) -> bool:
     if len(attributes) != len(fundamentals):
         return False
 
-    # All checks pass — mark Phase 2 as completed
+    # All checks pass — mark Phase 2 as completed.
+    # NOTE: do NOT commit here; PhaseService.complete_step owns the session commit.
     project = await session.get(Project, project_id)
     if project is not None:
         project.phase2_completed = 1
-        await session.commit()
 
     return True
