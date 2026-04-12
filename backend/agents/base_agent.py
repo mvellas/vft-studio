@@ -3,6 +3,9 @@ backend/agents/base_agent.py
 ============================
 BaseAgent wraps the Anthropic AsyncAnthropic SDK with invoke() and stream()
 methods. Both support 3x exponential backoff retry on failure.
+
+Also defines ToolAwareAgent (extends BaseAgent) with tool-use loop support,
+and the ToolUseEvent / ToolResultEvent / StreamChunk types for SSE streaming.
 """
 from __future__ import annotations
 
@@ -88,10 +91,22 @@ class ToolAwareAgent(BaseAgent):
         super().__init__(model=model, system=system)
         self.tools: list[dict] = tools or []
 
+    async def _create_with_retry(self, **kwargs: Any) -> object:
+        """Call client.messages.create with 3x exponential backoff retry."""
+        for attempt in range(3):
+            try:
+                return await self.client.messages.create(**kwargs)
+            except Exception:
+                if attempt == 2:
+                    raise
+                await asyncio.sleep(2 ** attempt)
+        raise RuntimeError("unreachable")  # satisfies type checker
+
     async def execute_tool(self, name: str, tool_input: dict[str, Any]) -> tuple[str, dict[str, Any]]:
         """Execute a tool call. Returns (content_for_llm, ui_metadata).
 
-        Override in subclasses to implement specific tools.
+        IMPORTANT: Subclasses MUST override this with `async def execute_tool(...)`.
+        The base implementation just returns a not-implemented message.
         """
         return f"Tool '{name}' not implemented.", {}
 
@@ -104,20 +119,13 @@ class ToolAwareAgent(BaseAgent):
         current_messages = list(messages)
 
         # Non-streaming call to get initial response (may request tool use)
-        for attempt in range(3):
-            try:
-                response = await self.client.messages.create(
-                    model=self.model,
-                    max_tokens=4096,
-                    system=self.system,
-                    tools=self.tools,
-                    messages=current_messages,
-                )
-                break
-            except Exception:
-                if attempt == 2:
-                    raise
-                await asyncio.sleep(2 ** attempt)
+        response = await self._create_with_retry(
+            model=self.model,
+            max_tokens=4096,
+            system=self.system,
+            tools=self.tools,
+            messages=current_messages,
+        )
 
         # Tool-use loop
         while response.stop_reason == "tool_use":
@@ -141,20 +149,13 @@ class ToolAwareAgent(BaseAgent):
                 {"role": "user", "content": tool_results},
             ]
 
-            for attempt in range(3):
-                try:
-                    response = await self.client.messages.create(
-                        model=self.model,
-                        max_tokens=4096,
-                        system=self.system,
-                        tools=self.tools,
-                        messages=current_messages,
-                    )
-                    break
-                except Exception:
-                    if attempt == 2:
-                        raise
-                    await asyncio.sleep(2 ** attempt)
+            response = await self._create_with_retry(
+                model=self.model,
+                max_tokens=4096,
+                system=self.system,
+                tools=self.tools,
+                messages=current_messages,
+            )
 
         # Stream final text response (no tools needed now)
         for attempt in range(3):
