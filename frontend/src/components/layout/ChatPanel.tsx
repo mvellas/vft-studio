@@ -32,12 +32,15 @@ export function ChatPanel({ width }: ChatPanelProps) {
   // Load chat history when agent changes
   useEffect(() => {
     if (!activeProjectId) return
+    let cancelled = false
     loadChatHistory(activeProjectId, activeAgentType).then(history => {
+      if (cancelled) return
       // Skip if a new conversation was already started (streaming or messages present)
       const { isStreaming: streaming, messages: current } = useChatStore.getState()
       if (streaming || current.length > 0) return
       for (const msg of history) addMessage(msg)
     }).catch(() => {})
+    return () => { cancelled = true }
   }, [activeAgentType, activeProjectId])
 
   // Auto-scroll to bottom on new message or new streaming content
