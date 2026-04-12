@@ -11,7 +11,7 @@ import { loadChatHistory } from '../../api/chat'
 import { useProjectStore } from '../../stores/projectStore'
 
 export function ChatPanel() {
-  const { messages, isStreaming, activeAgent, activeAgentType, addMessage, streamingToolState } = useChatStore()
+  const { messages, isStreaming, activeAgent, activeAgentType, addMessage, streamingToolState, autoSendMessage, setAutoSendMessage } = useChatStore()
   const { setChatPanelOpen } = useUiStore()
   const { sendMessage, cancelStream } = useChat()
   const { activeProjectId } = useProjectStore()
@@ -30,6 +30,15 @@ export function ChatPanel() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  // Fire autoSendMessage once when set (used by DocumentPanel onAnalyze)
+  useEffect(() => {
+    if (autoSendMessage && !isStreaming) {
+      const msg = autoSendMessage
+      setAutoSendMessage(null)
+      sendMessage(msg)
+    }
+  }, [autoSendMessage, isStreaming])
 
   const handleSend = () => {
     const text = inputValue.trim()
