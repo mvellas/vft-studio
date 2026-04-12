@@ -81,3 +81,37 @@ export interface ToolEvent {
   query?: string   // present in tool_use
   count?: number   // present in tool_result
 }
+
+export interface Document {
+  id: string
+  project_id: string
+  stakeholder_id: string | null
+  title: string
+  doc_type: string
+  date_reference: string | null
+  source: string
+  content_text: string
+  file_name: string | null
+  created_at: string
+}
+
+export interface DocumentCreate {
+  title: string
+  doc_type: string
+  date_reference?: string
+  source?: string
+  content_text?: string
+  stakeholder_id?: string
+  file_name?: string
+}
+
+export const DOC_TYPE_LABELS: Record<string, string> = {
+  official_speech: 'Discurso oficial',
+  policy_document: 'Documento de política',
+  report: 'Relatório',
+  academic_paper: 'Artigo acadêmico',
+  news_article: 'Notícia',
+  minutes: 'Ata',
+  legal_text: 'Texto legal',
+  other: 'Outro',
+}
