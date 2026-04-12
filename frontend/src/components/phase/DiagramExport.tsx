@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import html2canvas from 'html2canvas'
-import { Download, FileText, Image, Loader2 } from 'lucide-react'
+import { FileText, Image, Loader2 } from 'lucide-react'
 import { apiClient } from '../../api/client'
 
 interface DiagramExportProps {

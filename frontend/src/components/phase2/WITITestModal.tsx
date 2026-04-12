@@ -40,7 +40,6 @@ export function WITITestModal({ isOpen, onClose, objectiveId, projectId }: WITIT
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const objectives = useObjectivesStore(s => s.objectives)
-  const updateObjectiveInStore = useObjectivesStore(s => s.updateObjective)
   const fetchNetwork = useObjectivesStore(s => s.fetchNetwork)
 
   const objective: Objective | null =

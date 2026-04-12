@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Loader2, Users, CheckCircle2 } from 'lucide-react'
 import { stakeholdersApi } from '../../api/stakeholders'
-import { objectivesApi } from '../../api/objectives'
 import { useObjectivesStore } from '../../stores/objectivesStore'
 import type { Stakeholder } from '../../types'
 import type { Objective } from '../../api/objectives'

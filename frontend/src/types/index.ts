@@ -74,3 +74,10 @@ export interface ChatMessage {
   phase: number | null
   step: string | null
 }
+
+export interface ToolEvent {
+  type: 'tool_use' | 'tool_result'
+  name: string
+  query?: string   // present in tool_use
+  count?: number   // present in tool_result
+}

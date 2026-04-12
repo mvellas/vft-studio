@@ -4,16 +4,23 @@ import { useProjectStore } from '../stores/projectStore'
 import { streamChatMessage } from '../api/chat'
 import type { ChatMessage } from '../types'
 
+interface SendOptions {
+  agentName?: string
+  agentType?: string
+}
+
 export function useChat() {
   const abortRef = useRef<(() => void) | null>(null)
-  const { addMessage, appendToLastMessage, setStreaming, activeAgent, activeAgentType } = useChatStore()
+  const { addMessage, appendToLastMessage, setStreaming, setToolState, activeAgent, activeAgentType } = useChatStore()
   const activeProjectId = useProjectStore((s) => s.activeProjectId)
 
   const sendMessage = useCallback(
-    (text: string) => {
+    (text: string, opts?: SendOptions) => {
       if (!activeProjectId || !text.trim()) return
 
-      // Add user message
+      const resolvedAgent = opts?.agentName ?? activeAgent
+      const resolvedAgentType = opts?.agentType ?? activeAgentType
+
       const userMsg: ChatMessage = {
         id: crypto.randomUUID(),
         session_id: '',
@@ -27,14 +34,13 @@ export function useChat() {
       }
       addMessage(userMsg)
 
-      // Add placeholder for assistant response (content will be built up via appendToLastMessage)
       const assistantMsg: ChatMessage = {
         id: crypto.randomUUID(),
         session_id: '',
         project_id: activeProjectId,
         timestamp: new Date().toISOString(),
         role: 'assistant',
-        agent_name: activeAgent,
+        agent_name: resolvedAgent,
         content: '',
         phase: null,
         step: null,
@@ -45,16 +51,22 @@ export function useChat() {
       abortRef.current = streamChatMessage(
         text,
         activeProjectId,
-        activeAgentType,
+        resolvedAgentType,
         (delta) => appendToLastMessage(delta),
-        () => setStreaming(false),
+        (event) => setToolState({ type: 'tool_use', name: event.name, query: event.query }),
+        (event) => setToolState({ type: 'tool_result', name: event.name, count: event.count }),
+        () => {
+          setToolState(null)
+          setStreaming(false)
+        },
         (error) => {
+          setToolState(null)
           appendToLastMessage(`\n\n[Erro: ${error}]`)
           setStreaming(false)
         },
       )
     },
-    [activeProjectId, activeAgent, activeAgentType, addMessage, appendToLastMessage, setStreaming],
+    [activeProjectId, activeAgent, activeAgentType, addMessage, appendToLastMessage, setStreaming, setToolState],
   )
 
   const cancelStream = useCallback(() => {
