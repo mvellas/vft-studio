@@ -7,7 +7,7 @@ Tests: BaseAgent invoke/stream, agent prompt rendering, from_project_id context 
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from backend.agents.base_agent import BaseAgent
+from backend.agents.base_agent import BaseAgent, ToolAwareAgent, ToolUseEvent, ToolResultEvent
 
 
 # ---------------------------------------------------------------------------
@@ -151,3 +151,114 @@ class TestFacilitatorAgent:
         assert "My VFT Project" in agent.system
         assert "Step 1.3 in progress" in agent.system
         assert "Alice (DM)" in agent.system
+
+
+# ---------------------------------------------------------------------------
+# ToolAwareAgent
+# ---------------------------------------------------------------------------
+
+class TestToolAwareAgent:
+    def test_tool_aware_agent_init(self):
+        tools = [{"name": "web_search", "description": "Search the web"}]
+        agent = ToolAwareAgent(model="claude-sonnet-4-6", system="test", tools=tools)
+        assert agent.tools == tools
+
+    def test_tool_aware_agent_default_tools(self):
+        agent = ToolAwareAgent()
+        assert agent.tools == []
+
+    @pytest.mark.asyncio
+    async def test_stream_with_tools_yields_tool_events_then_text(self):
+        tools = [{"name": "web_search", "description": "Search"}]
+
+        # Mock first call: stop_reason=tool_use
+        mock_tool_block = MagicMock()
+        mock_tool_block.type = "tool_use"
+        mock_tool_block.id = "tu_123"
+        mock_tool_block.name = "web_search"
+        mock_tool_block.input = {"query": "test query"}
+        mock_tool_block.model_dump = MagicMock(return_value={
+            "type": "tool_use", "id": "tu_123",
+            "name": "web_search", "input": {"query": "test query"}
+        })
+
+        first_response = MagicMock()
+        first_response.stop_reason = "tool_use"
+        first_response.content = [mock_tool_block]
+
+        # Mock second call: stop_reason=end_turn
+        second_response = MagicMock()
+        second_response.stop_reason = "end_turn"
+        second_response.content = []
+
+        # Mock streaming context
+        mock_stream_ctx = MagicMock()
+        mock_stream_ctx.__aenter__ = AsyncMock(return_value=mock_stream_ctx)
+        mock_stream_ctx.__aexit__ = AsyncMock(return_value=False)
+
+        async def fake_text_stream():
+            yield "Resultado "
+            yield "da busca."
+
+        mock_stream_ctx.text_stream = fake_text_stream()
+
+        agent = ToolAwareAgent(model="claude-sonnet-4-6", system="test", tools=tools)
+
+        async def fake_execute_tool(name, tool_input):
+            return "5 results found", {"count": 5}
+
+        agent.execute_tool = fake_execute_tool
+
+        create_responses = [first_response, second_response]
+        create_call_count = 0
+
+        async def fake_create(**kwargs):
+            nonlocal create_call_count
+            resp = create_responses[create_call_count]
+            create_call_count += 1
+            return resp
+
+        with patch.object(agent.client.messages, "create", side_effect=fake_create), \
+             patch.object(agent.client.messages, "stream", return_value=mock_stream_ctx):
+            events = []
+            async for event in agent.stream_with_tools([{"role": "user", "content": "search"}]):
+                events.append(event)
+
+        tool_use_events = [e for e in events if isinstance(e, ToolUseEvent)]
+        tool_result_events = [e for e in events if isinstance(e, ToolResultEvent)]
+        text_events = [e for e in events if isinstance(e, str)]
+
+        assert len(tool_use_events) == 1
+        assert tool_use_events[0].name == "web_search"
+        assert tool_use_events[0].input == {"query": "test query"}
+        assert len(tool_result_events) == 1
+        assert tool_result_events[0].metadata["count"] == 5
+        assert "".join(text_events) == "Resultado da busca."
+
+    @pytest.mark.asyncio
+    async def test_stream_with_tools_no_tool_use_goes_straight_to_stream(self):
+        """When stop_reason is not tool_use, skip the loop and stream directly."""
+        tools = [{"name": "web_search", "description": "Search"}]
+
+        first_response = MagicMock()
+        first_response.stop_reason = "end_turn"
+        first_response.content = []
+
+        mock_stream_ctx = MagicMock()
+        mock_stream_ctx.__aenter__ = AsyncMock(return_value=mock_stream_ctx)
+        mock_stream_ctx.__aexit__ = AsyncMock(return_value=False)
+
+        async def fake_text_stream():
+            yield "Direct response."
+
+        mock_stream_ctx.text_stream = fake_text_stream()
+
+        agent = ToolAwareAgent(model="claude-sonnet-4-6", system="test", tools=tools)
+
+        with patch.object(agent.client.messages, "create", new=AsyncMock(return_value=first_response)), \
+             patch.object(agent.client.messages, "stream", return_value=mock_stream_ctx):
+            events = []
+            async for event in agent.stream_with_tools([{"role": "user", "content": "hello"}]):
+                events.append(event)
+
+        assert events == ["Direct response."]
