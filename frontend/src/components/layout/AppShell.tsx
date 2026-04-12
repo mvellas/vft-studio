@@ -5,6 +5,7 @@ import { useUiStore } from '../../stores/uiStore'
 import { useProjectStore } from '../../stores/projectStore'
 import { DiagramExport } from '../phase/DiagramExport'
 import { MessageSquare } from 'lucide-react'
+import { useResize } from '../../hooks/useResize'
 
 interface AppShellProps {
   children: ReactNode
@@ -15,11 +16,27 @@ export function AppShell({ children }: AppShellProps) {
   const { activeProjectId, projects } = useProjectStore()
   const activeProject = projects.find(p => p.id === activeProjectId)
 
+  const sidebar = useResize({ initialSize: 256, min: 48, max: 400, direction: 'horizontal-right' })
+  const chat = useResize({ initialSize: 384, min: 240, max: 600, direction: 'horizontal-left' })
+
+  const collapsed = sidebar.size <= 56
+
   return (
     <div className="h-screen flex overflow-hidden bg-gray-50">
-      <Sidebar />
+      {/* Sidebar */}
+      <div className="relative h-screen shrink-0 flex" style={{ width: sidebar.size }}>
+        <Sidebar collapsed={collapsed} width={sidebar.size} />
+        {/* Sidebar resize handle */}
+        <div
+          onMouseDown={sidebar.onMouseDown}
+          className="absolute right-0 top-0 h-full w-1.5 cursor-col-resize z-10 group"
+        >
+          <div className="h-full w-px bg-transparent group-hover:bg-indigo-400 transition-colors mx-auto" />
+        </div>
+      </div>
+
+      {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        {/* Top bar — only shown when in project-detail view */}
         {currentView === 'project-detail' && activeProject && (
           <div className="shrink-0 bg-white border-b border-gray-200 px-6 py-2 flex items-center justify-between">
             <span className="text-sm text-gray-500 truncate max-w-xs">{activeProject.name}</span>
@@ -43,7 +60,20 @@ export function AppShell({ children }: AppShellProps) {
           {children}
         </main>
       </div>
-      {chatPanelOpen && <ChatPanel />}
+
+      {/* Chat panel */}
+      {chatPanelOpen && (
+        <div className="relative h-screen shrink-0 flex" style={{ width: chat.size }}>
+          {/* Chat resize handle */}
+          <div
+            onMouseDown={chat.onMouseDown}
+            className="absolute left-0 top-0 h-full w-1.5 cursor-col-resize z-10 group"
+          >
+            <div className="h-full w-px bg-transparent group-hover:bg-indigo-400 transition-colors mx-auto" />
+          </div>
+          <ChatPanel width={chat.size} />
+        </div>
+      )}
     </div>
   )
 }

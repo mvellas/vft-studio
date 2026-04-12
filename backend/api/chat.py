@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, Query
 from sse_starlette.sse import EventSourceResponse, ServerSentEvent
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import uuid
@@ -27,6 +27,7 @@ from backend.agents.facilitator import FacilitatorAgent
 from backend.agents.phase2_specialist import Phase2SpecialistAgent
 from backend.agents.phase3_specialist import Phase3SpecialistAgent
 from backend.agents.stakeholder_agent import StakeholderSimulationAgent
+from backend.agents.analyst_agent import AnalystAgent
 
 router = APIRouter(tags=["chat"])
 
@@ -59,6 +60,11 @@ AGENT_CONFIGS: dict[str, dict] = {
         "model": "claude-sonnet-4-6",
         "name": "",  # name set dynamically from stakeholder record
         "system": "",  # dynamically loaded from DB via StakeholderSimulationAgent.from_stakeholder_id
+    },
+    "analyst": {
+        "model": "claude-sonnet-4-6",
+        "name": "ANALYST",
+        "system": "",  # dynamically loaded from DB
     },
 }
 
@@ -212,3 +218,22 @@ async def chat_history(
     filtered.reverse()
 
     return [ChatMessageResponse.model_validate(m) for m in filtered]
+
+
+@router.delete("/chat/history", status_code=204)
+async def clear_chat_history(
+    project_id: str = Query(...),
+    agent_type: str = Query(default="facilitator"),
+    session: AsyncSession = Depends(get_session),
+) -> None:
+    """Delete all chat messages for a project/agent combination."""
+    config = AGENT_CONFIGS.get(agent_type, AGENT_CONFIGS["facilitator"])
+    agent_name = config["name"]
+
+    await session.execute(
+        delete(ChatMessage).where(
+            ChatMessage.project_id == project_id,
+            ChatMessage.agent_name.in_([agent_name, "User"]),
+        )
+    )
+    await session.commit()
