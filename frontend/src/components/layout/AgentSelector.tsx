@@ -5,6 +5,7 @@ const AGENTS = [
   { name: 'FRAME', type: 'phase1_specialist', label: 'Fase 1', description: 'Especialista em Enquadramento' },
   { name: 'AXIOM', type: 'phase2_specialist', label: 'Fase 2', description: 'Especialista em Objetivos' },
   { name: 'NOVA', type: 'phase3_specialist', label: 'Fase 3', description: 'Especialista em Alternativas' },
+  { name: 'ANALYST', type: 'analyst', label: 'Documentos', description: 'Análise documental e proxy de stakeholder' },
 ]
 
 export function AgentSelector() {
