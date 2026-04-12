@@ -1,17 +1,19 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { ChatMessage } from '../types'
+import type { ChatMessage, ToolEvent } from '../types'
 
 interface ChatState {
   messages: ChatMessage[]
   isStreaming: boolean
   activeAgent: string
   activeAgentType: string
+  streamingToolState: ToolEvent | null
   addMessage: (message: ChatMessage) => void
   appendToLastMessage: (text: string) => void
   setStreaming: (streaming: boolean) => void
   setActiveAgent: (agentName: string, agentType: string) => void
   clearMessages: () => void
+  setToolState: (event: ToolEvent | null) => void
 }
 
 export const useChatStore = create<ChatState>()(
@@ -20,6 +22,7 @@ export const useChatStore = create<ChatState>()(
     isStreaming: false,
     activeAgent: 'ARIA',
     activeAgentType: 'facilitator',
+    streamingToolState: null,
     addMessage: (message) => set((state) => { state.messages.push(message) }),
     appendToLastMessage: (text) => set((state) => {
       const last = state.messages[state.messages.length - 1]
@@ -32,5 +35,6 @@ export const useChatStore = create<ChatState>()(
       state.messages = []
     }),
     clearMessages: () => set((state) => { state.messages = [] }),
+    setToolState: (event) => set((state) => { state.streamingToolState = event }),
   }))
 )

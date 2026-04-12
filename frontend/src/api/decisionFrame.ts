@@ -69,6 +69,8 @@ export const decisionFrameApi = {
         (delta: string) => {
           accumulated += delta
         },
+        () => {},
+        () => {},
         () => {
           resolve(accumulated.trim())
         },

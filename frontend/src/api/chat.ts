@@ -12,6 +12,8 @@ export function streamChatMessage(
   projectId: string,
   agentType: string,
   onDelta: (text: string) => void,
+  onToolUse: (event: { name: string; query: string }) => void,
+  onToolResult: (event: { name: string; count: number }) => void,
   onDone: () => void,
   onError: (error: string) => void,
 ): () => void {
@@ -55,6 +57,14 @@ export function streamChatMessage(
             if (lastEventType === 'error') {
               onError(data)
               return
+            }
+            if (lastEventType === 'tool_use') {
+              try { onToolUse(JSON.parse(data)) } catch {}
+              continue
+            }
+            if (lastEventType === 'tool_result') {
+              try { onToolResult(JSON.parse(data)) } catch {}
+              continue
             }
             onDelta(data)
           }

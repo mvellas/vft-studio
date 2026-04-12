@@ -1,6 +1,8 @@
 import { useRef, useEffect, useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { X, Send, Square, Loader2 } from 'lucide-react'
+import { X, Send, Square, Loader2, Globe, CheckCircle } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { useChatStore } from '../../stores/chatStore'
 import { useUiStore } from '../../stores/uiStore'
 import { useChat } from '../../hooks/useChat'
@@ -9,7 +11,7 @@ import { loadChatHistory } from '../../api/chat'
 import { useProjectStore } from '../../stores/projectStore'
 
 export function ChatPanel() {
-  const { messages, isStreaming, activeAgent, activeAgentType, addMessage } = useChatStore()
+  const { messages, isStreaming, activeAgent, activeAgentType, addMessage, streamingToolState } = useChatStore()
   const { setChatPanelOpen } = useUiStore()
   const { sendMessage, cancelStream } = useChat()
   const { activeProjectId } = useProjectStore()
@@ -83,22 +85,44 @@ export function ChatPanel() {
           >
             <span className="text-xs text-gray-400 font-medium">{msg.agent_name}</span>
             <div
-              className={`max-w-[85%] rounded-lg px-3 py-2 text-sm whitespace-pre-wrap ${
+              className={`max-w-[85%] rounded-lg px-3 py-2 text-sm select-text cursor-text ${
                 msg.role === 'user'
                   ? 'bg-indigo-600 text-white'
                   : 'bg-gray-100 text-gray-900'
               }`}
             >
-              {msg.content}
-              {/* Blinking cursor while last assistant message is streaming */}
+              {msg.role === 'user' ? (
+                <span className="whitespace-pre-wrap">{msg.content}</span>
+              ) : (
+                <div className="prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0 prose-headings:my-2 prose-code:text-xs prose-pre:text-xs prose-table:text-xs prose-td:px-2 prose-td:py-1 prose-th:px-2 prose-th:py-1">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                  {isStreaming && msg === messages[messages.length - 1] && (
+                    <span className="inline-block w-0.5 h-4 bg-gray-500 animate-pulse ml-0.5 align-text-bottom" />
+                  )}
+                </div>
+              )}
+              {/* Blinking cursor for user messages while streaming (shouldn't happen, safety) */}
               {isStreaming &&
-                msg.role === 'assistant' &&
+                msg.role === 'user' &&
                 msg === messages[messages.length - 1] && (
-                  <span className="inline-block w-0.5 h-4 bg-gray-500 animate-pulse ml-0.5 align-text-bottom" />
+                  <span className="inline-block w-0.5 h-4 bg-white animate-pulse ml-0.5 align-text-bottom" />
                 )}
             </div>
           </div>
         ))}
+
+        {streamingToolState?.type === 'tool_use' && (
+          <div className="flex items-center gap-2 text-xs text-gray-500 animate-pulse px-1">
+            <Globe size={12} />
+            Pesquisando: "{streamingToolState.query}"
+          </div>
+        )}
+        {streamingToolState?.type === 'tool_result' && (
+          <div className="flex items-center gap-2 text-xs text-emerald-600 px-1">
+            <CheckCircle size={12} />
+            {streamingToolState.count} resultado{streamingToolState.count !== 1 ? 's' : ''} encontrado{streamingToolState.count !== 1 ? 's' : ''}
+          </div>
+        )}
 
         <div ref={messagesEndRef} />
       </div>
