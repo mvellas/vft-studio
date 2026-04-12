@@ -256,3 +256,23 @@ class AppSetting(Base):
     key: Mapped[str] = mapped_column(Text, primary_key=True)
     value: Mapped[str] = mapped_column(Text, nullable=False)
     updated_at: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class Document(Base):
+    __tablename__ = "documents"
+
+    id: Mapped[str] = mapped_column(Text, primary_key=True)
+    project_id: Mapped[str] = mapped_column(Text, ForeignKey("projects.id"), nullable=False)
+    stakeholder_id: Mapped[str | None] = mapped_column(Text, ForeignKey("stakeholders.id"), nullable=True)
+    title: Mapped[str] = mapped_column(Text, nullable=False)
+    doc_type: Mapped[str] = mapped_column(Text, nullable=False)
+    date_reference: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source: Mapped[str] = mapped_column(Text, default="", server_default="")
+    content_text: Mapped[str] = mapped_column(Text, default="", server_default="")
+    file_name: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[str] = mapped_column(Text, nullable=False)
+
+    __table_args__ = (
+        Index("idx_documents_project", "project_id"),
+        Index("idx_documents_stakeholder", "stakeholder_id"),
+    )
