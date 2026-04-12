@@ -13,8 +13,11 @@ from pathlib import Path
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.agents.base_agent import BaseAgent
+from backend.agents.base_agent import ToolAwareAgent
+from backend.agents.facilitator import WEB_SEARCH_TOOL
+from backend.api.settings import get_brave_api_key
 from backend.db.models import Project, Stakeholder
+from backend.tools.brave_search import brave_search
 
 PROMPT_PATH = Path(__file__).parent.parent / "prompts" / "phase1_specialist.md"
 _MAX_FIELD_LEN = 500
@@ -27,13 +30,21 @@ def _truncate(text: str) -> str:
     return text[:_MAX_FIELD_LEN] + "...[truncated]"
 
 
-class Phase1SpecialistAgent(BaseAgent):
+class Phase1SpecialistAgent(ToolAwareAgent):
     """FRAME — Phase 1 Specialist for IDF and Decision Statement work."""
 
     def __init__(self, project_context: dict, model: str = "claude-sonnet-4-6") -> None:
         system = self._render_prompt(project_context)
-        super().__init__(model=model, system=system)
+        super().__init__(model=model, system=system, tools=[WEB_SEARCH_TOOL])
         self.project_context = project_context
+
+    async def execute_tool(self, name: str, tool_input: dict) -> tuple[str, dict]:
+        if name == "web_search":
+            query = tool_input.get("query", "")
+            api_key = get_brave_api_key()
+            result_text, count = await brave_search(query, api_key=api_key)
+            return result_text, {"count": count, "query": query}
+        return f"Tool '{name}' not implemented.", {}
 
     def _render_prompt(self, ctx: dict) -> str:
         """Load prompt template and substitute context placeholders."""

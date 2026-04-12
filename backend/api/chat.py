@@ -7,6 +7,7 @@ complete. Both user and assistant messages are persisted to the database.
 """
 from __future__ import annotations
 
+import json
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, Query
@@ -20,7 +21,7 @@ from backend.db.base import get_session
 from backend.db.models import ChatMessage, ChatSession
 from backend.db.repository import BaseRepository
 from backend.schemas.chat import ChatMessageRequest, ChatMessageResponse
-from backend.agents.base_agent import BaseAgent
+from backend.agents.base_agent import BaseAgent, ToolAwareAgent, ToolUseEvent, ToolResultEvent
 from backend.agents.phase1_specialist import Phase1SpecialistAgent
 from backend.agents.facilitator import FacilitatorAgent
 from backend.agents.phase2_specialist import Phase2SpecialistAgent
@@ -144,14 +145,25 @@ async def chat_message(
     async def generate():
         full_response = ""
         try:
-            async for chunk in agent.stream(messages):
-                full_response += chunk
-                yield ServerSentEvent(data=chunk, event="delta")
+            if isinstance(agent, ToolAwareAgent):
+                async for event in agent.stream_with_tools(messages):
+                    if isinstance(event, ToolUseEvent):
+                        data = json.dumps({"name": event.name, "query": event.input.get("query", "")})
+                        yield ServerSentEvent(data=data, event="tool_use")
+                    elif isinstance(event, ToolResultEvent):
+                        data = json.dumps({"name": event.name, **event.metadata})
+                        yield ServerSentEvent(data=data, event="tool_result")
+                    else:  # str
+                        full_response += event
+                        yield ServerSentEvent(data=event, event="delta")
+            else:
+                async for chunk in agent.stream(messages):
+                    full_response += chunk
+                    yield ServerSentEvent(data=chunk, event="delta")
         except Exception as exc:
             yield ServerSentEvent(data=str(exc), event="error")
             return
 
-        # Persist assistant message
         await msg_repo.create(
             session_id=chat_session.id,
             project_id=body.project_id,
