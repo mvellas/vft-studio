@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronRight, Key, BookOpen, FolderPlus, CheckCircle, Loader2 } from 'lucide-react'
+import { ChevronRight, Key, BookOpen, FolderPlus, CheckCircle, Loader2, Globe } from 'lucide-react'
 import { apiClient } from '../../api/client'
 
 interface OnboardingFlowProps {
@@ -22,6 +22,13 @@ const SCREENS = [
     action: 'Continuar',
   },
   {
+    id: 'brave-key',
+    icon: Globe,
+    title: 'Busca na Web (opcional)',
+    body: `Os agentes ARIA, FRAME e ANALYST podem pesquisar na internet para buscar legislações, referências e dados públicos.\n\nVocê precisará de uma Brave Search API key.\nObtenha gratuitamente em brave.com/search/api (2.000 buscas/mês).`,
+    action: 'Continuar',
+  },
+  {
     id: 'ready',
     icon: FolderPlus,
     title: 'Tudo pronto!',
@@ -36,11 +43,14 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
+  const [braveKey, setBraveKey] = useState('')
+  const [braveSaved, setBraveSaved] = useState(false)
 
   const current = SCREENS[screen]
   const Icon = current.icon
   const isLast = screen === SCREENS.length - 1
   const isApiKeyScreen = current.id === 'api-key'
+  const isBraveKeyScreen = current.id === 'brave-key'
 
   const handleSaveKey = async () => {
     if (!apiKey.trim()) {
@@ -61,9 +71,31 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
     }
   }
 
+  const handleSaveBraveKey = async () => {
+    if (!braveKey.trim()) {
+      setScreen(s => s + 1)
+      return
+    }
+    setSaving(true)
+    setSaveError(null)
+    try {
+      await apiClient.put('/api/settings/brave-api-key', { api_key: braveKey.trim() })
+      setBraveSaved(true)
+      setTimeout(() => setScreen(s => s + 1), 600)
+    } catch (e: unknown) {
+      setSaveError(e instanceof Error ? e.message : 'Erro ao salvar.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const handleNext = async () => {
     if (isApiKeyScreen) {
       handleSaveKey()
+      return
+    }
+    if (isBraveKeyScreen) {
+      handleSaveBraveKey()
       return
     }
     if (isLast) {
@@ -120,6 +152,20 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
               </div>
             )}
             <p className="text-xs text-gray-400">Você pode pular e configurar depois em Configurações.</p>
+          </div>
+        )}
+
+        {isBraveKeyScreen && (
+          <div className="space-y-2">
+            <input
+              type="password"
+              value={braveKey}
+              onChange={e => setBraveKey(e.target.value)}
+              placeholder="BSA... (opcional)"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            {saveError && <p className="text-xs text-red-500">{saveError}</p>}
+            {braveSaved && <p className="text-xs text-green-600">Brave key salva!</p>}
           </div>
         )}
 

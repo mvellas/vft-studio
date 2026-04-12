@@ -112,7 +112,7 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
         </div>
 
         {/* Body */}
-        <div className="px-6 py-6">
+        <div className="px-6 py-6 overflow-y-auto max-h-[60vh]">
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
               {error}

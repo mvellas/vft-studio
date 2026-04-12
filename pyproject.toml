@@ -19,6 +19,7 @@ dependencies = [
     "anthropic>=0.91.0",
     "sse-starlette>=1.8.0",
     "keyring",
+    "pypdf>=4.0",
 ]
 
 [tool.setuptools.packages.find]

@@ -34,12 +34,13 @@ class BaseRepository(Generic[T]):
 
     async def create(self, **data) -> T:
         now = datetime.now(timezone.utc).isoformat()
-        obj = self._model(
-            id=str(uuid.uuid4()),
-            created_at=now,
-            updated_at=now,
-            **data,
-        )
+        model_cols = {c.key for c in self._model.__table__.columns}  # type: ignore[attr-defined]
+        auto: dict = {"id": str(uuid.uuid4())}
+        if "created_at" in model_cols and "created_at" not in data:
+            auto["created_at"] = now
+        if "updated_at" in model_cols and "updated_at" not in data:
+            auto["updated_at"] = now
+        obj = self._model(**auto, **data)
         self._session.add(obj)
         await self._session.flush()
         await self._session.refresh(obj)
