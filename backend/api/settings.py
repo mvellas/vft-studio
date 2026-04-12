@@ -18,6 +18,7 @@ router = APIRouter(prefix="/settings", tags=["settings"])
 
 _KEYRING_SERVICE = "vft-studio"
 _KEYRING_USERNAME = "anthropic-api-key"
+_BRAVE_KEYRING_USERNAME = "brave-api-key"
 
 
 def _try_keyring_set(key: str) -> None:
@@ -36,6 +37,27 @@ def _try_keyring_get() -> str | None:
         return keyring.get_password(_KEYRING_SERVICE, _KEYRING_USERNAME)
     except Exception:
         return None
+
+
+def _try_brave_keyring_set(key: str) -> None:
+    try:
+        import keyring
+        keyring.set_password(_KEYRING_SERVICE, _BRAVE_KEYRING_USERNAME, key)
+    except Exception:
+        pass
+
+
+def _try_brave_keyring_get() -> str | None:
+    try:
+        import keyring
+        return keyring.get_password(_KEYRING_SERVICE, _BRAVE_KEYRING_USERNAME)
+    except Exception:
+        return None
+
+
+def get_brave_api_key() -> str:
+    """Return Brave API key from Keychain or BRAVE_SEARCH_API_KEY env var. Empty string if not set."""
+    return _try_brave_keyring_get() or os.environ.get("BRAVE_SEARCH_API_KEY", "")
 
 
 class ApiKeyRequest(BaseModel):
@@ -116,6 +138,51 @@ async def test_connection() -> ConnectionTestResult:
         return ConnectionTestResult(success=False, message="Resposta vazia da API.")
     except Exception as exc:
         return ConnectionTestResult(success=False, message=f"Erro: {str(exc)[:120]}")
+
+
+@router.get("/brave-api-key", response_model=ApiKeyStatus)
+async def get_brave_api_key_status() -> ApiKeyStatus:
+    key = get_brave_api_key()
+    if key:
+        source = "keychain" if _try_brave_keyring_get() else "env"
+        preview = f"****...{key[-4:]}" if len(key) >= 4 else "****"
+        return ApiKeyStatus(has_key=True, key_preview=preview, source=source)
+    return ApiKeyStatus(has_key=False, key_preview="", source="none")
+
+
+@router.put("/brave-api-key", response_model=ApiKeyStatus)
+async def save_brave_api_key(body: ApiKeyRequest) -> ApiKeyStatus:
+    key = body.api_key.strip()
+    if not key:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="API key cannot be empty.")
+    _try_brave_keyring_set(key)
+    os.environ["BRAVE_SEARCH_API_KEY"] = key
+    preview = f"****...{key[-4:]}"
+    return ApiKeyStatus(has_key=True, key_preview=preview, source="keychain")
+
+
+@router.delete("/brave-api-key", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_brave_api_key() -> None:
+    try:
+        import keyring
+        keyring.delete_password(_KEYRING_SERVICE, _BRAVE_KEYRING_USERNAME)
+    except Exception:
+        pass
+    os.environ.pop("BRAVE_SEARCH_API_KEY", None)
+
+
+@router.post("/test-brave-connection", response_model=ConnectionTestResult)
+async def test_brave_connection() -> ConnectionTestResult:
+    key = get_brave_api_key()
+    if not key:
+        return ConnectionTestResult(success=False, message="Nenhuma Brave API key configurada.")
+    from backend.tools.brave_search import brave_search
+    text, count = await brave_search("test", api_key=key, count=1)
+    if count > 0:
+        return ConnectionTestResult(success=True, message="Conexão com Brave Search estabelecida.")
+    if "Erro" in text:
+        return ConnectionTestResult(success=False, message=text[:120])
+    return ConnectionTestResult(success=True, message="Brave Search acessível.")
 
 
 @router.get("/onboarding-completed")

@@ -38,9 +38,23 @@ def _load_api_key_from_keychain() -> None:
         pass
 
 
+def _load_brave_key_from_keychain() -> None:
+    """On startup: load Brave Search API key from macOS Keychain into env."""
+    if os.environ.get("BRAVE_SEARCH_API_KEY"):
+        return
+    try:
+        import keyring
+        key = keyring.get_password("vft-studio", "brave-api-key")
+        if key:
+            os.environ["BRAVE_SEARCH_API_KEY"] = key
+    except Exception:
+        pass
+
+
 @asynccontextmanager
 async def lifespan(application: FastAPI):
     _load_api_key_from_keychain()
+    _load_brave_key_from_keychain()
     await init_db()
     yield
 
