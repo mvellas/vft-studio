@@ -1,4 +1,5 @@
 """tests/test_brave_search.py"""
+import httpx
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 
@@ -41,7 +42,6 @@ class TestBraveSearch:
 
     @pytest.mark.asyncio
     async def test_http_error_returns_error_message(self):
-        import httpx
         mock_client = AsyncMock()
         mock_client.__aenter__ = AsyncMock(return_value=mock_client)
         mock_client.__aexit__ = AsyncMock(return_value=False)
@@ -52,3 +52,22 @@ class TestBraveSearch:
 
         assert count == 0
         assert "Erro" in text
+
+    @pytest.mark.asyncio
+    async def test_empty_results_returns_no_results_message(self):
+        mock_data = {"web": {"results": []}}
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = mock_data
+        mock_response.raise_for_status = MagicMock()
+
+        mock_client = AsyncMock()
+        mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+        mock_client.__aexit__ = AsyncMock(return_value=False)
+        mock_client.get = AsyncMock(return_value=mock_response)
+
+        with patch("backend.tools.brave_search.httpx.AsyncClient", return_value=mock_client):
+            text, count = await brave_search("obscure query", api_key="test-key")
+
+        assert count == 0
+        assert "Nenhum resultado" in text
