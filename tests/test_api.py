@@ -39,7 +39,9 @@ def client():
         async with test_engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
 
-    asyncio.get_event_loop().run_until_complete(_init())
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(_init())
 
     async def override_get_session():
         async with TestSessionLocal() as session:
@@ -51,7 +53,8 @@ def client():
         yield c
 
     app.dependency_overrides.clear()
-    asyncio.get_event_loop().run_until_complete(test_engine.dispose())
+    loop.run_until_complete(test_engine.dispose())
+    loop.close()
 
 
 # ---------------------------------------------------------------------------
@@ -229,3 +232,43 @@ class TestSettingsAPI:
         assert r.status_code == 204
         r2 = client.get("/api/settings/onboarding-completed")
         assert r2.json()["completed"] is True
+
+
+# ---------------------------------------------------------------------------
+# Brave Settings API
+# ---------------------------------------------------------------------------
+
+class TestBraveSettings:
+    def test_get_brave_key_status_no_key(self, client):
+        # Clear any env var that might be set
+        import os
+        from unittest.mock import patch
+        os.environ.pop("BRAVE_SEARCH_API_KEY", None)
+        with patch("backend.api.settings._try_brave_keyring_get", return_value=None):
+            r = client.get("/api/settings/brave-api-key")
+        assert r.status_code == 200
+        data = r.json()
+        assert data["has_key"] is False
+        assert data["source"] == "none"
+
+    def test_save_and_get_brave_key(self, client):
+        r = client.put("/api/settings/brave-api-key", json={"api_key": "BSAtest1234567890"})
+        assert r.status_code == 200
+        data = r.json()
+        assert data["has_key"] is True
+        assert data["source"] == "keychain"
+
+    def test_save_brave_key_empty_rejected(self, client):
+        r = client.put("/api/settings/brave-api-key", json={"api_key": ""})
+        assert r.status_code == 422
+
+    def test_test_brave_connection_no_key(self, client):
+        import os
+        from unittest.mock import patch
+        os.environ.pop("BRAVE_SEARCH_API_KEY", None)
+        with patch("backend.api.settings._try_brave_keyring_get", return_value=None):
+            r = client.post("/api/settings/test-brave-connection", json={})
+        assert r.status_code == 200
+        data = r.json()
+        assert data["success"] is False
+        assert "Nenhuma" in data["message"]
