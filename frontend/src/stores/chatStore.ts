@@ -8,12 +8,14 @@ interface ChatState {
   activeAgent: string
   activeAgentType: string
   streamingToolState: ToolEvent | null
+  autoSendMessage: string | null
   addMessage: (message: ChatMessage) => void
   appendToLastMessage: (text: string) => void
   setStreaming: (streaming: boolean) => void
   setActiveAgent: (agentName: string, agentType: string) => void
   clearMessages: () => void
   setToolState: (event: ToolEvent | null) => void
+  setAutoSendMessage: (msg: string | null) => void
 }
 
 export const useChatStore = create<ChatState>()(
@@ -23,6 +25,7 @@ export const useChatStore = create<ChatState>()(
     activeAgent: 'ARIA',
     activeAgentType: 'facilitator',
     streamingToolState: null,
+    autoSendMessage: null,
     addMessage: (message) => set((state) => { state.messages.push(message) }),
     appendToLastMessage: (text) => set((state) => {
       const last = state.messages[state.messages.length - 1]
@@ -36,5 +39,6 @@ export const useChatStore = create<ChatState>()(
     }),
     clearMessages: () => set((state) => { state.messages = [] }),
     setToolState: (event) => set((state) => { state.streamingToolState = event }),
+    setAutoSendMessage: (msg) => set((state) => { state.autoSendMessage = msg }),
   }))
 )

@@ -9,9 +9,11 @@ import { PhaseProgress } from './components/phase/PhaseProgress'
 import { Phase3View } from './components/phase3/Phase3View'
 import { useUiStore } from './stores/uiStore'
 import { useProjectStore } from './stores/projectStore'
+import { useChatStore } from './stores/chatStore'
 import { phasesApi } from './api/phases'
 import { apiClient } from './api/client'
 import type { CurrentStep } from './types'
+import { DocumentPanel } from './components/documents/DocumentPanel'
 
 function ProjectDetailView() {
   const { activeProjectId } = useProjectStore()
@@ -98,6 +100,18 @@ function App() {
           {currentView === 'project-list' && <ProjectList />}
           {currentView === 'project-detail' && <ProjectDetailView />}
           {currentView === 'settings' && <SettingsView />}
+          {currentView === 'documents' && (
+            <DocumentPanel
+              onAnalyze={() => {
+                useChatStore.getState().setActiveAgent('ANALYST', 'analyst')
+                useChatStore.getState().setAutoSendMessage(
+                  'Analise os documentos disponíveis e extraia os valores, objetivos e posições relevantes para o projeto VFT. Cite as fontes diretamente.'
+                )
+                useUiStore.getState().setChatPanelOpen(true)
+                useUiStore.getState().setView('project-detail')
+              }}
+            />
+          )}
         </ErrorBoundary>
       </AppShell>
     </>
