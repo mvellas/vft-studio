@@ -13,11 +13,33 @@ from pathlib import Path
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.agents.base_agent import BaseAgent
+from backend.agents.base_agent import ToolAwareAgent
+from backend.api.settings import get_brave_api_key
 from backend.db.models import Project, StepCompletion, Stakeholder
+from backend.tools.brave_search import brave_search
 
 PROMPT_PATH = Path(__file__).parent.parent / "prompts" / "facilitator.md"
 _MAX_FIELD_LEN = 500
+
+WEB_SEARCH_TOOL = {
+    "name": "web_search",
+    "description": (
+        "Search the web for current legislation, public data, academic references, "
+        "and other information relevant to the VFT decision context. "
+        "Use when the user asks about specific laws, regulations, or external context "
+        "that may not be in the project data. Always cite sources in your response."
+    ),
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "query": {
+                "type": "string",
+                "description": "Search query in the most specific terms possible.",
+            }
+        },
+        "required": ["query"],
+    },
+}
 
 
 def _truncate(text: str, max_len: int = _MAX_FIELD_LEN) -> str:
@@ -28,13 +50,21 @@ def _truncate(text: str, max_len: int = _MAX_FIELD_LEN) -> str:
     return text[:max_len] + "...[truncated]"
 
 
-class FacilitatorAgent(BaseAgent):
-    """ARIA — Master VFT Facilitator."""
+class FacilitatorAgent(ToolAwareAgent):
+    """ARIA — Master VFT Facilitator with optional web search."""
 
     def __init__(self, project_context: dict, model: str = "claude-opus-4-6") -> None:
         system = self._render_prompt(project_context)
-        super().__init__(model=model, system=system)
+        super().__init__(model=model, system=system, tools=[WEB_SEARCH_TOOL])
         self.project_context = project_context
+
+    async def execute_tool(self, name: str, tool_input: dict) -> tuple[str, dict]:
+        if name == "web_search":
+            query = tool_input.get("query", "")
+            api_key = get_brave_api_key()
+            result_text, count = await brave_search(query, api_key=api_key)
+            return result_text, {"count": count, "query": query}
+        return f"Tool '{name}' not implemented.", {}
 
     def _render_prompt(self, ctx: dict) -> str:
         template = PROMPT_PATH.read_text(encoding="utf-8")
