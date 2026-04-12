@@ -6,5 +6,20 @@
     "Edit",
     "Glob",
     "Grep"
-  ]
+  ],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty' 2>/dev/null); echo \"$f\" | grep -q 'Claude Projects/vft-studio/frontend/' && cd '/Users/mvellasquez/Claude Projects/vft-studio/frontend' && npm run build 2>&1 | tail -3 || true",
+            "timeout": 60,
+            "statusMessage": "Rebuilding frontend..."
+          }
+        ]
+      }
+    ]
+  }
 }
