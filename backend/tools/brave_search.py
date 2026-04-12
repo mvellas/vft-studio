@@ -18,6 +18,10 @@ async def brave_search(query: str, api_key: str, count: int = 5) -> tuple[str, i
     if not api_key:
         return "Busca na web não está disponível. Configure uma Brave Search API key nas configurações.", 0
 
+    if not query or not query.strip():
+        return "Query de busca não pode ser vazia.", 0
+    count = max(1, min(count, 20))
+
     url = "https://api.search.brave.com/res/v1/web/search"
     headers = {
         "Accept": "application/json",
@@ -33,6 +37,8 @@ async def brave_search(query: str, api_key: str, count: int = 5) -> tuple[str, i
             data = response.json()
     except httpx.HTTPError as exc:
         return f"Erro na busca: {str(exc)[:200]}", 0
+    except (ValueError, KeyError) as exc:
+        return f"Erro ao processar resposta: {str(exc)[:200]}", 0
 
     results = data.get("web", {}).get("results", [])
     if not results:
