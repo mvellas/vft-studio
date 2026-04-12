@@ -1,27 +1,41 @@
 import { useRef, useEffect, useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { X, Send, Square, Loader2, Globe, CheckCircle } from 'lucide-react'
+import { X, Send, Square, Loader2, Globe, CheckCircle, Trash2 } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useChatStore } from '../../stores/chatStore'
 import { useUiStore } from '../../stores/uiStore'
 import { useChat } from '../../hooks/useChat'
 import { AgentSelector } from './AgentSelector'
-import { loadChatHistory } from '../../api/chat'
+import { loadChatHistory, clearChatHistory } from '../../api/chat'
 import { useProjectStore } from '../../stores/projectStore'
 
-export function ChatPanel() {
-  const { messages, isStreaming, activeAgent, activeAgentType, addMessage, streamingToolState, autoSendMessage, setAutoSendMessage } = useChatStore()
+interface ChatPanelProps {
+  width?: number
+}
+
+export function ChatPanel({ width }: ChatPanelProps) {
+  const { messages, isStreaming, activeAgent, activeAgentType, addMessage, clearMessages, streamingToolState, autoSendMessage, setAutoSendMessage } = useChatStore()
   const { setChatPanelOpen } = useUiStore()
   const { sendMessage, cancelStream } = useChat()
   const { activeProjectId } = useProjectStore()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [inputValue, setInputValue] = useState('')
 
+  const handleClearHistory = () => {
+    if (!activeProjectId || isStreaming) return
+    clearChatHistory(activeProjectId, activeAgentType)
+      .then(() => clearMessages())
+      .catch(() => {})
+  }
+
   // Load chat history when agent changes
   useEffect(() => {
     if (!activeProjectId) return
     loadChatHistory(activeProjectId, activeAgentType).then(history => {
+      // Skip if a new conversation was already started (streaming or messages present)
+      const { isStreaming: streaming, messages: current } = useChatStore.getState()
+      if (streaming || current.length > 0) return
       for (const msg of history) addMessage(msg)
     }).catch(() => {})
   }, [activeAgentType, activeProjectId])
@@ -55,7 +69,7 @@ export function ChatPanel() {
   }
 
   return (
-    <aside className="h-screen w-96 bg-white border-l border-gray-200 flex flex-col">
+    <aside className="h-screen bg-white border-l border-gray-200 flex flex-col overflow-hidden" style={width ? { width } : undefined}>
       {/* Header */}
       <div className="border-b border-gray-200 shrink-0">
         <div className="flex items-center justify-between px-4 py-3">
@@ -65,13 +79,24 @@ export function ChatPanel() {
               Agente IA
             </span>
           </div>
-          <button
-            onClick={() => setChatPanelOpen(false)}
-            className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded"
-            aria-label="Close chat panel"
-          >
-            <X size={18} />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={handleClearHistory}
+              disabled={isStreaming}
+              className="text-gray-400 hover:text-red-500 transition-colors p-1 rounded disabled:opacity-40"
+              aria-label="Clear chat history"
+              title="Limpar histórico"
+            >
+              <Trash2 size={15} />
+            </button>
+            <button
+              onClick={() => setChatPanelOpen(false)}
+              className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded"
+              aria-label="Close chat panel"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
         <div className="pb-2">
           <AgentSelector />

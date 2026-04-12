@@ -2,29 +2,33 @@ import { useUiStore } from '../../stores/uiStore'
 import { useProjectStore } from '../../stores/projectStore'
 import { FolderOpen, Settings, ChevronLeft, ChevronRight, FileText } from 'lucide-react'
 
-export function Sidebar() {
-  const { sidebarCollapsed, toggleSidebar, setView, currentView } = useUiStore()
+interface SidebarProps {
+  collapsed: boolean
+  width: number
+}
+
+export function Sidebar({ collapsed, width }: SidebarProps) {
+  const { toggleSidebar, setView, currentView } = useUiStore()
   const { projects, activeProjectId, setActiveProject } = useProjectStore()
 
   const activeProject = projects.find(p => p.id === activeProjectId)
 
   return (
     <aside
-      className={`h-screen bg-[#1E1E2E] border-r border-gray-800 flex flex-col transition-all duration-250 ${
-        sidebarCollapsed ? 'w-16' : 'w-64'
-      }`}
+      className="h-screen bg-[#1E1E2E] border-r border-gray-800 flex flex-col overflow-hidden"
+      style={{ width }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-800">
-        {!sidebarCollapsed && (
-          <span className="text-white font-semibold text-lg tracking-tight">VFT Studio</span>
+      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-800 shrink-0">
+        {!collapsed && (
+          <span className="text-white font-semibold text-lg tracking-tight truncate">VFT Studio</span>
         )}
         <button
           onClick={toggleSidebar}
-          className="text-gray-400 hover:text-white transition-colors p-1 rounded"
-          aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          className="text-gray-400 hover:text-white transition-colors p-1 rounded shrink-0"
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {sidebarCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </button>
       </div>
 
@@ -42,7 +46,7 @@ export function Sidebar() {
           }`}
         >
           <FolderOpen size={18} className="shrink-0" />
-          {!sidebarCollapsed && <span>Projetos</span>}
+          {!collapsed && <span className="truncate">Projetos</span>}
         </button>
 
         {activeProjectId && (
@@ -55,7 +59,7 @@ export function Sidebar() {
             }`}
           >
             <FileText size={18} className="shrink-0" />
-            {!sidebarCollapsed && <span>Documentos</span>}
+            {!collapsed && <span className="truncate">Documentos</span>}
           </button>
         )}
 
@@ -68,13 +72,13 @@ export function Sidebar() {
           }`}
         >
           <Settings size={18} className="shrink-0" />
-          {!sidebarCollapsed && <span>Configurações</span>}
+          {!collapsed && <span className="truncate">Configurações</span>}
         </button>
       </nav>
 
       {/* Active project info */}
-      {activeProject && !sidebarCollapsed && (
-        <div className="border-t border-gray-800 px-4 py-4">
+      {activeProject && !collapsed && (
+        <div className="border-t border-gray-800 px-4 py-4 shrink-0">
           <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Projeto Ativo</p>
           <p className="text-white text-sm font-medium truncate">{activeProject.name}</p>
           <p className="text-gray-400 text-xs mt-1">

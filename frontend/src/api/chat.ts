@@ -89,3 +89,9 @@ export function loadChatHistory(
     .get<ChatMessage[]>('/api/chat/history', { params: { project_id: projectId, agent_type: agentType, limit } })
     .then(r => r.data)
 }
+
+export function clearChatHistory(projectId: string, agentType: string): Promise<void> {
+  return apiClient
+    .delete('/api/chat/history', { params: { project_id: projectId, agent_type: agentType } })
+    .then(() => undefined)
+}
