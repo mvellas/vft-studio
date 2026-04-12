@@ -28,6 +28,7 @@ from backend.agents.phase2_specialist import Phase2SpecialistAgent
 from backend.agents.phase3_specialist import Phase3SpecialistAgent
 from backend.agents.stakeholder_agent import StakeholderSimulationAgent
 from backend.agents.analyst_agent import AnalystAgent
+from backend.agents.router_agent import RouterAgent
 
 router = APIRouter(tags=["chat"])
 
@@ -74,38 +75,60 @@ async def chat_message(
     body: ChatMessageRequest,
     session: AsyncSession = Depends(get_session),
 ) -> EventSourceResponse:
-    config = AGENT_CONFIGS.get(body.agent_type, AGENT_CONFIGS["facilitator"])
+    # Resolve agent via RouterAgent when agent_type is "auto"
+    resolved_agent_type = body.agent_type
+    if body.agent_type in ("auto", "", None):
+        router = RouterAgent()
+        phase = body.phase or 1
+        history_result = await session.execute(
+            select(ChatMessage)
+            .where(ChatMessage.project_id == body.project_id)
+            .order_by(ChatMessage.timestamp.desc())
+            .limit(6)
+        )
+        recent_rows = list(reversed(history_result.scalars().all()))
+        recent_turns = [
+            {"role": "user" if m.role == "user" else "assistant", "content": m.content}
+            for m in recent_rows
+        ]
+        resolved_agent_type = await router.invoke(
+            phase=phase,
+            recent_turns=recent_turns,
+            user_message=body.message,
+        )
+
+    config = AGENT_CONFIGS.get(resolved_agent_type, AGENT_CONFIGS["facilitator"])
 
     # Route to context-aware agents loaded from DB
-    if body.agent_type == "facilitator":
+    if resolved_agent_type == "facilitator":
         try:
             agent = await FacilitatorAgent.from_project_id(
                 body.project_id, session, model=config["model"]
             )
         except ValueError:
             agent = BaseAgent(model=config["model"], system=config["system"])
-    elif body.agent_type == "phase1_specialist":
+    elif resolved_agent_type == "phase1_specialist":
         try:
             agent = await Phase1SpecialistAgent.from_project_id(
                 body.project_id, session, model=config["model"]
             )
         except ValueError:
             agent = BaseAgent(model=config["model"], system=config["system"])
-    elif body.agent_type == "phase2_specialist":
+    elif resolved_agent_type == "phase2_specialist":
         try:
             agent = await Phase2SpecialistAgent.from_project_id(
                 body.project_id, session, model=config["model"]
             )
         except ValueError:
             agent = BaseAgent(model=config["model"], system=config["system"])
-    elif body.agent_type == "phase3_specialist":
+    elif resolved_agent_type == "phase3_specialist":
         try:
             agent = await Phase3SpecialistAgent.from_project_id(
                 body.project_id, session, model=config["model"]
             )
         except ValueError:
             agent = BaseAgent(model=config["model"], system=config["system"])
-    elif body.agent_type == "stakeholder_simulation" and body.stakeholder_id:
+    elif resolved_agent_type == "stakeholder_simulation" and body.stakeholder_id:
         try:
             agent = await StakeholderSimulationAgent.from_stakeholder_id(
                 body.stakeholder_id, body.project_id, session, model=config["model"]
@@ -174,13 +197,16 @@ async def chat_message(
             session_id=chat_session.id,
             project_id=body.project_id,
             timestamp=datetime.now(timezone.utc).isoformat(),
-            role=body.agent_type,
+            role=resolved_agent_type,
             agent_name=config["name"],
             content=full_response,
         )
         await session.commit()
 
-        yield ServerSentEvent(data="[DONE]", event="done")
+        yield ServerSentEvent(
+            data=json.dumps({"agent_type": resolved_agent_type, "agent_name": config["name"]}),
+            event="done",
+        )
 
     return EventSourceResponse(generate())
 
