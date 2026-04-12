@@ -21,6 +21,7 @@ from fastapi.staticfiles import StaticFiles
 
 from backend.db.base import init_db
 from backend.api import projects, stakeholders, phases, chat, frame, decision_frame, objectives, axiom, attributes, alternatives, export, settings
+from backend.api.settings import _KEYRING_SERVICE, _KEYRING_USERNAME, _BRAVE_KEYRING_USERNAME
 
 FRONTEND_DIST = Path(__file__).parent.parent / "frontend" / "dist"
 
@@ -31,7 +32,7 @@ def _load_api_key_from_keychain() -> None:
         return
     try:
         import keyring
-        key = keyring.get_password("vft-studio", "anthropic-api-key")
+        key = keyring.get_password(_KEYRING_SERVICE, _KEYRING_USERNAME)
         if key:
             os.environ["ANTHROPIC_API_KEY"] = key
     except Exception:
@@ -44,7 +45,7 @@ def _load_brave_key_from_keychain() -> None:
         return
     try:
         import keyring
-        key = keyring.get_password("vft-studio", "brave-api-key")
+        key = keyring.get_password(_KEYRING_SERVICE, _BRAVE_KEYRING_USERNAME)
         if key:
             os.environ["BRAVE_SEARCH_API_KEY"] = key
     except Exception:

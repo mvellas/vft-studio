@@ -40,6 +40,7 @@ def _try_keyring_get() -> str | None:
 
 
 def _try_brave_keyring_set(key: str) -> None:
+    """Store Brave API key in macOS Keychain via keyring. Silent fail if keyring unavailable."""
     try:
         import keyring
         keyring.set_password(_KEYRING_SERVICE, _BRAVE_KEYRING_USERNAME, key)
@@ -48,6 +49,7 @@ def _try_brave_keyring_set(key: str) -> None:
 
 
 def _try_brave_keyring_get() -> str | None:
+    """Retrieve Brave API key from macOS Keychain via keyring. Returns None if unavailable."""
     try:
         import keyring
         return keyring.get_password(_KEYRING_SERVICE, _BRAVE_KEYRING_USERNAME)
@@ -142,9 +144,10 @@ async def test_connection() -> ConnectionTestResult:
 
 @router.get("/brave-api-key", response_model=ApiKeyStatus)
 async def get_brave_api_key_status() -> ApiKeyStatus:
-    key = get_brave_api_key()
+    keychain_val = _try_brave_keyring_get()
+    key = keychain_val or os.environ.get("BRAVE_SEARCH_API_KEY", "")
     if key:
-        source = "keychain" if _try_brave_keyring_get() else "env"
+        source = "keychain" if keychain_val else "env"
         preview = f"****...{key[-4:]}" if len(key) >= 4 else "****"
         return ApiKeyStatus(has_key=True, key_preview=preview, source=source)
     return ApiKeyStatus(has_key=False, key_preview="", source="none")
@@ -176,13 +179,16 @@ async def test_brave_connection() -> ConnectionTestResult:
     key = get_brave_api_key()
     if not key:
         return ConnectionTestResult(success=False, message="Nenhuma Brave API key configurada.")
-    from backend.tools.brave_search import brave_search
-    text, count = await brave_search("test", api_key=key, count=1)
-    if count > 0:
-        return ConnectionTestResult(success=True, message="Conexão com Brave Search estabelecida.")
-    if "Erro" in text:
-        return ConnectionTestResult(success=False, message=text[:120])
-    return ConnectionTestResult(success=True, message="Brave Search acessível.")
+    try:
+        from backend.tools.brave_search import brave_search
+        text, count = await brave_search("test", api_key=key, count=1)
+        if count > 0:
+            return ConnectionTestResult(success=True, message="Conexão com Brave Search estabelecida.")
+        if "Erro" in text:
+            return ConnectionTestResult(success=False, message=text[:120])
+        return ConnectionTestResult(success=True, message="Brave Search acessível.")
+    except Exception as exc:
+        return ConnectionTestResult(success=False, message=f"Erro: {str(exc)[:120]}")
 
 
 @router.get("/onboarding-completed")
