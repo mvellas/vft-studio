@@ -4,6 +4,8 @@ import { ChatPanel } from './ChatPanel'
 import { useUiStore } from '../../stores/uiStore'
 import { useProjectStore } from '../../stores/projectStore'
 import { DiagramExport } from '../phase/DiagramExport'
+import { PipelineButton } from '../pipeline/PipelineButton'
+import { PipelinePanel } from '../pipeline/PipelinePanel'
 import { MessageSquare } from 'lucide-react'
 import { useResize } from '../../hooks/useResize'
 
@@ -12,7 +14,7 @@ interface AppShellProps {
 }
 
 export function AppShell({ children }: AppShellProps) {
-  const { chatPanelOpen, currentView, setChatPanelOpen } = useUiStore()
+  const { chatPanelOpen, currentView, setChatPanelOpen, pipelineView } = useUiStore()
   const { activeProjectId, projects } = useProjectStore()
   const activeProject = projects.find(p => p.id === activeProjectId)
 
@@ -42,6 +44,10 @@ export function AppShell({ children }: AppShellProps) {
             <span className="text-sm text-gray-500 truncate max-w-xs">{activeProject.name}</span>
             <div className="flex items-center gap-3">
               <DiagramExport projectId={activeProject.id} projectName={activeProject.name} />
+              <PipelineButton
+                projectId={activeProject.id}
+                projectDescription={activeProject.description ?? ''}
+              />
               <button
                 onClick={() => setChatPanelOpen(!chatPanelOpen)}
                 className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border transition-colors ${
@@ -57,6 +63,11 @@ export function AppShell({ children }: AppShellProps) {
           </div>
         )}
         <main className="flex-1 overflow-y-auto p-6">
+          {currentView === 'project-detail' && activeProject && pipelineView !== 'idle' && (
+            <div className="max-w-4xl mx-auto mb-6">
+              <PipelinePanel projectName={activeProject.name} />
+            </div>
+          )}
           {children}
         </main>
       </div>

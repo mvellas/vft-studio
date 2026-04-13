@@ -3,13 +3,16 @@ import { Plus } from 'lucide-react'
 import { projectsApi } from '../../api/projects'
 import { useProjectStore } from '../../stores/projectStore'
 import { useUiStore } from '../../stores/uiStore'
+import { getLatestRun } from '../../api/pipeline'
+import { usePipelineStore } from '../../stores/pipelineStore'
 import { ProjectCard } from './ProjectCard'
 import { NewProjectWizard } from './NewProjectWizard'
 
 export function ProjectList() {
   const { projects, setProjects, setActiveProject, loading, setLoading, error, setError } =
     useProjectStore()
-  const { setView } = useUiStore()
+  const { setView, setPipelineView } = useUiStore()
+  const { setFromExisting, reset: resetPipeline } = usePipelineStore()
   const [wizardOpen, setWizardOpen] = useState(false)
 
   useEffect(() => {
@@ -34,8 +37,16 @@ export function ProjectList() {
   }, [setProjects, setLoading, setError])
 
   function handleOpen(id: string) {
+    resetPipeline()
+    setPipelineView('idle')
     setActiveProject(id)
     setView('project-detail')
+    getLatestRun(id).then((run) => {
+      if (run && run.status === 'done' && run.report_md) {
+        setFromExisting(run.report_md, run.id)
+        setPipelineView('report')
+      }
+    })
   }
 
   return (
