@@ -13,13 +13,46 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.db.base import get_session
-from backend.db.models import Document, PipelineRun, PipelineTurn, Project
+from backend.db.models import Document, PipelineRun, PipelineTurn, Project, StepCompletion
 from backend.schemas.pipeline import PipelineRunRequest, PipelineRunResponse
 from backend.pipeline.orchestrator import PipelineOrchestrator
 from backend.pipeline.war_room import WarRoomOrchestrator
 from backend.pipeline.report import ReportGenerator
+from backend.engine.process_manager import ProcessManager
 
 router = APIRouter(tags=["pipeline"])
+
+_process_manager = ProcessManager()
+
+
+async def _auto_complete_all_steps(project: Project, session: AsyncSession) -> None:
+    """Mark all applicable steps as completed after a full pipeline run."""
+    applicable = _process_manager.get_steps_for_config(
+        project.stakeholder_config, project.qualitative_modeling_tech
+    )
+    if not applicable:
+        return
+
+    result = await session.execute(
+        select(StepCompletion).where(StepCompletion.project_id == project.id)
+    )
+    completed_ids = {sc.step_id for sc in result.scalars().all()}
+
+    now = datetime.now(timezone.utc).isoformat()
+    for step in applicable:
+        if step.id not in completed_ids:
+            session.add(StepCompletion(
+                id=str(uuid.uuid4()),
+                project_id=project.id,
+                step_id=step.id,
+                completed_at=now,
+                data_json="{}",
+                notes="Auto-completed by full AI analysis pipeline.",
+            ))
+
+    last_step = applicable[-1]
+    project.current_step = last_step.id
+    await session.commit()
 
 
 def _build_full_document(
@@ -130,6 +163,9 @@ async def run_full_pipeline(
 
     # Also send full document via SSE so frontend store has it
     yield {"event": "report_done", "data": {"report_md": full_document}}
+
+    # Auto-complete all applicable steps now that the full analysis is done
+    await _auto_complete_all_steps(project, session)
 
     yield {"event": "pipeline_done", "data": {}}
 

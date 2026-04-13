@@ -95,7 +95,10 @@ class PipelineOrchestrator:
 
             AgentCls = _AGENT_CLASS_MAP[agent_type]
             try:
-                agent = await AgentCls.from_project_id(self.project.id, self.session)
+                if agent_type == "analyst":
+                    agent = await AgentCls.from_project_id(self.project.id, None, self.session)
+                else:
+                    agent = await AgentCls.from_project_id(self.project.id, self.session)
             except Exception:
                 agent = BaseAgent(model="claude-sonnet-4-6", system="")
 
@@ -145,8 +148,14 @@ class PipelineOrchestrator:
         prior = ""
         if self._phase_outputs:
             prior = "\n\n## Contexto das fases anteriores\n"
+            prior += (
+                "IMPORTANTE: use os outputs abaixo como fonte primária de contexto. "
+                "Se campos do IDF ou lista de stakeholders aparecerem vazios no seu contexto interno, "
+                "extraia essas informações diretamente dos outputs do FRAME abaixo — "
+                "NÃO solicite essas informações ao usuário.\n"
+            )
             for name, content in self._phase_outputs.items():
-                prior += f"\n### {name}\n{content[:2000]}\n"
+                prior += f"\n### {name}\n{content[:8000]}\n"
         doc_context = ""
         if self.documents and agent_name == "ANALYST":
             doc_context = "\n\n## Documentos disponíveis\n"
