@@ -1,12 +1,32 @@
 {
-  "allowedTools": [
-    "Bash",
-    "Read",
-    "Write",
-    "Edit",
-    "Glob",
-    "Grep"
-  ],
+  "permissions": {
+    "allow": [
+      "Read(//Users/mvellasquez/Claude Projects/ratioxtrade/src/**)",
+      "Read(//Users/mvellasquez/Claude Projects/ratioxtrade/**)",
+      "Bash(sed -i '' 's/\\\\$247/\\\\$147/g; s/\"247\"/\"147\"/g; s/: 247/: 147/g; s/price: 247/price: 147/g; s/value: 247/value: 147/g' src/pages/Index.tsx src/pages/IndexPT.tsx src/pages/IndexES.tsx src/components/ToolboxHeroSection.tsx src/components/ToolboxOfferSection.tsx src/components/ToolboxFinalCTASection.tsx src/components/ToolboxFAQSection.tsx src/components/SEOHead.tsx src/components/TestimonialsSection.tsx src/components/LeadCaptureModal.tsx src/components/blog/SmartCTA.tsx src/components/blog/RatioXBanner.tsx src/components/pt/ToolboxOfferSectionPT.tsx src/components/pt/ToolboxFAQSectionPT.tsx src/components/pt/TestimonialsSectionPT.tsx src/components/es/ToolboxOfferSectionES.tsx src/components/es/ToolboxFAQSectionES.tsx src/components/es/TestimonialsSection.tsx src/lib/product-schema-helpers.ts)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/ratioxtrade\" status)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/ratioxtrade\" log --oneline -5)",
+      "Bash(git -C '/Users/mvellasquez/Claude Projects/ratioxtrade' add src/components/LeadCaptureModal.tsx src/components/SEOHead.tsx src/components/TestimonialsSection.tsx src/components/ToolboxFAQSection.tsx src/components/ToolboxFinalCTASection.tsx src/components/ToolboxHeroSection.tsx src/components/ToolboxOfferSection.tsx src/components/blog/RatioXBanner.tsx src/components/blog/SmartCTA.tsx src/components/dna/DNAFinalCTASection.tsx src/components/dna/DNAOfferSection.tsx src/components/es/TestimonialsSection.tsx src/components/es/ToolboxFAQSectionES.tsx src/components/es/ToolboxOfferSectionES.tsx src/components/pt/TestimonialsSectionPT.tsx src/components/pt/ToolboxFAQSectionPT.tsx src/components/pt/ToolboxOfferSectionPT.tsx src/lib/product-schema-helpers.ts src/pages/Affiliate.tsx src/pages/AffiliateES.tsx src/pages/AffiliatePT.tsx src/pages/Index.tsx src/pages/IndexES.tsx src/pages/IndexPT.tsx)",
+      "Bash(git -C '/Users/mvellasquez/Claude Projects/ratioxtrade' commit -m ':*)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/ratioxtrade\" push origin main)",
+      "Bash(git -C '/Users/mvellasquez/Claude Projects/ratioxtrade' add src/components/dna/DNAOfferSection.tsx src/components/dna/DNAFinalCTASection.tsx src/components/dna/DNAFAQSection.tsx src/components/dna/DNAComparisonSection.tsx)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/ratioxtrade\" commit -m \"feat\\(dna\\): update price to \\\\$1,297 \\(4x \\\\$324.25 installments\\)\")",
+      "Read(//Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/**)",
+      "WebSearch",
+      "Skill(gsd:resume-work)",
+      "Skill(gsd:resume-work:*)",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/ -v)",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/test_pipeline_orchestrator.py -v)",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/test_war_room.py -v)",
+      "Bash(/opt/anaconda3/bin/python -c \"import ast; ast.parse\\(open\\('backend/api/pipeline.py'\\).read\\(\\)\\); print\\('syntax ok'\\)\")",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/test_war_room.py tests/test_pipeline_api.py -v)"
+    ],
+    "additionalDirectories": [
+      "/Users/mvellasquez/Claude Projects/ratioxtrade/src/pages",
+      "/Users/mvellasquez/Claude Projects/ratioxtrade/src/components/dna",
+      "/Users/mvellasquez/Claude Projects/ebook-generator/docs/superpowers"
+    ]
+  },
   "hooks": {
     "PostToolUse": [
       {
@@ -21,5 +41,13 @@
         ]
       }
     ]
-  }
+  },
+  "allowedTools": [
+    "Bash",
+    "Read",
+    "Write",
+    "Edit",
+    "Glob",
+    "Grep"
+  ]
 }

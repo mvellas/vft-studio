@@ -16,16 +16,17 @@ async def test_orchestrator_yields_agent_start_and_done():
     mock_project.name = "Test Project"
     mock_project.description = "A test"
 
-    with patch("backend.pipeline.orchestrator.Phase1SpecialistAgent") as P1, \
-         patch("backend.pipeline.orchestrator.Phase2SpecialistAgent") as P2, \
-         patch("backend.pipeline.orchestrator.Phase3SpecialistAgent") as P3, \
-         patch("backend.pipeline.orchestrator.AnalystAgent") as AN:
+    inst = MagicMock()
+    inst.stream = lambda msgs: async_gen("output text")
 
-        for Cls in [P1, P2, P3, AN]:
-            inst = MagicMock()
-            inst.stream_with_tools = AsyncMock(side_effect=lambda msgs: async_gen("output text"))
-            Cls.from_project_id = AsyncMock(return_value=inst)
+    mock_map = {
+        "phase1_specialist": MagicMock(from_project_id=AsyncMock(return_value=inst)),
+        "phase2_specialist": MagicMock(from_project_id=AsyncMock(return_value=inst)),
+        "phase3_specialist": MagicMock(from_project_id=AsyncMock(return_value=inst)),
+        "analyst": MagicMock(from_project_id=AsyncMock(return_value=inst)),
+    }
 
+    with patch("backend.pipeline.orchestrator._AGENT_CLASS_MAP", mock_map):
         orch = PipelineOrchestrator(
             project=mock_project,
             documents=[],
@@ -57,16 +58,17 @@ async def test_orchestrator_includes_analyst_when_docs_present():
     mock_doc.title = "Doc 1"
     mock_doc.content_text = "content"
 
-    with patch("backend.pipeline.orchestrator.Phase1SpecialistAgent") as P1, \
-         patch("backend.pipeline.orchestrator.Phase2SpecialistAgent") as P2, \
-         patch("backend.pipeline.orchestrator.Phase3SpecialistAgent") as P3, \
-         patch("backend.pipeline.orchestrator.AnalystAgent") as AN:
+    inst = MagicMock()
+    inst.stream = lambda msgs: async_gen("output")
 
-        for Cls in [P1, P2, P3, AN]:
-            inst = MagicMock()
-            inst.stream_with_tools = AsyncMock(side_effect=lambda msgs: async_gen("output"))
-            Cls.from_project_id = AsyncMock(return_value=inst)
+    mock_map = {
+        "phase1_specialist": MagicMock(from_project_id=AsyncMock(return_value=inst)),
+        "phase2_specialist": MagicMock(from_project_id=AsyncMock(return_value=inst)),
+        "phase3_specialist": MagicMock(from_project_id=AsyncMock(return_value=inst)),
+        "analyst": MagicMock(from_project_id=AsyncMock(return_value=inst)),
+    }
 
+    with patch("backend.pipeline.orchestrator._AGENT_CLASS_MAP", mock_map):
         orch = PipelineOrchestrator(
             project=mock_project,
             documents=[mock_doc],
