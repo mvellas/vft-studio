@@ -19,12 +19,14 @@
       "Bash(/opt/anaconda3/bin/python -m pytest tests/test_pipeline_orchestrator.py -v)",
       "Bash(/opt/anaconda3/bin/python -m pytest tests/test_war_room.py -v)",
       "Bash(/opt/anaconda3/bin/python -c \"import ast; ast.parse\\(open\\('backend/api/pipeline.py'\\).read\\(\\)\\); print\\('syntax ok'\\)\")",
-      "Bash(/opt/anaconda3/bin/python -m pytest tests/test_war_room.py tests/test_pipeline_api.py -v)"
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/test_war_room.py tests/test_pipeline_api.py -v)",
+      "Bash(python3 -m venv .venv)"
     ],
     "additionalDirectories": [
       "/Users/mvellasquez/Claude Projects/ratioxtrade/src/pages",
       "/Users/mvellasquez/Claude Projects/ratioxtrade/src/components/dna",
-      "/Users/mvellasquez/Claude Projects/ebook-generator/docs/superpowers"
+      "/Users/mvellasquez/Claude Projects/ebook-generator/docs/superpowers",
+      "/Users/mvellasquez/Claude Projects/ebook-generator"
     ]
   },
   "hooks": {
