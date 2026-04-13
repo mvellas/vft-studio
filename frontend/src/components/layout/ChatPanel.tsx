@@ -6,9 +6,19 @@ import remarkGfm from 'remark-gfm'
 import { useChatStore } from '../../stores/chatStore'
 import { useUiStore } from '../../stores/uiStore'
 import { useChat } from '../../hooks/useChat'
-import { AgentSelector } from './AgentSelector'
 import { loadChatHistory, clearChatHistory } from '../../api/chat'
 import { useProjectStore } from '../../stores/projectStore'
+
+function agentBadgeColor(agentName: string): string {
+  const colors: Record<string, string> = {
+    ARIA: 'bg-indigo-100 text-indigo-700',
+    FRAME: 'bg-blue-100 text-blue-700',
+    AXIOM: 'bg-amber-100 text-amber-700',
+    NOVA: 'bg-emerald-100 text-emerald-700',
+    ANALYST: 'bg-purple-100 text-purple-700',
+  }
+  return colors[agentName] ?? 'bg-gray-100 text-gray-600'
+}
 
 interface ChatPanelProps {
   width?: number
@@ -101,9 +111,6 @@ export function ChatPanel({ width }: ChatPanelProps) {
             </button>
           </div>
         </div>
-        <div className="pb-2">
-          <AgentSelector />
-        </div>
       </div>
 
       {/* Messages */}
@@ -115,12 +122,26 @@ export function ChatPanel({ width }: ChatPanelProps) {
           </div>
         )}
 
-        {messages.map((msg) => (
+        {messages.map((msg, idx) => {
+          const prev = idx > 0 ? messages[idx - 1] : null
+          const agentChanged = msg.role !== 'user' && msg.agent_name && msg.agent_name !== prev?.agent_name
+          return (
+          <div key={msg.id}>
+            {agentChanged && (
+              <div className="flex items-center gap-2 my-2">
+                <div className="h-px flex-1 bg-gray-200" />
+                <span className="text-xs text-gray-400">— {msg.agent_name} —</span>
+                <div className="h-px flex-1 bg-gray-200" />
+              </div>
+            )}
           <div
-            key={msg.id}
             className={`flex flex-col gap-1 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
           >
-            <span className="text-xs text-gray-400 font-medium">{msg.agent_name}</span>
+            {msg.role !== 'user' && msg.agent_name && (
+              <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${agentBadgeColor(msg.agent_name)}`}>
+                {msg.agent_name}
+              </span>
+            )}
             <div
               className={`max-w-[85%] rounded-lg px-3 py-2 text-sm select-text cursor-text ${
                 msg.role === 'user'
@@ -146,7 +167,9 @@ export function ChatPanel({ width }: ChatPanelProps) {
                 )}
             </div>
           </div>
-        ))}
+          </div>
+          )
+        })}
 
         {streamingToolState?.type === 'tool_use' && (
           <div className="flex items-center gap-2 text-xs text-gray-500 animate-pulse px-1">
