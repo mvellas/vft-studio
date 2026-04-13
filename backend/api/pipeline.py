@@ -22,6 +22,34 @@ from backend.pipeline.report import ReportGenerator
 router = APIRouter(tags=["pipeline"])
 
 
+def _build_full_document(
+    project_name: str,
+    phase_outputs: dict[str, str],
+    war_room_transcript: str,
+    final_report: str,
+) -> str:
+    """Assemble complete export document: phase analyses + war room + final report."""
+    sections: list[str] = [f"# Análise VFT Completa — {project_name}\n"]
+
+    agent_labels = {
+        "FRAME": "Fase 1 — Stakeholders (FRAME)",
+        "AXIOM": "Fase 2 — Valores e Objetivos (AXIOM)",
+        "NOVA": "Fase 3 — Alternativas (NOVA)",
+        "ANALYST": "Documentos Analisados (ANALYST)",
+    }
+    for agent, label in agent_labels.items():
+        if agent in phase_outputs and phase_outputs[agent].strip():
+            sections.append(f"## {label}\n\n{phase_outputs[agent]}")
+
+    if war_room_transcript.strip():
+        sections.append(f"## War Room — Transcrição do Debate\n\n{war_room_transcript}")
+
+    if final_report.strip():
+        sections.append(f"---\n\n{final_report}")
+
+    return "\n\n---\n\n".join(sections)
+
+
 async def run_full_pipeline(
     project: Project,
     documents: list[Document],
@@ -74,20 +102,34 @@ async def run_full_pipeline(
     )
     full_report = ""
     async for event in report_gen.run():
-        yield event
+        # Suppress the partial report_done from ReportGenerator — we'll emit
+        # a final report_done below with the fully assembled document.
+        if event["event"] != "report_done":
+            yield event
         if event["event"] == "report_delta":
             full_report += event["data"].get("text", "")
 
-    # Persist report
+    # Assemble full export document: phase analyses + war room + final report
+    full_document = _build_full_document(
+        project_name=project.name,
+        phase_outputs=orchestrator.phase_outputs,
+        war_room_transcript=war_room_transcript,
+        final_report=full_report,
+    )
+
+    # Persist full document
     result = await session.execute(
         select(PipelineRun).where(PipelineRun.id == run_id)
     )
     run = result.scalar_one_or_none()
     if run:
-        run.report_md = full_report
+        run.report_md = full_document
         run.status = "done"
         run.completed_at = datetime.now(timezone.utc).isoformat()
     await session.commit()
+
+    # Also send full document via SSE so frontend store has it
+    yield {"event": "report_done", "data": {"report_md": full_document}}
 
     yield {"event": "pipeline_done", "data": {}}
 

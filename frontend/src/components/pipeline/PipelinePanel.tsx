@@ -87,6 +87,8 @@ export function PipelinePanel({ projectName }: Props) {
           reportMd={reportMd}
           projectName={projectName}
           runId={runId}
+          phaseTurns={phaseTurns}
+          warRoomTurns={warRoomTurns}
           onDiscussInChat={handleDiscussInChat}
           onRedo={handleRedo}
         />
