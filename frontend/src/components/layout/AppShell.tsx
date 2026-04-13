@@ -3,12 +3,15 @@ import { Sidebar } from './Sidebar'
 import { ChatPanel } from './ChatPanel'
 import { useUiStore } from '../../stores/uiStore'
 import { useProjectStore } from '../../stores/projectStore'
+import { usePhaseProgressStore } from '../../stores/phaseProgressStore'
 import { DiagramExport } from '../phase/DiagramExport'
 import { PipelineButton } from '../pipeline/PipelineButton'
 import { PipelinePanel } from '../pipeline/PipelinePanel'
 import { PipelineHistory } from '../pipeline/PipelineHistory'
+import { PhaseProgress } from '../phase/PhaseProgress'
 import { MessageSquare } from 'lucide-react'
 import { useResize } from '../../hooks/useResize'
+import { usePhasePoller } from '../../hooks/usePhasePoller'
 
 interface AppShellProps {
   children: ReactNode
@@ -18,6 +21,9 @@ export function AppShell({ children }: AppShellProps) {
   const { chatPanelOpen, currentView, setChatPanelOpen, pipelineView } = useUiStore()
   const { activeProjectId, projects } = useProjectStore()
   const activeProject = projects.find(p => p.id === activeProjectId)
+
+  const { currentStep, completedSteps, totalSteps, progressPercent } = usePhaseProgressStore()
+  usePhasePoller(activeProjectId)
 
   const sidebar = useResize({ initialSize: 256, min: 48, max: 400, direction: 'horizontal-right' })
   const chat = useResize({ initialSize: 384, min: 240, max: 600, direction: 'horizontal-left' })
@@ -41,25 +47,38 @@ export function AppShell({ children }: AppShellProps) {
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {currentView === 'project-detail' && activeProject && (
-          <div className="shrink-0 bg-white border-b border-gray-200 px-6 py-2 flex items-center justify-between">
-            <span className="text-sm text-gray-500 truncate max-w-xs">{activeProject.name}</span>
-            <div className="flex items-center gap-3">
-              <DiagramExport projectId={activeProject.id} projectName={activeProject.name} />
-              <PipelineButton
-                projectId={activeProject.id}
-                projectDescription={activeProject.description ?? ''}
+          <div className="shrink-0 bg-white border-b border-gray-200">
+            {/* Top row: project name + actions */}
+            <div className="px-6 py-2 flex items-center justify-between">
+              <span className="text-sm text-gray-500 truncate max-w-xs">{activeProject.name}</span>
+              <div className="flex items-center gap-3">
+                <DiagramExport projectId={activeProject.id} projectName={activeProject.name} />
+                <PipelineButton
+                  projectId={activeProject.id}
+                  projectDescription={activeProject.description ?? ''}
+                />
+                <button
+                  onClick={() => setChatPanelOpen(!chatPanelOpen)}
+                  className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border transition-colors ${
+                    chatPanelOpen
+                      ? 'bg-indigo-600 text-white border-indigo-600'
+                      : 'text-gray-600 hover:text-indigo-700 border-gray-200 hover:border-indigo-300 bg-white'
+                  }`}
+                >
+                  <MessageSquare size={13} />
+                  Chat IA
+                </button>
+              </div>
+            </div>
+            {/* Progress row */}
+            <div className="px-4 pb-3">
+              <PhaseProgress
+                currentStep={currentStep}
+                completedSteps={completedSteps}
+                totalSteps={totalSteps}
+                progressPercent={progressPercent}
+                compact
               />
-              <button
-                onClick={() => setChatPanelOpen(!chatPanelOpen)}
-                className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border transition-colors ${
-                  chatPanelOpen
-                    ? 'bg-indigo-600 text-white border-indigo-600'
-                    : 'text-gray-600 hover:text-indigo-700 border-gray-200 hover:border-indigo-300 bg-white'
-                }`}
-              >
-                <MessageSquare size={13} />
-                Chat IA
-              </button>
             </div>
           </div>
         )}
