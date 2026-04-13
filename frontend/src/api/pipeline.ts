@@ -69,6 +69,16 @@ export function streamPipeline(
   return () => ctrl.abort()
 }
 
+export async function listRuns(projectId: string): Promise<PipelineRunInfo[]> {
+  try {
+    const resp = await fetch(`/api/pipeline/${projectId}/runs`)
+    if (!resp.ok) return []
+    return await resp.json()
+  } catch {
+    return []
+  }
+}
+
 export async function getLatestRun(projectId: string): Promise<PipelineRunInfo | null> {
   try {
     const resp = await fetch(`/api/pipeline/${projectId}`)

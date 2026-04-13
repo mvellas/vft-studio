@@ -6,6 +6,7 @@ import { useProjectStore } from '../../stores/projectStore'
 import { DiagramExport } from '../phase/DiagramExport'
 import { PipelineButton } from '../pipeline/PipelineButton'
 import { PipelinePanel } from '../pipeline/PipelinePanel'
+import { PipelineHistory } from '../pipeline/PipelineHistory'
 import { MessageSquare } from 'lucide-react'
 import { useResize } from '../../hooks/useResize'
 
@@ -67,6 +68,9 @@ export function AppShell({ children }: AppShellProps) {
             <div className="max-w-4xl mx-auto mb-6">
               <PipelinePanel projectName={activeProject.name} />
             </div>
+          )}
+          {currentView === 'project-detail' && activeProject && (
+            <PipelineHistory projectId={activeProject.id} />
           )}
           {children}
         </main>

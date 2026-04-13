@@ -28,7 +28,7 @@ interface Props {
 }
 
 export function PipelinePanel({ projectName }: Props) {
-  const { status, turns, reportMd, errorMessage, reset } = usePipelineStore()
+  const { status, turns, reportMd, errorMessage, reset, runId } = usePipelineStore()
   const { pipelineView, setPipelineView, setChatPanelOpen } = useUiStore()
   const bottomRef = useRef<HTMLDivElement>(null)
 
@@ -86,6 +86,7 @@ export function PipelinePanel({ projectName }: Props) {
         <ReportView
           reportMd={reportMd}
           projectName={projectName}
+          runId={runId}
           onDiscussInChat={handleDiscussInChat}
           onRedo={handleRedo}
         />
