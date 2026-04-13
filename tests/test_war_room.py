@@ -18,21 +18,10 @@ async def test_war_room_yields_turns():
         "NOVA": "alternatives",
     }
 
-    inst = MagicMock()
-    inst.stream = lambda msgs: aiter(["response text"])
+    mock_agent = MagicMock()
+    mock_agent.stream = lambda msgs: aiter(["response text"])
 
-    mock_agent_class_map = {
-        "facilitator": MagicMock(from_project_id=AsyncMock(return_value=inst)),
-        "phase1_specialist": MagicMock(from_project_id=AsyncMock(return_value=inst)),
-        "phase2_specialist": MagicMock(from_project_id=AsyncMock(return_value=inst)),
-        "phase3_specialist": MagicMock(from_project_id=AsyncMock(return_value=inst)),
-        "analyst": MagicMock(from_project_id=AsyncMock(return_value=inst)),
-    }
-
-    with patch("backend.pipeline.war_room._AGENT_CLASS_MAP", mock_agent_class_map), \
-         patch("backend.pipeline.war_room.FacilitatorAgent") as FA:
-        FA.from_project_id = AsyncMock(return_value=inst)
-
+    with patch("backend.pipeline.war_room.BaseAgent", return_value=mock_agent):
         orch = WarRoomOrchestrator(
             project_id="proj-1",
             project_name="Test",
