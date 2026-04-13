@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from typing import AsyncIterator
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import Response
 from sse_starlette.sse import EventSourceResponse, ServerSentEvent
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -132,6 +133,41 @@ async def start_pipeline(
             yield ServerSentEvent(data=json.dumps({"message": str(exc)}), event="error")
 
     return EventSourceResponse(generate())
+
+
+@router.get("/pipeline/export/{run_id}")
+async def export_report(
+    run_id: str,
+    session: AsyncSession = Depends(get_session),
+) -> Response:
+    result = await session.execute(
+        select(PipelineRun).where(PipelineRun.id == run_id)
+    )
+    run = result.scalar_one_or_none()
+    if not run:
+        raise HTTPException(status_code=404, detail="Run not found")
+
+    filename = f"vft-analise-{run.project_id[:8]}.md"
+    return Response(
+        content=run.report_md,
+        media_type="text/markdown; charset=utf-8",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+@router.get("/pipeline/{project_id}/runs", response_model=list[PipelineRunResponse])
+async def list_runs(
+    project_id: str,
+    session: AsyncSession = Depends(get_session),
+) -> list[PipelineRunResponse]:
+    result = await session.execute(
+        select(PipelineRun)
+        .where(PipelineRun.project_id == project_id)
+        .where(PipelineRun.status == "done")
+        .order_by(PipelineRun.created_at.desc())
+    )
+    runs = result.scalars().all()
+    return [PipelineRunResponse.model_validate(r) for r in runs]
 
 
 @router.get("/pipeline/{project_id}", response_model=PipelineRunResponse)
