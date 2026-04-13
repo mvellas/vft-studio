@@ -94,8 +94,8 @@ ${html}
         </button>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-6 print:border-0 print:p-0">
-        <div id="report-content" className="prose prose-sm max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-li:text-gray-700 prose-strong:text-gray-900">
+      <div className="bg-white border border-gray-200 rounded-xl p-6 print:border-0 print:p-0 select-text cursor-text">
+        <div id="report-content" className="prose prose-sm max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-li:text-gray-700 prose-strong:text-gray-900 select-text">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{reportMd}</ReactMarkdown>
         </div>
       </div>
