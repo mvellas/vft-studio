@@ -57,7 +57,6 @@ export function WarRoomGraph({ turns }: Props) {
           dashes: true,
         },
         nodes: { borderWidth: 2 },
-        background: { color: '#0e0e13' } as any,
       }
     )
     networkRef.current = network
