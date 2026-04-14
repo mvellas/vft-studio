@@ -86,7 +86,7 @@ export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: Objective
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4 space-y-3">
+    <div className="rounded-lg p-4 space-y-3" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Header: badge + type selector */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
@@ -100,7 +100,8 @@ export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: Objective
         <select
           value={currentType}
           onChange={e => handleTypeChange(e.target.value)}
-          className="text-xs border border-gray-200 rounded-md px-1.5 py-0.5 text-gray-600 focus:ring-1 focus:ring-indigo-500"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+          className="text-xs px-1.5 py-0.5 focus:outline-none"
         >
           <option value="uncategorized">Nao categorizado</option>
           <option value="means">Meio</option>
@@ -124,7 +125,8 @@ export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: Objective
             value={editValue}
             onChange={e => setEditValue(e.target.value)}
             onBlur={handleBlur}
-            className="w-full text-sm border border-indigo-400 rounded-md p-1 focus:ring-1 focus:ring-indigo-500 resize-none"
+            style={{ background: '#0e0e13', border: '1px solid rgba(232,121,249,0.4)', color: '#f1f5f9', borderRadius: '8px', resize: 'none' as const }}
+            className="w-full text-sm p-1 focus:outline-none"
             rows={3}
           />
         ) : (

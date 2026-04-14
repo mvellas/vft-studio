@@ -108,10 +108,10 @@ export function WITITestModal({ isOpen, onClose, objectiveId, projectId }: WITIT
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="bg-white rounded-xl p-6 max-w-lg w-full shadow-xl space-y-4">
+      <div className="rounded-xl p-6 max-w-lg w-full shadow-xl space-y-4" style={{ background: '#13131f' }}>
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-900">WITI Test</h2>
+          <h2 className="text-xl font-semibold" style={{ color: '#f1f5f9' }}>WITI Test</h2>
           <button
             type="button"
             onClick={onClose}
@@ -124,18 +124,18 @@ export function WITITestModal({ isOpen, onClose, objectiveId, projectId }: WITIT
 
         {/* Objective statement */}
         {objective ? (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
-            <p className="text-sm text-gray-700 leading-relaxed">{objective.statement}</p>
+          <div className="rounded-lg p-3" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <p className="text-sm leading-relaxed" style={{ color: '#e2e8f0' }}>{objective.statement}</p>
           </div>
         ) : (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
-            <p className="text-sm text-gray-400 italic">Carregando objetivo...</p>
+          <div className="rounded-lg p-3" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <p className="text-sm italic" style={{ color: '#64748b' }}>Carregando objetivo...</p>
           </div>
         )}
 
         {/* Why question + textarea */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium" style={{ color: '#94a3b8' }}>
             {objective
               ? `Por que "${objective.statement}" e importante no contexto desta decisao?`
               : 'Por que este objetivo e importante no contexto desta decisao?'}
@@ -144,8 +144,8 @@ export function WITITestModal({ isOpen, onClose, objectiveId, projectId }: WITIT
             value={whyAnswer}
             onChange={e => setWhyAnswer(e.target.value)}
             placeholder="Descreva por que este objetivo e relevante..."
-            className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent resize-none"
-            style={{ minHeight: '100px' }}
+            style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '100px', resize: 'none' as const }}
+            className="w-full p-3 text-sm focus:outline-none"
             disabled={classifying}
           />
         </div>

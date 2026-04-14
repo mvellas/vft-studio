@@ -40,7 +40,9 @@
       "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" add frontend/src/components/phase2/ObjectivesHierarchy.tsx frontend/src/components/phase2/MeansEndsNetwork.tsx)",
       "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"feat\\(ui\\): ObjectivesHierarchy + MeansEndsNetwork dark theme + html-to-image export\")",
       "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" add frontend/src/components/guide/GuideView.tsx)",
-      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"feat\\(ui\\): GuideView Midnight Ink dark theme\")"
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"feat\\(ui\\): GuideView Midnight Ink dark theme\")",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" add -u)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"fix\\(ui\\): dark theme contrast audit — inputs/textareas/selects/modals across all phase components\")"
     ],
     "additionalDirectories": [
       "/Users/mvellasquez/Claude Projects/ratioxtrade/src/pages",

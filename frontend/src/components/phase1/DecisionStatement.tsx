@@ -80,7 +80,7 @@ export function DecisionStatement({ projectId, onStepComplete }: DecisionStateme
   const canComplete = statement.trim() !== '' && validated
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+    <div className="rounded-lg p-6 space-y-6" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Header */}
       <div>
         <h2 className="text-lg font-semibold text-gray-900">
@@ -104,7 +104,8 @@ export function DecisionStatement({ projectId, onStepComplete }: DecisionStateme
           value={statement}
           onChange={e => setStatement(e.target.value)}
           placeholder="Ex: Decidir qual estrategia de expansao adotar para os proximos 5 anos, considerando a perspectiva dos acionistas e dentro do escopo do mercado latino-americano."
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[120px] resize-y"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '120px' }}
+          className="w-full p-3 text-sm focus:outline-none resize-y"
         />
 
         {/* Gerar com IA button */}

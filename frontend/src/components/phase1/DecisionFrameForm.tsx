@@ -126,7 +126,7 @@ export function DecisionFrameForm({ projectId, variant, onStepComplete }: Decisi
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">
+    <div className="rounded-lg p-6 space-y-4" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Variant instruction */}
       <div className="pl-4 border-l-2 border-blue-500">
         <p className="text-sm text-blue-700">{VARIANT_INSTRUCTIONS[variant]}</p>
@@ -147,7 +147,8 @@ export function DecisionFrameForm({ projectId, variant, onStepComplete }: Decisi
         <textarea
           value={purpose}
           onChange={handleChange(setPurpose)}
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px]"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '100px' }}
+          className="w-full p-3 text-sm focus:outline-none"
           placeholder="Descreva o proposito da decisao..."
         />
         <button
@@ -169,7 +170,8 @@ export function DecisionFrameForm({ projectId, variant, onStepComplete }: Decisi
         <textarea
           value={perspective}
           onChange={handleChange(setPerspective)}
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px]"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '100px' }}
+          className="w-full p-3 text-sm focus:outline-none"
           placeholder="Descreva a perspectiva que guia esta decisao..."
         />
         <button
@@ -191,7 +193,8 @@ export function DecisionFrameForm({ projectId, variant, onStepComplete }: Decisi
         <textarea
           value={scope}
           onChange={handleChange(setScope)}
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px]"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '100px' }}
+          className="w-full p-3 text-sm focus:outline-none"
           placeholder="Defina os limites do escopo..."
         />
         <button

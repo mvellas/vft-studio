@@ -213,7 +213,7 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
   return (
     <div className="space-y-4">
       {/* Header with variant badge */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="rounded-lg p-6" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
         <div className="flex items-center justify-between gap-4">
           <div>
             <h3 className="font-semibold text-gray-900 text-base">Passo 1.1 — Mapeamento de Stakeholders</h3>
@@ -238,7 +238,7 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
 
       {/* Stakeholder list */}
       {stakeholders.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm divide-y divide-gray-100">
+        <div className="rounded-lg divide-y" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.06)' }}>
           {stakeholders.map(s => (
             <div key={s.id} className="flex items-start justify-between gap-4 p-4">
               <div className="flex-1 min-w-0">
@@ -278,7 +278,7 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
 
       {/* Empty state */}
       {stakeholders.length === 0 && !showForm && (
-        <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+        <div className="rounded-lg p-8 text-center" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
           <p className="text-sm text-gray-500">Nenhum stakeholder cadastrado ainda.</p>
           <p className="text-xs text-gray-400 mt-1">Adicione ao menos uma Autoridade Decisora para continuar.</p>
         </div>
@@ -286,7 +286,7 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
 
       {/* Add/Edit form */}
       {showForm && (
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="rounded-lg p-6" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
           <h4 className="text-sm font-semibold text-gray-800 mb-4">
             {editingId ? 'Editar Stakeholder' : 'Adicionar Stakeholder'}
           </h4>
@@ -302,7 +302,8 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
                 value={form.name}
                 onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="Nome do stakeholder"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+                className="w-full px-3 py-2 text-sm focus:outline-none"
               />
             </div>
 
@@ -312,7 +313,8 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
               <select
                 value={form.role}
                 onChange={e => handleRoleChange(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+                className="w-full px-3 py-2 text-sm focus:outline-none"
               >
                 {ROLE_OPTIONS.map(opt => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -351,7 +353,8 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
                 onChange={e => setForm(prev => ({ ...prev, profile: e.target.value }))}
                 placeholder="Descreva o perfil e experiencia do stakeholder..."
                 rows={2}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', resize: 'none' as const }}
+                className="w-full px-3 py-2 text-sm focus:outline-none"
               />
             </div>
 
@@ -365,7 +368,8 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
                 onChange={e => setForm(prev => ({ ...prev, interests: e.target.value }))}
                 placeholder="Quais os interesses e preocupacoes deste stakeholder?"
                 rows={2}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', resize: 'none' as const }}
+                className="w-full px-3 py-2 text-sm focus:outline-none"
               />
             </div>
 
@@ -375,7 +379,8 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
               <select
                 value={form.elicitation_mode}
                 onChange={e => setForm(prev => ({ ...prev, elicitation_mode: e.target.value }))}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+                className="w-full px-3 py-2 text-sm focus:outline-none"
               >
                 {ELICITATION_OPTIONS.map(opt => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -422,7 +427,7 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
       )}
 
       {/* Complete step button */}
-      <div className="bg-white rounded-lg shadow-sm p-4 flex items-center justify-between gap-4">
+      <div className="rounded-lg p-4 flex items-center justify-between gap-4" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
         <div>
           {stakeholders.length === 0 ? (
             <p className="text-xs text-gray-500">Adicione ao menos uma Autoridade Decisora para completar este passo.</p>

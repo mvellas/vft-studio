@@ -180,7 +180,8 @@ export function ConsequencesMatrix({
                             onChange={e => setCellValues(prev => ({ ...prev, [key]: e.target.value }))}
                             onBlur={() => handleCellBlur(alt.id, obj.id)}
                             rows={3}
-                            className="w-full text-xs border border-indigo-400 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
+                            style={{ background: '#0e0e13', border: '1px solid rgba(232,121,249,0.4)', color: '#f1f5f9', borderRadius: '8px', resize: 'none' as const }}
+                            className="w-full text-xs px-2 py-1 focus:outline-none"
                           />
                         ) : (
                           <div

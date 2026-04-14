@@ -269,10 +269,10 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+    <div className="rounded-lg p-6 space-y-6" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Objective context */}
       {objective && (
-        <div className="bg-gray-50 rounded-md p-3">
+        <div className="rounded-md p-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
           <p className="text-xs text-gray-500 font-medium mb-1">Objetivo fundamental:</p>
           <p className="text-sm text-gray-700">{objective.statement}</p>
         </div>
@@ -286,13 +286,14 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
 
       {/* Attribute type */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium" style={{ color: '#94a3b8' }}>
           Tipo de Atributo
         </label>
         <select
           value={form.attr_type}
           onChange={e => handleFormChange({ attr_type: e.target.value })}
-          className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+          className="w-full p-2 text-sm focus:outline-none"
         >
           {ATTR_TYPE_OPTIONS.map(opt => (
             <option key={opt.value} value={opt.value}>
@@ -304,29 +305,29 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
 
       {/* Description */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium" style={{ color: '#94a3b8' }}>
           Descricao do Atributo
         </label>
         <textarea
           value={form.description}
           onChange={e => handleFormChange({ description: e.target.value })}
           placeholder="Descreva o que este atributo mede"
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-y"
-          style={{ minHeight: '80px' }}
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '80px' }}
+          className="w-full p-3 text-sm focus:outline-none resize-y"
         />
       </div>
 
       {/* Scale description */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium" style={{ color: '#94a3b8' }}>
           Escala de Medicao
         </label>
         <textarea
           value={form.scale_description}
           onChange={e => handleFormChange({ scale_description: e.target.value })}
           placeholder="Descreva a escala de medicao"
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-y"
-          style={{ minHeight: '60px' }}
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '60px' }}
+          className="w-full p-3 text-sm focus:outline-none resize-y"
         />
       </div>
 
@@ -425,9 +426,9 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
       {/* Confirmation dialog */}
       {showConfirmDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md mx-4 space-y-4">
-            <h3 className="text-base font-semibold text-gray-900">Concluir Fase 2</h3>
-            <p className="text-sm text-gray-600">
+          <div className="rounded-lg shadow-xl p-6 max-w-md mx-4 space-y-4" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <h3 className="text-base font-semibold" style={{ color: '#f1f5f9' }}>Concluir Fase 2</h3>
+            <p className="text-sm" style={{ color: '#94a3b8' }}>
               Fase 2 concluida. Todos os objetivos fundamentais tem atributos definidos.
               Avancar para a Fase 3 de Alternativas?
             </p>
@@ -470,8 +471,8 @@ function LevelRow({ level, index, total, onBlur, onDelete, onMove }: LevelRowPro
   const [description, setDescription] = useState(level.description)
 
   return (
-    <div className="flex items-center gap-2 p-2 border border-gray-200 rounded-md bg-gray-50">
-      <span className="text-xs text-gray-400 w-5 text-center flex-shrink-0">{index + 1}</span>
+    <div className="flex items-center gap-2 p-2 rounded-md" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+      <span className="text-xs w-5 text-center flex-shrink-0" style={{ color: '#64748b' }}>{index + 1}</span>
 
       <input
         type="text"
@@ -479,7 +480,8 @@ function LevelRow({ level, index, total, onBlur, onDelete, onMove }: LevelRowPro
         onChange={e => setLabel(e.target.value)}
         onBlur={() => onBlur(level, label, description)}
         placeholder="Rotulo"
-        className="border border-gray-300 rounded px-2 py-1 text-sm w-48 focus:ring-1 focus:ring-indigo-500"
+        style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+        className="px-2 py-1 text-sm w-48 focus:outline-none"
       />
 
       <input
@@ -488,7 +490,8 @@ function LevelRow({ level, index, total, onBlur, onDelete, onMove }: LevelRowPro
         onChange={e => setDescription(e.target.value)}
         onBlur={() => onBlur(level, label, description)}
         placeholder="Descricao"
-        className="border border-gray-300 rounded px-2 py-1 text-sm flex-1 focus:ring-1 focus:ring-indigo-500"
+        style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+        className="px-2 py-1 text-sm flex-1 focus:outline-none"
       />
 
       <div className="flex flex-col gap-0.5 flex-shrink-0">

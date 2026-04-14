@@ -124,7 +124,7 @@ export function WorkshopMode({ projectId, onStepComplete }: WorkshopModeProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+    <div className="rounded-lg p-6 space-y-6" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Header */}
       <div>
         <h3 className="font-semibold text-gray-900 text-base">
@@ -210,7 +210,8 @@ export function WorkshopMode({ projectId, onStepComplete }: WorkshopModeProps) {
             value={notes[currentStep] ?? ''}
             onChange={e => handleNoteChange(e.target.value)}
             placeholder="Registre as anotacoes desta etapa..."
-            className="w-full min-h-[120px] border border-gray-200 rounded-lg p-3 text-sm text-gray-700 resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '120px' }}
+            className="w-full p-3 text-sm resize-y focus:outline-none"
           />
         </div>
 

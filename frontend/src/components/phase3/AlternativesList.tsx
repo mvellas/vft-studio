@@ -138,7 +138,8 @@ export function AlternativesList({ projectId, onAlternativesChange }: Alternativ
               if (e.key === 'Escape') { setAdding(false); setNewName('') }
             }}
             placeholder="Nome da nova alternativa"
-            className="flex-1 border border-indigo-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            style={{ background: '#0e0e13', border: '1px solid rgba(232,121,249,0.4)', color: '#f1f5f9', borderRadius: '8px' }}
+            className="flex-1 px-3 py-2 text-sm focus:outline-none"
           />
           <button
             onClick={handleCreate}

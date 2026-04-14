@@ -149,7 +149,7 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm flex flex-col">
+    <div className="rounded-lg flex flex-col" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b border-gray-100">
         <Users className="w-5 h-5 text-indigo-600" />
@@ -327,7 +327,7 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
       </div>
 
       {/* Summary bar */}
-      <div className="px-4 py-3 border-t border-gray-100 bg-gray-50 rounded-b-lg flex items-center justify-between gap-4 flex-wrap">
+      <div className="px-4 py-3 border-t rounded-b-lg flex items-center justify-between gap-4 flex-wrap" style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}>
         <p className="text-xs text-gray-500">
           {totalObjectives} objetivos no total
           {' | '}
@@ -351,19 +351,18 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
       {/* Merge modal */}
       {mergeModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 space-y-4">
-            <h4 className="text-base font-semibold text-gray-900">Mesclar Objetivos Similares</h4>
+          <div className="rounded-lg shadow-xl max-w-lg w-full p-6 space-y-4" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <h4 className="text-base font-semibold" style={{ color: '#f1f5f9' }}>Mesclar Objetivos Similares</h4>
 
             <div className="space-y-2">
               <p className="text-xs font-semibold text-gray-600">Selecione o objetivo canonico:</p>
               {mergeModal.group.objectives.map(obj => (
                 <label
                   key={obj.id}
-                  className={`flex items-start gap-2 p-2 rounded-md border cursor-pointer ${
-                    mergeModal.selectedCanonicalId === obj.id
-                      ? 'border-indigo-400 bg-indigo-50'
-                      : 'border-gray-200'
-                  }`}
+                  style={mergeModal.selectedCanonicalId === obj.id
+                    ? { background: 'rgba(232,121,249,0.08)', border: '1px solid rgba(232,121,249,0.35)', borderRadius: '8px' }
+                    : { background: 'transparent', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px' }}
+                  className="flex items-start gap-2 p-2 cursor-pointer"
                 >
                   <input
                     type="radio"
@@ -399,7 +398,8 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
                     prev ? { ...prev, mergedStatement: e.target.value } : null
                   )
                 }
-                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-indigo-500 resize-none"
+                style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', resize: 'none' as const }}
+                className="w-full p-2 text-sm focus:outline-none"
                 rows={3}
               />
             </div>

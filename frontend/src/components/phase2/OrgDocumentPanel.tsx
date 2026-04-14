@@ -88,7 +88,7 @@ export function OrgDocumentPanel({ projectId }: OrgDocumentPanelProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">
+    <div className="rounded-lg p-6 space-y-4" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       <div className="flex items-center justify-between">
         <h3 className="text-base font-semibold text-gray-900">
           Analise de Documentos Organizacionais
@@ -113,8 +113,8 @@ export function OrgDocumentPanel({ projectId }: OrgDocumentPanelProps) {
         value={text}
         onChange={handleTextChange}
         placeholder="Cole o texto do documento organizacional aqui..."
-        className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-y"
-        style={{ minHeight: '200px' }}
+        style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '200px' }}
+        className="w-full p-3 text-sm focus:outline-none resize-y"
       />
 
       <div className="flex justify-end">

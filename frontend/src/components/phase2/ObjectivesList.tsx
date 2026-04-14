@@ -60,7 +60,7 @@ export function ObjectivesList({ projectId, onWITI, onCoC }: ObjectivesListProps
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm flex flex-col">
+    <div className="rounded-lg flex flex-col" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-100">
         <h3 className="text-xl font-semibold text-gray-900">Objetivos</h3>
@@ -94,13 +94,14 @@ export function ObjectivesList({ projectId, onWITI, onCoC }: ObjectivesListProps
 
       {/* Add form */}
       {showAddForm && (
-        <div className="p-4 bg-indigo-50 border-b border-indigo-100 space-y-2">
+        <div className="p-4 border-b space-y-2" style={{ background: 'rgba(232,121,249,0.05)', borderColor: 'rgba(232,121,249,0.2)' }}>
           <textarea
             autoFocus
             value={newStatement}
             onChange={e => setNewStatement(e.target.value)}
             placeholder="Digite o enunciado do objetivo..."
-            className="w-full border border-indigo-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+            style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', resize: 'none' as const }}
+            className="w-full p-2 text-sm focus:outline-none"
             rows={2}
             onKeyDown={e => {
               if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleAdd()
@@ -174,7 +175,7 @@ export function ObjectivesList({ projectId, onWITI, onCoC }: ObjectivesListProps
 
       {/* Summary row */}
       {objectives.length > 0 && (
-        <div className="px-4 py-3 border-t border-gray-100 bg-gray-50 rounded-b-lg">
+        <div className="px-4 py-3 border-t rounded-b-lg" style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}>
           <p className="text-xs text-gray-500">
             {objectives.length} objetivos total
             {' | '}
