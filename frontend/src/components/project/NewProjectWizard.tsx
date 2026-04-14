@@ -29,6 +29,23 @@ const STAKEHOLDER_OPTIONS: { value: StakeholderConfig; label: string; descriptio
   },
 ]
 
+const inputStyle = {
+  width: '100%',
+  background: '#0e0e13',
+  border: '1px solid rgba(255,255,255,0.1)',
+  borderRadius: '8px',
+  padding: '8px 12px',
+  fontSize: '13px',
+  color: '#f1f5f9',
+  outline: 'none',
+  resize: 'none' as const,
+}
+
+const inputFocusStyle = {
+  ...inputStyle,
+  border: '1px solid rgba(232,121,249,0.4)',
+}
+
 export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
   const { addProject, setActiveProject } = useProjectStore()
   const { setView } = useUiStore()
@@ -40,6 +57,7 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
   const [stakeholderConfig, setStakeholderConfig] = useState<StakeholderConfig>('single_dm_single')
   const [creating, setCreating] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [focusedField, setFocusedField] = useState<string | null>(null)
 
   function handleNext() {
     if (step === 1 && !name.trim()) {
@@ -76,14 +94,15 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg">
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ background: 'rgba(0,0,0,0.7)' }}>
+      <div className="rounded-xl shadow-2xl w-full max-w-lg" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-          <h2 className="font-semibold text-gray-900 text-lg">Novo Projeto VFT</h2>
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          <h2 className="font-semibold text-lg" style={{ color: '#f8fafc' }}>Novo Projeto VFT</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded"
+            className="p-1 rounded transition-colors"
+            style={{ color: '#475569' }}
             aria-label="Fechar"
           >
             <X size={18} />
@@ -91,30 +110,34 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
         </div>
 
         {/* Step indicator */}
-        <div className="flex items-center gap-2 px-6 py-3 bg-gray-50 border-b border-gray-200">
+        <div className="flex items-center gap-2 px-6 py-3" style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           {[1, 2, 3].map((s) => (
             <div key={s} className="flex items-center gap-2">
               <div
-                className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-                  s < step
-                    ? 'bg-indigo-600 text-white'
-                    : s === step
-                    ? 'bg-indigo-600 text-white ring-2 ring-indigo-200'
-                    : 'bg-gray-200 text-gray-500'
-                }`}
+                className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium"
+                style={
+                  s <= step
+                    ? { background: 'rgba(232,121,249,0.2)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.4)' }
+                    : { background: 'rgba(255,255,255,0.06)', color: '#475569', border: '1px solid rgba(255,255,255,0.08)' }
+                }
               >
                 {s}
               </div>
-              {s < 3 && <div className={`h-0.5 w-8 ${s < step ? 'bg-indigo-600' : 'bg-gray-200'}`} />}
+              {s < 3 && (
+                <div
+                  className="h-0.5 w-8"
+                  style={{ background: s < step ? 'rgba(232,121,249,0.4)' : 'rgba(255,255,255,0.07)' }}
+                />
+              )}
             </div>
           ))}
-          <span className="ml-2 text-xs text-gray-500">Passo {step} de 3</span>
+          <span className="ml-2 text-xs" style={{ color: '#475569' }}>Passo {step} de 3</span>
         </div>
 
         {/* Body */}
         <div className="px-6 py-6 overflow-y-auto max-h-[60vh]">
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            <div className="mb-4 p-3 rounded-lg text-sm" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171' }}>
               {error}
             </div>
           )}
@@ -122,42 +145,48 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
           {/* Step 1: Identification */}
           {step === 1 && (
             <div className="space-y-4">
-              <h3 className="font-medium text-gray-900">Identificação do Projeto</h3>
+              <h3 className="font-medium" style={{ color: '#f1f5f9' }}>Identificação do Projeto</h3>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nome do projeto <span className="text-red-500">*</span>
+                <label className="block text-sm font-medium mb-1" style={{ color: '#94a3b8' }}>
+                  Nome do projeto <span style={{ color: '#f87171' }}>*</span>
                 </label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Ex: Seleção de Sistema de Drones"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  style={focusedField === 'name' ? inputFocusStyle : inputStyle}
+                  onFocus={() => setFocusedField('name')}
+                  onBlur={() => setFocusedField(null)}
                   autoFocus
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Descrição <span className="text-gray-400 font-normal">(opcional)</span>
+                <label className="block text-sm font-medium mb-1" style={{ color: '#94a3b8' }}>
+                  Descrição <span className="font-normal" style={{ color: '#475569' }}>(opcional)</span>
                 </label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Breve descrição do problema de decisão..."
                   rows={3}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                  style={focusedField === 'description' ? inputFocusStyle : inputStyle}
+                  onFocus={() => setFocusedField('description')}
+                  onBlur={() => setFocusedField(null)}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Notas de contexto <span className="text-gray-400 font-normal">(opcional)</span>
+                <label className="block text-sm font-medium mb-1" style={{ color: '#94a3b8' }}>
+                  Notas de contexto <span className="font-normal" style={{ color: '#475569' }}>(opcional)</span>
                 </label>
                 <textarea
                   value={contextNotes}
                   onChange={(e) => setContextNotes(e.target.value)}
                   placeholder="Contexto organizacional, restrições relevantes..."
                   rows={3}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                  style={focusedField === 'contextNotes' ? inputFocusStyle : inputStyle}
+                  onFocus={() => setFocusedField('contextNotes')}
+                  onBlur={() => setFocusedField(null)}
                 />
               </div>
             </div>
@@ -166,19 +195,20 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
           {/* Step 2: Stakeholder config */}
           {step === 2 && (
             <div className="space-y-4">
-              <h3 className="font-medium text-gray-900">Configuração de Stakeholders</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="font-medium" style={{ color: '#f1f5f9' }}>Configuração de Stakeholders</h3>
+              <p className="text-sm" style={{ color: '#64748b' }}>
                 Selecione a variante que melhor descreve a estrutura de decisão do seu projeto.
               </p>
               <div className="space-y-3">
                 {STAKEHOLDER_OPTIONS.map((opt) => (
                   <label
                     key={opt.value}
-                    className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
+                    className="flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-colors"
+                    style={
                       stakeholderConfig === opt.value
-                        ? 'border-indigo-500 bg-indigo-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                        ? { border: '1px solid rgba(232,121,249,0.35)', background: 'rgba(232,121,249,0.07)' }
+                        : { border: '1px solid rgba(255,255,255,0.08)', background: 'transparent' }
+                    }
                   >
                     <input
                       type="radio"
@@ -186,11 +216,12 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
                       value={opt.value}
                       checked={stakeholderConfig === opt.value}
                       onChange={() => setStakeholderConfig(opt.value)}
-                      className="mt-0.5 accent-indigo-600"
+                      className="mt-0.5"
+                      style={{ accentColor: '#e879f9' }}
                     />
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{opt.label}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{opt.description}</p>
+                      <p className="text-sm font-medium" style={{ color: '#f1f5f9' }}>{opt.label}</p>
+                      <p className="text-xs mt-0.5" style={{ color: '#64748b' }}>{opt.description}</p>
                     </div>
                   </label>
                 ))}
@@ -201,22 +232,22 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
           {/* Step 3: Confirmation */}
           {step === 3 && (
             <div className="space-y-4">
-              <h3 className="font-medium text-gray-900">Confirmação</h3>
-              <p className="text-sm text-gray-500">Revise as configurações antes de criar o projeto.</p>
-              <div className="bg-gray-50 rounded-lg p-4 space-y-3 text-sm">
+              <h3 className="font-medium" style={{ color: '#f1f5f9' }}>Confirmação</h3>
+              <p className="text-sm" style={{ color: '#64748b' }}>Revise as configurações antes de criar o projeto.</p>
+              <div className="rounded-lg p-4 space-y-3 text-sm" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
                 <div>
-                  <span className="font-medium text-gray-700">Nome:</span>{' '}
-                  <span className="text-gray-900">{name}</span>
+                  <span className="font-medium" style={{ color: '#94a3b8' }}>Nome:</span>{' '}
+                  <span style={{ color: '#f1f5f9' }}>{name}</span>
                 </div>
                 {description && (
                   <div>
-                    <span className="font-medium text-gray-700">Descrição:</span>{' '}
-                    <span className="text-gray-900">{description}</span>
+                    <span className="font-medium" style={{ color: '#94a3b8' }}>Descrição:</span>{' '}
+                    <span style={{ color: '#f1f5f9' }}>{description}</span>
                   </div>
                 )}
                 <div>
-                  <span className="font-medium text-gray-700">Configuração:</span>{' '}
-                  <span className="text-gray-900">
+                  <span className="font-medium" style={{ color: '#94a3b8' }}>Configuração:</span>{' '}
+                  <span style={{ color: '#f1f5f9' }}>
                     {STAKEHOLDER_OPTIONS.find((o) => o.value === stakeholderConfig)?.label}
                   </span>
                 </div>
@@ -226,17 +257,19 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
           <button
             onClick={step === 1 ? onClose : handleBack}
-            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            className="px-4 py-2 text-sm transition-colors"
+            style={{ color: '#64748b' }}
           >
             {step === 1 ? 'Cancelar' : 'Voltar'}
           </button>
           {step < 3 ? (
             <button
               onClick={handleNext}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
             >
               Próximo
             </button>
@@ -244,7 +277,8 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
             <button
               onClick={handleCreate}
               disabled={creating}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium disabled:opacity-60"
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+              style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
             >
               {creating ? 'Criando...' : 'Criar Projeto'}
             </button>
