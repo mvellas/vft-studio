@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { AppShell } from './components/layout/AppShell'
 import { ProjectList } from './components/project/ProjectList'
 import { SettingsView } from './components/project/SettingsView'
@@ -14,6 +15,12 @@ import { phasesApi } from './api/phases'
 import { apiClient } from './api/client'
 import { DocumentPanel } from './components/documents/DocumentPanel'
 import { GuideView } from './components/guide/GuideView'
+
+const pageVariants = {
+  initial: { opacity: 0, y: 8 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.18, ease: 'easeOut' } },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.12, ease: 'easeIn' } },
+}
 
 function ProjectDetailView() {
   const { activeProjectId } = useProjectStore()
@@ -87,22 +94,33 @@ function App() {
       )}
       <AppShell>
         <ErrorBoundary>
-          {currentView === 'project-list' && <ProjectList />}
-          {currentView === 'project-detail' && <ProjectDetailView />}
-          {currentView === 'settings' && <SettingsView />}
-          {currentView === 'guide' && <GuideView />}
-          {currentView === 'documents' && (
-            <DocumentPanel
-              onAnalyze={() => {
-                useChatStore.getState().setActiveAgent('ANALYST', 'analyst')
-                useChatStore.getState().setAutoSendMessage(
-                  'Analise os documentos disponíveis e extraia os valores, objetivos e posições relevantes para o projeto VFT. Cite as fontes diretamente.'
-                )
-                useUiStore.getState().setChatPanelOpen(true)
-                useUiStore.getState().setView('project-detail')
-              }}
-            />
-          )}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentView}
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="h-full"
+            >
+              {currentView === 'project-list' && <ProjectList />}
+              {currentView === 'project-detail' && <ProjectDetailView />}
+              {currentView === 'settings' && <SettingsView />}
+              {currentView === 'guide' && <GuideView />}
+              {currentView === 'documents' && (
+                <DocumentPanel
+                  onAnalyze={() => {
+                    useChatStore.getState().setActiveAgent('ANALYST', 'analyst')
+                    useChatStore.getState().setAutoSendMessage(
+                      'Analise os documentos disponíveis e extraia os valores, objetivos e posições relevantes para o projeto VFT. Cite as fontes diretamente.'
+                    )
+                    useUiStore.getState().setChatPanelOpen(true)
+                    useUiStore.getState().setView('project-detail')
+                  }}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
         </ErrorBoundary>
       </AppShell>
     </>
