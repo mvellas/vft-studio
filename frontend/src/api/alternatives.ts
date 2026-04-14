@@ -68,6 +68,16 @@ export const alternativesApi = {
       )
       .then(r => r.data),
 
+  suggestNames: (
+    projectId: string
+  ): Promise<{ suggestions: { name: string; description: string }[] }> =>
+    apiClient
+      .post<{ suggestions: { name: string; description: string }[] }>(
+        `/api/projects/${projectId}/alternatives/suggest-names`,
+        {}
+      )
+      .then(r => r.data),
+
   suggestConsequences: (
     projectId: string,
     alternativeId: string

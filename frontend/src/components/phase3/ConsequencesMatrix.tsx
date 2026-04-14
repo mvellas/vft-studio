@@ -93,7 +93,7 @@ export function ConsequencesMatrix({
 
   if (fundamentals.length === 0) {
     return (
-      <div className="text-sm text-gray-500 text-center py-8">
+      <div className="text-sm text-center py-8" style={{ color: '#64748b' }}>
         Nenhum objetivo fundamental definido. Complete a Fase 2 primeiro.
       </div>
     )
@@ -101,7 +101,7 @@ export function ConsequencesMatrix({
 
   if (alternatives.length === 0) {
     return (
-      <div className="text-sm text-gray-500 text-center py-8">
+      <div className="text-sm text-center py-8" style={{ color: '#64748b' }}>
         Adicione alternativas para preencher a matriz de consequências.
       </div>
     )
@@ -110,14 +110,14 @@ export function ConsequencesMatrix({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-base font-semibold text-gray-900">Matriz de Consequências</h3>
-        <span className="text-xs text-gray-500">
+        <h3 className="text-base font-semibold" style={{ color: '#f8fafc' }}>Matriz de Consequências</h3>
+        <span className="text-xs" style={{ color: '#64748b' }}>
           {filledCells}/{totalCells} células preenchidas ({progressPct}%)
         </span>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-gray-100 rounded-full h-1.5">
+      <div className="w-full rounded-full h-1.5" style={{ background: 'rgba(255,255,255,0.06)' }}>
         <div
           className="bg-indigo-500 h-1.5 rounded-full transition-all duration-300"
           style={{ width: `${progressPct}%` }}
@@ -125,23 +125,24 @@ export function ConsequencesMatrix({
       </div>
 
       {/* Matrix table */}
-      <div className="overflow-x-auto rounded-lg border border-gray-200">
+      <div className="overflow-x-auto rounded-lg" style={{ border: '1px solid rgba(255,255,255,0.07)' }}>
         <table className="min-w-full text-sm">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-200">
-              <th className="text-left px-3 py-2 font-medium text-gray-600 text-xs w-40 sticky left-0 bg-gray-50 z-10">
+            <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+              <th className="text-left px-3 py-2 font-medium text-xs w-40 sticky left-0 z-10" style={{ color: '#94a3b8', background: 'rgba(255,255,255,0.03)' }}>
                 Alternativa
               </th>
               {fundamentals.map(obj => (
                 <th
                   key={obj.id}
-                  className="text-left px-3 py-2 font-medium text-gray-600 text-xs min-w-[160px] max-w-[200px]"
+                  className="text-left px-3 py-2 font-medium text-xs min-w-[160px] max-w-[200px]"
+                  style={{ color: '#94a3b8' }}
                   title={obj.statement}
                 >
                   <span className="line-clamp-2">{obj.statement}</span>
                 </th>
               ))}
-              <th className="px-3 py-2 text-xs text-gray-400 font-medium">NOVA</th>
+              <th className="px-3 py-2 text-xs font-medium" style={{ color: '#334155' }}>NOVA</th>
             </tr>
           </thead>
           <tbody>
@@ -150,15 +151,22 @@ export function ConsequencesMatrix({
               return (
                 <tr
                   key={alt.id}
-                  className={`border-b border-gray-100 ${rowIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'} ${alt.is_status_quo ? 'bg-amber-50/50' : ''}`}
+                  style={{
+                    borderBottom: '1px solid rgba(255,255,255,0.04)',
+                    background: alt.is_status_quo
+                      ? 'rgba(251,191,36,0.03)'
+                      : rowIdx % 2 === 0
+                        ? 'transparent'
+                        : 'rgba(255,255,255,0.01)',
+                  }}
                 >
                   {/* Alternative name cell */}
-                  <td className="px-3 py-2 sticky left-0 z-10 bg-inherit">
-                    <div className="font-medium text-gray-900 text-xs truncate max-w-[130px]" title={alt.name}>
+                  <td className="px-3 py-2 sticky left-0 z-10" style={{ background: 'inherit' }}>
+                    <div className="font-medium text-xs truncate max-w-[130px]" style={{ color: '#f8fafc' }} title={alt.name}>
                       {alt.name}
                     </div>
                     {alt.is_status_quo === 1 && (
-                      <span className="text-[10px] text-amber-600">Status Quo</span>
+                      <span className="text-[10px]" style={{ color: '#fbbf24' }}>Status Quo</span>
                     )}
                   </td>
 
@@ -180,16 +188,16 @@ export function ConsequencesMatrix({
                             onChange={e => setCellValues(prev => ({ ...prev, [key]: e.target.value }))}
                             onBlur={() => handleCellBlur(alt.id, obj.id)}
                             rows={3}
-                            className="w-full text-xs border border-indigo-400 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
+                            style={{ background: '#0e0e13', border: '1px solid rgba(232,121,249,0.4)', color: '#f1f5f9', borderRadius: '8px', resize: 'none' as const }}
+                            className="w-full text-xs px-2 py-1 focus:outline-none"
                           />
                         ) : (
                           <div
                             onClick={() => setEditingCell({ alternativeId: alt.id, objectiveId: obj.id })}
-                            className={`min-h-[48px] text-xs rounded px-2 py-1 cursor-text transition-colors ${
-                              value
-                                ? 'text-gray-700 hover:bg-indigo-50'
-                                : 'text-gray-300 hover:bg-gray-50 italic'
-                            } ${isSaving ? 'opacity-50' : ''}`}
+                            className={`min-h-[48px] text-xs rounded px-2 py-1 cursor-text transition-colors ${isSaving ? 'opacity-50' : ''}`}
+                            style={value
+                              ? { color: '#94a3b8' }
+                              : { color: '#334155', fontStyle: 'italic' }}
                           >
                             {isSaving ? (
                               <Loader2 size={12} className="animate-spin text-indigo-400" />
@@ -208,7 +216,8 @@ export function ConsequencesMatrix({
                       onClick={() => handleSuggestRow(alt.id)}
                       disabled={suggestingRow === alt.id}
                       title="NOVA sugere consequências para esta alternativa"
-                      className="p-1.5 text-indigo-400 hover:text-indigo-600 disabled:opacity-40 transition-colors rounded hover:bg-indigo-50"
+                      className="p-1.5 disabled:opacity-40 transition-colors rounded"
+                      style={{ color: '#e879f9' }}
                     >
                       {suggestingRow === alt.id ? (
                         <Loader2 size={14} className="animate-spin" />
@@ -224,7 +233,7 @@ export function ConsequencesMatrix({
         </table>
       </div>
 
-      <p className="text-xs text-gray-400">
+      <p className="text-xs" style={{ color: '#334155' }}>
         Clique em qualquer célula para editar. Use NOVA para sugerir consequências automaticamente por linha.
       </p>
     </div>

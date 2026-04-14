@@ -5,11 +5,11 @@ from pydantic import BaseModel, ConfigDict
 
 class ChatMessageRequest(BaseModel):
     model_config = ConfigDict(frozen=True)
-    message: str
     project_id: str
-    agent_type: str = "facilitator"  # facilitator, phase1_specialist, phase2_specialist, stakeholder_simulation, etc.
-    context: dict = {}
+    message: str
+    agent_type: str = "auto"
     stakeholder_id: str | None = None
+    phase: int | None = None
 
 
 class ChatMessageResponse(BaseModel):

@@ -80,21 +80,21 @@ export function DecisionStatement({ projectId, onStepComplete }: DecisionStateme
   const canComplete = statement.trim() !== '' && validated
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+    <div className="rounded-lg p-6 space-y-6" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Header */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900">
+        <h2 className="text-lg font-semibold" style={{ color: '#f8fafc' }}>
           Enunciado da Decisao (Decision Statement)
         </h2>
-        <p className="mt-1 text-sm text-gray-600">
+        <p className="mt-1 text-sm" style={{ color: '#94a3b8' }}>
           Formule um enunciado conciso que capture o proposito, perspectiva e escopo da decisao.
           Formato sugerido: &quot;Decidir [qual/como/se/quando] + [acao]&quot;.
         </p>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-md p-3">
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="rounded-md p-3" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+          <p className="text-sm" style={{ color: '#f87171' }}>{error}</p>
         </div>
       )}
 
@@ -104,7 +104,8 @@ export function DecisionStatement({ projectId, onStepComplete }: DecisionStateme
           value={statement}
           onChange={e => setStatement(e.target.value)}
           placeholder="Ex: Decidir qual estrategia de expansao adotar para os proximos 5 anos, considerando a perspectiva dos acionistas e dentro do escopo do mercado latino-americano."
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[120px] resize-y"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '120px' }}
+          className="w-full p-3 text-sm focus:outline-none resize-y"
         />
 
         {/* Gerar com IA button */}
@@ -112,15 +113,16 @@ export function DecisionStatement({ projectId, onStepComplete }: DecisionStateme
           type="button"
           onClick={handleGenerateDS}
           disabled={generating}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
+          className="px-4 py-2 rounded-md text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.2)', color: '#60a5fa' }}
         >
           {generating ? 'Gerando...' : 'Gerar com IA'}
         </button>
       </div>
 
       {/* Validation section */}
-      <div className="space-y-3 border-t border-gray-100 pt-4">
-        <p className="text-xs text-gray-500">
+      <div className="space-y-3 pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <p className="text-xs" style={{ color: '#64748b' }}>
           O enunciado deve seguir o formato &quot;Decidir + [interrogativa] + [acao]&quot;.
           A validacao e consultiva — voce tem a palavra final.
         </p>
@@ -130,27 +132,28 @@ export function DecisionStatement({ projectId, onStepComplete }: DecisionStateme
             type="checkbox"
             checked={validated}
             onChange={e => setValidated(e.target.checked)}
-            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            className="mt-0.5 h-4 w-4 rounded focus:ring-blue-500"
           />
-          <span className="text-sm text-gray-700">
+          <span className="text-sm" style={{ color: '#94a3b8' }}>
             Confirmo que este enunciado da decisao e valido e reflete adequadamente o quadro decisorio.
           </span>
         </label>
       </div>
 
       {/* Save + Complete section */}
-      <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+      <div className="flex items-center justify-between pt-2" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={handleSave}
             disabled={!statement.trim() || saving}
-            className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-2 text-sm font-medium rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            style={{ background: 'rgba(255,255,255,0.06)', color: '#94a3b8' }}
           >
             {saving ? 'Salvando...' : 'Salvar'}
           </button>
           {savedIndicator && (
-            <span className="text-xs text-green-600">Salvo</span>
+            <span className="text-xs" style={{ color: '#34d399' }}>Salvo</span>
           )}
         </div>
 
@@ -158,7 +161,7 @@ export function DecisionStatement({ projectId, onStepComplete }: DecisionStateme
           type="button"
           onClick={handleComplete}
           disabled={!canComplete || completing}
-          className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 disabled:opacity-40 disabled:cursor-not-allowed font-semibold text-base transition-colors"
+          className="px-6 py-3 rounded-md disabled:opacity-40 disabled:cursor-not-allowed font-semibold text-base transition-colors bg-green-600 text-white"
         >
           {completing ? 'Concluindo...' : 'Validar e Concluir Fase 1'}
         </button>

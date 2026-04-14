@@ -126,35 +126,37 @@ export function DecisionFrameForm({ projectId, variant, onStepComplete }: Decisi
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">
+    <div className="rounded-lg p-6 space-y-4" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Variant instruction */}
       <div className="pl-4 border-l-2 border-blue-500">
-        <p className="text-sm text-blue-700">{VARIANT_INSTRUCTIONS[variant]}</p>
+        <p className="text-sm" style={{ color: '#60a5fa' }}>{VARIANT_INSTRUCTIONS[variant]}</p>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-md p-3">
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="rounded-md p-3" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+          <p className="text-sm" style={{ color: '#f87171' }}>{error}</p>
         </div>
       )}
 
       {/* Proposito */}
       <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-900">
+        <label className="block text-sm font-semibold" style={{ color: '#f8fafc' }}>
           Proposito
         </label>
-        <p className="text-xs text-gray-500">{FIELD_HELP.purpose}</p>
+        <p className="text-xs" style={{ color: '#64748b' }}>{FIELD_HELP.purpose}</p>
         <textarea
           value={purpose}
           onChange={handleChange(setPurpose)}
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px]"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '100px' }}
+          className="w-full p-3 text-sm focus:outline-none"
           placeholder="Descreva o proposito da decisao..."
         />
         <button
           type="button"
           onClick={() => handleGenerateSuggestion('purpose')}
           disabled={generating['purpose']}
-          className="text-xs text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ color: '#60a5fa' }}
         >
           {generating['purpose'] ? 'Gerando...' : 'Gerar sugestao com IA'}
         </button>
@@ -162,21 +164,23 @@ export function DecisionFrameForm({ projectId, variant, onStepComplete }: Decisi
 
       {/* Perspectiva */}
       <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-900">
+        <label className="block text-sm font-semibold" style={{ color: '#f8fafc' }}>
           Perspectiva
         </label>
-        <p className="text-xs text-gray-500">{FIELD_HELP.perspective}</p>
+        <p className="text-xs" style={{ color: '#64748b' }}>{FIELD_HELP.perspective}</p>
         <textarea
           value={perspective}
           onChange={handleChange(setPerspective)}
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px]"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '100px' }}
+          className="w-full p-3 text-sm focus:outline-none"
           placeholder="Descreva a perspectiva que guia esta decisao..."
         />
         <button
           type="button"
           onClick={() => handleGenerateSuggestion('perspective')}
           disabled={generating['perspective']}
-          className="text-xs text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ color: '#60a5fa' }}
         >
           {generating['perspective'] ? 'Gerando...' : 'Gerar sugestao com IA'}
         </button>
@@ -184,39 +188,42 @@ export function DecisionFrameForm({ projectId, variant, onStepComplete }: Decisi
 
       {/* Escopo */}
       <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-900">
+        <label className="block text-sm font-semibold" style={{ color: '#f8fafc' }}>
           Escopo
         </label>
-        <p className="text-xs text-gray-500">{FIELD_HELP.scope}</p>
+        <p className="text-xs" style={{ color: '#64748b' }}>{FIELD_HELP.scope}</p>
         <textarea
           value={scope}
           onChange={handleChange(setScope)}
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px]"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '100px' }}
+          className="w-full p-3 text-sm focus:outline-none"
           placeholder="Defina os limites do escopo..."
         />
         <button
           type="button"
           onClick={() => handleGenerateSuggestion('scope')}
           disabled={generating['scope']}
-          className="text-xs text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ color: '#60a5fa' }}
         >
           {generating['scope'] ? 'Gerando...' : 'Gerar sugestao com IA'}
         </button>
       </div>
 
       {/* Save indicator + Complete button */}
-      <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-        <div className="text-xs text-gray-400">
+      <div className="flex items-center justify-between pt-2" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="text-xs" style={{ color: '#334155' }}>
           {saving && 'Salvando...'}
           {savedIndicator && !saving && (
-            <span className="text-green-600">Salvo</span>
+            <span style={{ color: '#34d399' }}>Salvo</span>
           )}
         </div>
         <button
           type="button"
           onClick={handleComplete}
           disabled={!allFilled || completing}
-          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-4 py-2 text-sm font-medium rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          style={{ background: 'rgba(96,165,250,0.15)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.3)' }}
         >
           {completing ? 'Concluindo...' : 'Concluir Passo'}
         </button>

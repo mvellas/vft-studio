@@ -143,39 +143,40 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
     return (
       <div className="flex items-center justify-center py-12">
         <Loader2 className="w-5 h-5 animate-spin text-indigo-600 mr-2" />
-        <span className="text-sm text-gray-500">Carregando stakeholders...</span>
+        <span className="text-sm" style={{ color: '#64748b' }}>Carregando stakeholders...</span>
       </div>
     )
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm flex flex-col">
+    <div className="rounded-lg flex flex-col" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-gray-100">
-        <Users className="w-5 h-5 text-indigo-600" />
-        <h3 className="text-xl font-semibold text-gray-900">Consolidacao de Objetivos</h3>
-        <span className="text-xs text-gray-400 ml-auto">Passos 2.8–2.12</span>
+      <div className="flex items-center gap-3 p-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <Users className="w-5 h-5 text-indigo-400" />
+        <h3 className="text-xl font-semibold" style={{ color: '#f8fafc' }}>Consolidacao de Objetivos</h3>
+        <span className="text-xs ml-auto" style={{ color: '#334155' }}>Passos 2.8–2.12</span>
       </div>
 
       {error && (
-        <div className="mx-4 mt-4 bg-red-50 border border-red-200 rounded-md p-3">
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="mx-4 mt-4 rounded-md p-3" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+          <p className="text-sm" style={{ color: '#f87171' }}>{error}</p>
         </div>
       )}
 
       {/* Stakeholder tabs + "Todos" */}
-      <div className="flex gap-0 border-b border-gray-100 overflow-x-auto">
+      <div className="flex gap-0 overflow-x-auto" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <button
           type="button"
           onClick={() => setActiveTab('all')}
           className={`px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px ${
             activeTab === 'all'
-              ? 'border-indigo-600 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
+              ? 'border-indigo-400'
+              : 'border-transparent'
           }`}
+          style={activeTab === 'all' ? { color: '#e879f9' } : { color: '#64748b' }}
         >
           Todos
-          <span className="ml-1.5 text-xs text-gray-400">{objectives.length}</span>
+          <span className="ml-1.5 text-xs" style={{ color: '#334155' }}>{objectives.length}</span>
         </button>
 
         {stakeholders.map(s => {
@@ -188,13 +189,14 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
               onClick={() => setActiveTab(s.id)}
               className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px ${
                 activeTab === s.id
-                  ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  ? 'border-indigo-400'
+                  : 'border-transparent'
               }`}
+              style={activeTab === s.id ? { color: '#e879f9' } : { color: '#64748b' }}
             >
               {isReviewed && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />}
               {s.name}
-              <span className="text-xs text-gray-400">{count} objetivos</span>
+              <span className="text-xs" style={{ color: '#334155' }}>{count} objetivos</span>
             </button>
           )
         })}
@@ -206,40 +208,42 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
         {activeTab !== 'all' && (
           <>
             {filteredObjectives.length === 0 ? (
-              <p className="text-sm text-gray-400 py-8 text-center">
+              <p className="text-sm py-8 text-center" style={{ color: '#334155' }}>
                 Nenhum objetivo registrado para este stakeholder.
               </p>
             ) : (
               filteredObjectives.map(obj => {
                 const isExcluded = excluded.has(obj.id)
-                const badgeColors: Record<string, string> = {
-                  means: 'bg-amber-100 text-amber-700',
-                  fundamental: 'bg-purple-100 text-purple-700',
-                  strategic: 'bg-blue-100 text-blue-700',
-                  uncategorized: 'bg-gray-100 text-gray-500',
+                const badgeStyles: Record<string, React.CSSProperties> = {
+                  means: { background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)', color: '#fbbf24' },
+                  fundamental: { background: 'rgba(167,139,250,0.06)', border: '1px solid rgba(167,139,250,0.2)', color: '#a78bfa' },
+                  strategic: { background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.2)', color: '#60a5fa' },
+                  uncategorized: { background: 'rgba(255,255,255,0.03)', color: '#64748b' },
                 }
                 const typeKey = obj.type ?? 'uncategorized'
-                const badgeClass = badgeColors[typeKey] ?? badgeColors.uncategorized
+                const badgeStyle = badgeStyles[typeKey] ?? badgeStyles.uncategorized
 
                 return (
                   <div
                     key={obj.id}
-                    className={`flex items-start gap-3 p-3 rounded-lg border transition-colors ${
-                      isExcluded ? 'border-gray-100 bg-gray-50 opacity-50' : 'border-gray-200 bg-white'
-                    }`}
+                    className={`flex items-start gap-3 p-3 rounded-lg transition-colors ${isExcluded ? 'opacity-50' : ''}`}
+                    style={isExcluded
+                      ? { border: '1px solid rgba(255,255,255,0.04)', background: 'rgba(255,255,255,0.01)' }
+                      : { border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}
                   >
                     <input
                       type="checkbox"
                       checked={!isExcluded}
                       onChange={() => handleToggleExclude(obj.id)}
-                      className="mt-0.5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      className="mt-0.5 rounded focus:ring-indigo-500"
                       title="Incluir na lista consolidada"
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-800">{obj.statement}</p>
+                      <p className="text-sm" style={{ color: '#f8fafc' }}>{obj.statement}</p>
                     </div>
                     <span
-                      className={`flex-shrink-0 text-xs font-semibold px-1.5 py-0.5 rounded-full ${badgeClass}`}
+                      className="flex-shrink-0 text-xs font-semibold px-1.5 py-0.5 rounded-full"
+                      style={badgeStyle}
                     >
                       {typeKey}
                     </span>
@@ -253,7 +257,8 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
                 type="button"
                 onClick={() => handleMarkTabReviewed(activeTab)}
                 disabled={reviewedTabs.has(activeTab)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm border border-emerald-300 text-emerald-600 rounded-md hover:bg-emerald-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                style={{ border: '1px solid rgba(52,211,153,0.3)', color: '#34d399' }}
               >
                 {reviewedTabs.has(activeTab) ? (
                   <>
@@ -273,13 +278,13 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
           <>
             {duplicateGroups.length > 0 && (
               <div className="space-y-3">
-                <p className="text-sm font-semibold text-gray-700">
+                <p className="text-sm font-semibold" style={{ color: '#94a3b8' }}>
                   Grupos de duplicatas detectados ({duplicateGroups.length}):
                 </p>
                 {duplicateGroups.map(group => (
-                  <details key={group.key} className="rounded-lg border border-yellow-200 bg-yellow-50">
+                  <details key={group.key} className="rounded-lg" style={{ border: '1px solid rgba(251,191,36,0.2)', background: 'rgba(251,191,36,0.04)' }}>
                     <summary className="flex items-center justify-between p-3 cursor-pointer select-none">
-                      <span className="text-sm font-medium text-yellow-800">
+                      <span className="text-sm font-medium" style={{ color: '#fbbf24' }}>
                         {group.objectives.length} objetivos similares
                       </span>
                       <button
@@ -288,18 +293,19 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
                           e.preventDefault()
                           handleOpenMerge(group)
                         }}
-                        className="text-xs text-indigo-600 border border-indigo-200 rounded-md px-2 py-0.5 hover:bg-indigo-50 transition-colors"
+                        className="text-xs rounded-md px-2 py-0.5 transition-colors"
+                        style={{ color: '#e879f9', border: '1px solid rgba(232,121,249,0.25)' }}
                       >
                         Mesclar
                       </button>
                     </summary>
                     <div className="px-3 pb-3 space-y-1.5">
                       {group.objectives.map(obj => (
-                        <div key={obj.id} className="text-sm text-gray-700 flex items-start gap-2">
+                        <div key={obj.id} className="text-sm flex items-start gap-2" style={{ color: '#94a3b8' }}>
                           <span className="mt-1 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-yellow-400" />
                           <span className="flex-1">{obj.statement}</span>
                           {obj.source_stakeholder_id && (
-                            <span className="text-xs text-gray-400 flex-shrink-0">
+                            <span className="text-xs flex-shrink-0" style={{ color: '#334155' }}>
                               {getStakeholderName(obj.source_stakeholder_id)}
                             </span>
                           )}
@@ -312,13 +318,13 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
             )}
 
             {objectives.length === 0 && (
-              <p className="text-sm text-gray-400 py-8 text-center">
+              <p className="text-sm py-8 text-center" style={{ color: '#334155' }}>
                 Nenhum objetivo registrado ainda.
               </p>
             )}
 
             {objectives.length > 0 && duplicateGroups.length === 0 && (
-              <p className="text-sm text-emerald-600 py-4 text-center">
+              <p className="text-sm py-4 text-center" style={{ color: '#34d399' }}>
                 Nenhum grupo de duplicatas detectado.
               </p>
             )}
@@ -327,8 +333,8 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
       </div>
 
       {/* Summary bar */}
-      <div className="px-4 py-3 border-t border-gray-100 bg-gray-50 rounded-b-lg flex items-center justify-between gap-4 flex-wrap">
-        <p className="text-xs text-gray-500">
+      <div className="px-4 py-3 rounded-b-lg flex items-center justify-between gap-4 flex-wrap" style={{ borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}>
+        <p className="text-xs" style={{ color: '#64748b' }}>
           {totalObjectives} objetivos no total
           {' | '}
           {uniqueStakeholders} stakeholders contribuiram
@@ -341,7 +347,8 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
           onClick={handleConsolidationComplete}
           disabled={!allTabsReviewed || consolidating}
           title={!allTabsReviewed ? 'Revise todos os stakeholders antes de concluir' : undefined}
-          className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
         >
           {consolidating && <Loader2 className="w-4 h-4 animate-spin" />}
           Consolidacao completa
@@ -351,19 +358,18 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
       {/* Merge modal */}
       {mergeModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 space-y-4">
-            <h4 className="text-base font-semibold text-gray-900">Mesclar Objetivos Similares</h4>
+          <div className="rounded-lg max-w-lg w-full p-6 space-y-4" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <h4 className="text-base font-semibold" style={{ color: '#f1f5f9' }}>Mesclar Objetivos Similares</h4>
 
             <div className="space-y-2">
-              <p className="text-xs font-semibold text-gray-600">Selecione o objetivo canonico:</p>
+              <p className="text-xs font-semibold" style={{ color: '#94a3b8' }}>Selecione o objetivo canonico:</p>
               {mergeModal.group.objectives.map(obj => (
                 <label
                   key={obj.id}
-                  className={`flex items-start gap-2 p-2 rounded-md border cursor-pointer ${
-                    mergeModal.selectedCanonicalId === obj.id
-                      ? 'border-indigo-400 bg-indigo-50'
-                      : 'border-gray-200'
-                  }`}
+                  style={mergeModal.selectedCanonicalId === obj.id
+                    ? { background: 'rgba(232,121,249,0.08)', border: '1px solid rgba(232,121,249,0.35)', borderRadius: '8px' }
+                    : { background: 'transparent', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px' }}
+                  className="flex items-start gap-2 p-2 cursor-pointer"
                 >
                   <input
                     type="radio"
@@ -383,13 +389,13 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
                     }
                     className="mt-0.5 text-indigo-600 focus:ring-indigo-500"
                   />
-                  <span className="text-sm text-gray-800">{obj.statement}</span>
+                  <span className="text-sm" style={{ color: '#f8fafc' }}>{obj.statement}</span>
                 </label>
               ))}
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-gray-600">
+              <label className="text-xs font-semibold" style={{ color: '#94a3b8' }}>
                 Enunciado mesclado (editavel):
               </label>
               <textarea
@@ -399,7 +405,8 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
                     prev ? { ...prev, mergedStatement: e.target.value } : null
                   )
                 }
-                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-indigo-500 resize-none"
+                style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', resize: 'none' as const }}
+                className="w-full p-2 text-sm focus:outline-none"
                 rows={3}
               />
             </div>
@@ -408,7 +415,8 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
               <button
                 type="button"
                 onClick={() => setMergeModal(null)}
-                className="px-3 py-1.5 text-sm border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50 transition-colors"
+                className="px-3 py-1.5 text-sm rounded-md transition-colors"
+                style={{ border: '1px solid rgba(255,255,255,0.07)', color: '#94a3b8' }}
               >
                 Cancelar
               </button>
@@ -416,7 +424,8 @@ export function StakeholderConsolidationPanel({ projectId }: StakeholderConsolid
                 type="button"
                 onClick={handleConfirmMerge}
                 disabled={mergeModal.merging || !mergeModal.mergedStatement.trim()}
-                className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-1.5 text-sm font-medium rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
               >
                 {mergeModal.merging && <Loader2 className="w-4 h-4 animate-spin" />}
                 Confirmar Mesclagem

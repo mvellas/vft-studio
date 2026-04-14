@@ -269,30 +269,31 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+    <div className="rounded-lg p-6 space-y-6" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Objective context */}
       {objective && (
-        <div className="bg-gray-50 rounded-md p-3">
-          <p className="text-xs text-gray-500 font-medium mb-1">Objetivo fundamental:</p>
-          <p className="text-sm text-gray-700">{objective.statement}</p>
+        <div className="rounded-md p-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+          <p className="text-xs font-medium mb-1" style={{ color: '#64748b' }}>Objetivo fundamental:</p>
+          <p className="text-sm" style={{ color: '#94a3b8' }}>{objective.statement}</p>
         </div>
       )}
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-md p-3">
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="rounded-md p-3" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+          <p className="text-sm" style={{ color: '#f87171' }}>{error}</p>
         </div>
       )}
 
       {/* Attribute type */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium" style={{ color: '#94a3b8' }}>
           Tipo de Atributo
         </label>
         <select
           value={form.attr_type}
           onChange={e => handleFormChange({ attr_type: e.target.value })}
-          className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+          className="w-full p-2 text-sm focus:outline-none"
         >
           {ATTR_TYPE_OPTIONS.map(opt => (
             <option key={opt.value} value={opt.value}>
@@ -304,29 +305,29 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
 
       {/* Description */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium" style={{ color: '#94a3b8' }}>
           Descricao do Atributo
         </label>
         <textarea
           value={form.description}
           onChange={e => handleFormChange({ description: e.target.value })}
           placeholder="Descreva o que este atributo mede"
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-y"
-          style={{ minHeight: '80px' }}
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '80px' }}
+          className="w-full p-3 text-sm focus:outline-none resize-y"
         />
       </div>
 
       {/* Scale description */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium" style={{ color: '#94a3b8' }}>
           Escala de Medicao
         </label>
         <textarea
           value={form.scale_description}
           onChange={e => handleFormChange({ scale_description: e.target.value })}
           placeholder="Descreva a escala de medicao"
-          className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-y"
-          style={{ minHeight: '60px' }}
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', minHeight: '60px' }}
+          className="w-full p-3 text-sm focus:outline-none resize-y"
         />
       </div>
 
@@ -336,17 +337,18 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
           type="button"
           onClick={handleSuggest}
           disabled={suggesting}
-          className="px-4 py-2 border border-indigo-600 text-indigo-600 rounded-md text-sm font-medium hover:bg-indigo-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-4 py-2 rounded-md text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          style={{ border: '1px solid rgba(232,121,249,0.25)', color: '#e879f9' }}
         >
           {suggesting ? 'Sugerindo...' : 'Sugerir com AXIOM'}
         </button>
-        {saving && <span className="text-xs text-gray-400">Salvando...</span>}
-        {saved && !saving && <span className="text-xs text-gray-400">Salvo</span>}
+        {saving && <span className="text-xs" style={{ color: '#334155' }}>Salvando...</span>}
+        {saved && !saving && <span className="text-xs" style={{ color: '#334155' }}>Salvo</span>}
       </div>
 
       {/* Quality properties */}
       <div className="space-y-2">
-        <p className="text-sm font-medium text-gray-700">Propriedades de Qualidade</p>
+        <p className="text-sm font-medium" style={{ color: '#94a3b8' }}>Propriedades de Qualidade</p>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           {PROPERTY_FIELDS.map(({ key, label }) => (
             <label key={key} className="flex items-start gap-2 cursor-pointer">
@@ -354,20 +356,20 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
                 type="checkbox"
                 checked={form[key] === 1}
                 onChange={e => handleFormChange({ [key]: e.target.checked ? 1 : 0 })}
-                className="mt-0.5 h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+                className="mt-0.5 h-4 w-4 text-indigo-600 rounded focus:ring-indigo-500"
               />
-              <span className="text-sm text-gray-700">{label}</span>
+              <span className="text-sm" style={{ color: '#94a3b8' }}>{label}</span>
             </label>
           ))}
         </div>
       </div>
 
       {/* Attribute levels */}
-      <div className="space-y-3 border-t border-gray-100 pt-4">
-        <h3 className="text-lg font-semibold text-gray-900">Niveis da Escala</h3>
+      <div className="space-y-3 pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <h3 className="text-lg font-semibold" style={{ color: '#f8fafc' }}>Niveis da Escala</h3>
 
         {levels.length === 0 && (
-          <p className="text-sm text-gray-400">Nenhum nivel definido. Adicione niveis para descrever a escala.</p>
+          <p className="text-sm" style={{ color: '#334155' }}>Nenhum nivel definido. Adicione niveis para descrever a escala.</p>
         )}
 
         <div className="space-y-2">
@@ -387,7 +389,8 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
         <button
           type="button"
           onClick={handleAddLevel}
-          className="flex items-center gap-2 px-3 py-2 border border-gray-300 text-gray-600 rounded-md text-sm hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors"
+          style={{ border: '1px solid rgba(255,255,255,0.07)', color: '#94a3b8' }}
         >
           <Plus className="w-4 h-4" />
           Adicionar Nivel
@@ -395,13 +398,13 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
       </div>
 
       {/* Phase 2 gate */}
-      <div className="border-t border-gray-100 pt-6 space-y-4">
+      <div className="pt-6 space-y-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="space-y-2">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm" style={{ color: '#64748b' }}>
             {fundamentalsWithAttr.length}/{fundamentals.length} objetivos fundamentais com atributos definidos
           </p>
           {fundamentals.length > 0 && (
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full rounded-full h-2" style={{ background: 'rgba(255,255,255,0.06)' }}>
               <div
                 className="bg-purple-500 h-2 rounded-full transition-all"
                 style={{
@@ -416,7 +419,8 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
           type="button"
           onClick={() => setShowConfirmDialog(true)}
           disabled={!gateReady || completing}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold text-base hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-6 py-3 rounded-lg font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
         >
           {completing ? 'Concluindo...' : 'Confirmar Fase 2'}
         </button>
@@ -425,9 +429,9 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
       {/* Confirmation dialog */}
       {showConfirmDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md mx-4 space-y-4">
-            <h3 className="text-base font-semibold text-gray-900">Concluir Fase 2</h3>
-            <p className="text-sm text-gray-600">
+          <div className="rounded-lg p-6 max-w-md mx-4 space-y-4" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <h3 className="text-base font-semibold" style={{ color: '#f1f5f9' }}>Concluir Fase 2</h3>
+            <p className="text-sm" style={{ color: '#94a3b8' }}>
               Fase 2 concluida. Todos os objetivos fundamentais tem atributos definidos.
               Avancar para a Fase 3 de Alternativas?
             </p>
@@ -435,14 +439,16 @@ export function AttributeDefiner({ projectId, objectiveId, onStepComplete }: Att
               <button
                 type="button"
                 onClick={() => setShowConfirmDialog(false)}
-                className="px-4 py-2 border border-gray-300 text-gray-600 rounded-md text-sm hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 rounded-md text-sm transition-colors"
+                style={{ border: '1px solid rgba(255,255,255,0.07)', color: '#94a3b8' }}
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={handleCompletePhase2}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors"
+                className="px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
               >
                 Avancar para Fase 3
               </button>
@@ -470,8 +476,8 @@ function LevelRow({ level, index, total, onBlur, onDelete, onMove }: LevelRowPro
   const [description, setDescription] = useState(level.description)
 
   return (
-    <div className="flex items-center gap-2 p-2 border border-gray-200 rounded-md bg-gray-50">
-      <span className="text-xs text-gray-400 w-5 text-center flex-shrink-0">{index + 1}</span>
+    <div className="flex items-center gap-2 p-2 rounded-md" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+      <span className="text-xs w-5 text-center flex-shrink-0" style={{ color: '#64748b' }}>{index + 1}</span>
 
       <input
         type="text"
@@ -479,7 +485,8 @@ function LevelRow({ level, index, total, onBlur, onDelete, onMove }: LevelRowPro
         onChange={e => setLabel(e.target.value)}
         onBlur={() => onBlur(level, label, description)}
         placeholder="Rotulo"
-        className="border border-gray-300 rounded px-2 py-1 text-sm w-48 focus:ring-1 focus:ring-indigo-500"
+        style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+        className="px-2 py-1 text-sm w-48 focus:outline-none"
       />
 
       <input
@@ -488,7 +495,8 @@ function LevelRow({ level, index, total, onBlur, onDelete, onMove }: LevelRowPro
         onChange={e => setDescription(e.target.value)}
         onBlur={() => onBlur(level, label, description)}
         placeholder="Descricao"
-        className="border border-gray-300 rounded px-2 py-1 text-sm flex-1 focus:ring-1 focus:ring-indigo-500"
+        style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+        className="px-2 py-1 text-sm flex-1 focus:outline-none"
       />
 
       <div className="flex flex-col gap-0.5 flex-shrink-0">
@@ -496,7 +504,8 @@ function LevelRow({ level, index, total, onBlur, onDelete, onMove }: LevelRowPro
           type="button"
           onClick={() => onMove(index, 'up')}
           disabled={index === 0}
-          className="text-gray-400 hover:text-gray-600 disabled:opacity-20"
+          className="disabled:opacity-20"
+          style={{ color: '#64748b' }}
         >
           <ChevronUp className="w-3.5 h-3.5" />
         </button>
@@ -504,7 +513,8 @@ function LevelRow({ level, index, total, onBlur, onDelete, onMove }: LevelRowPro
           type="button"
           onClick={() => onMove(index, 'down')}
           disabled={index === total - 1}
-          className="text-gray-400 hover:text-gray-600 disabled:opacity-20"
+          className="disabled:opacity-20"
+          style={{ color: '#64748b' }}
         >
           <ChevronDown className="w-3.5 h-3.5" />
         </button>
@@ -513,7 +523,8 @@ function LevelRow({ level, index, total, onBlur, onDelete, onMove }: LevelRowPro
       <button
         type="button"
         onClick={() => onDelete(level.id)}
-        className="text-gray-400 hover:text-red-600 transition-colors flex-shrink-0"
+        className="transition-colors flex-shrink-0"
+        style={{ color: '#64748b' }}
       >
         <Trash2 className="w-4 h-4" />
       </button>

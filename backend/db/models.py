@@ -276,3 +276,34 @@ class Document(Base):
         Index("idx_documents_project", "project_id"),
         Index("idx_documents_stakeholder", "stakeholder_id"),
     )
+
+
+class PipelineRun(Base):
+    __tablename__ = "pipeline_runs"
+
+    id: Mapped[str] = mapped_column(Text, primary_key=True)
+    project_id: Mapped[str] = mapped_column(Text, ForeignKey("projects.id"), nullable=False)
+    status: Mapped[str] = mapped_column(Text, nullable=False, default="idle", server_default="idle")
+    report_md: Mapped[str] = mapped_column(Text, default="", server_default="")
+    created_at: Mapped[str] = mapped_column(Text, nullable=False)
+    completed_at: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    __table_args__ = (
+        Index("idx_pipeline_runs_project", "project_id"),
+    )
+
+
+class PipelineTurn(Base):
+    __tablename__ = "pipeline_turns"
+
+    id: Mapped[str] = mapped_column(Text, primary_key=True)
+    run_id: Mapped[str] = mapped_column(Text, ForeignKey("pipeline_runs.id"), nullable=False)
+    agent_name: Mapped[str] = mapped_column(Text, nullable=False)
+    phase_label: Mapped[str] = mapped_column(Text, nullable=False)
+    turn_type: Mapped[str] = mapped_column(Text, nullable=False)
+    content: Mapped[str] = mapped_column(Text, default="", server_default="")
+    sequence: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    __table_args__ = (
+        Index("idx_pipeline_turns_run", "run_id"),
+    )

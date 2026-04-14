@@ -108,7 +108,7 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
 
   return (
     <div className="fixed inset-0 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 space-y-6">
+      <div className="rounded-2xl shadow-2xl max-w-md w-full p-8 space-y-6" style={{ background: '#13131f' }}>
         {/* Step indicator */}
         <div className="flex gap-1.5 justify-center">
           {SCREENS.map((_, i) => (
@@ -130,8 +130,8 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
 
         {/* Content */}
         <div className="text-center space-y-3">
-          <h2 className="text-xl font-bold text-gray-900">{current.title}</h2>
-          <p className="text-sm text-gray-500 whitespace-pre-line leading-relaxed">{current.body}</p>
+          <h2 className="text-xl font-bold" style={{ color: '#f1f5f9' }}>{current.title}</h2>
+          <p className="text-sm whitespace-pre-line leading-relaxed" style={{ color: '#94a3b8' }}>{current.body}</p>
         </div>
 
         {/* API key input on screen 2 */}
@@ -142,7 +142,8 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
               value={apiKey}
               onChange={e => setApiKey(e.target.value)}
               placeholder="sk-ant-api03-... (opcional agora)"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+              className="w-full px-3 py-2 text-sm focus:outline-none"
             />
             {saveError && <p className="text-xs text-red-600">{saveError}</p>}
             {saved && (
@@ -162,7 +163,8 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
               value={braveKey}
               onChange={e => setBraveKey(e.target.value)}
               placeholder="BSA... (opcional)"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+              className="w-full px-3 py-2 text-sm focus:outline-none"
             />
             {saveError && <p className="text-xs text-red-500">{saveError}</p>}
             {braveSaved && <p className="text-xs text-green-600">Brave key salva!</p>}

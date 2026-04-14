@@ -53,9 +53,9 @@ function UploadModal({ projectId, onSave, onClose }: UploadModalProps) {
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg space-y-4 p-6">
+      <div className="rounded-xl shadow-xl w-full max-w-lg space-y-4 p-6" style={{ background: '#13131f' }}>
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-gray-900">Adicionar Documento</h3>
+          <h3 className="font-semibold" style={{ color: '#f1f5f9' }}>Adicionar Documento</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-700"><X size={18} /></button>
         </div>
 
@@ -77,14 +77,16 @@ function UploadModal({ projectId, onSave, onClose }: UploadModalProps) {
           value={title}
           onChange={e => setTitle(e.target.value)}
           placeholder="Título (obrigatório)"
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+          className="w-full px-3 py-2 text-sm focus:outline-none"
         />
 
         <div className="flex gap-2">
           <select
             value={docType}
             onChange={e => setDocType(e.target.value)}
-            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+            className="flex-1 px-3 py-2 text-sm focus:outline-none"
           >
             {DOC_TYPES.map(([val, label]) => (
               <option key={val} value={val}>{label}</option>
@@ -94,7 +96,8 @@ function UploadModal({ projectId, onSave, onClose }: UploadModalProps) {
             value={dateRef}
             onChange={e => setDateRef(e.target.value)}
             placeholder="Data (ex: 2012-06)"
-            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+            className="flex-1 px-3 py-2 text-sm focus:outline-none"
           />
         </div>
 
@@ -102,7 +105,8 @@ function UploadModal({ projectId, onSave, onClose }: UploadModalProps) {
           value={source}
           onChange={e => setSource(e.target.value)}
           placeholder="Fonte / autoria (opcional)"
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+          className="w-full px-3 py-2 text-sm focus:outline-none"
         />
 
         {mode === 'text' ? (
@@ -111,7 +115,8 @@ function UploadModal({ projectId, onSave, onClose }: UploadModalProps) {
             onChange={e => setContentText(e.target.value)}
             placeholder="Cole o texto do documento aqui..."
             rows={6}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"
+            style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px', resize: 'none' as const }}
+            className="w-full px-3 py-2 text-sm focus:outline-none"
           />
         ) : (
           <div
@@ -205,8 +210,8 @@ export function DocumentPanel({ onAnalyze }: DocumentPanelProps) {
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Documentos</h1>
-          <p className="text-sm text-gray-500 mt-1">Documentos de referência para análise do ANALYST.</p>
+          <h1 className="text-2xl font-bold" style={{ color: '#f1f5f9' }}>Documentos</h1>
+          <p className="text-sm mt-1" style={{ color: '#94a3b8' }}>Documentos de referência para análise do ANALYST.</p>
         </div>
         <button
           onClick={() => setShowModal(true)}
@@ -224,7 +229,7 @@ export function DocumentPanel({ onAnalyze }: DocumentPanelProps) {
       )}
 
       {!loading && docs.length === 0 && (
-        <div className="bg-white rounded-xl border border-dashed border-gray-200 p-12 text-center">
+        <div className="rounded-xl border-2 border-dashed p-12 text-center" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <FileText size={32} className="mx-auto mb-3 text-gray-300" />
           <p className="text-gray-400 text-sm">Nenhum documento adicionado.</p>
           <p className="text-gray-400 text-xs mt-1">Adicione PDFs, textos ou imagens para o ANALYST analisar.</p>
@@ -232,7 +237,7 @@ export function DocumentPanel({ onAnalyze }: DocumentPanelProps) {
       )}
 
       {docs.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
+        <div className="rounded-xl divide-y" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.08)' }}>
           {docs.map(doc => (
             <div key={doc.id} className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors">
               <FileText size={16} className="text-indigo-500 shrink-0" />

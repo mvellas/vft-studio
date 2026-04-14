@@ -30,7 +30,7 @@ class BaseAgent:
             try:
                 response = await self.client.messages.create(
                     model=self.model,
-                    max_tokens=4096,
+                    max_tokens=16000,
                     system=self.system,
                     messages=messages,
                 )
@@ -47,7 +47,7 @@ class BaseAgent:
             try:
                 async with self.client.messages.stream(
                     model=self.model,
-                    max_tokens=4096,
+                    max_tokens=16000,
                     system=self.system,
                     messages=messages,
                 ) as stream:
@@ -121,7 +121,7 @@ class ToolAwareAgent(BaseAgent):
         # Non-streaming call to get initial response (may request tool use)
         response = await self._create_with_retry(
             model=self.model,
-            max_tokens=4096,
+            max_tokens=16000,
             system=self.system,
             tools=self.tools,
             messages=current_messages,
@@ -151,7 +151,7 @@ class ToolAwareAgent(BaseAgent):
 
             response = await self._create_with_retry(
                 model=self.model,
-                max_tokens=4096,
+                max_tokens=16000,
                 system=self.system,
                 tools=self.tools,
                 messages=current_messages,
@@ -162,7 +162,7 @@ class ToolAwareAgent(BaseAgent):
             try:
                 async with self.client.messages.stream(
                     model=self.model,
-                    max_tokens=4096,
+                    max_tokens=16000,
                     system=self.system,
                     messages=current_messages,
                 ) as stream:

@@ -70,7 +70,7 @@ export function TechniqueSelector({ projectId, onSelect }: TechniqueSelectorProp
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">
+    <div className="rounded-lg p-6 space-y-4" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       <div className="flex items-center justify-between">
         <h3 className="text-base font-semibold text-gray-900">
           Tecnica de Elicitacao de Valores
@@ -91,11 +91,10 @@ export function TechniqueSelector({ projectId, onSelect }: TechniqueSelectorProp
         {TECHNIQUES.map(tech => (
           <label
             key={tech.value}
-            className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
-              selected === tech.value
-                ? 'border-indigo-600 bg-indigo-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
+            style={selected === tech.value
+              ? { background: 'rgba(232,121,249,0.08)', border: '1px solid rgba(232,121,249,0.35)', borderRadius: '8px' }
+              : { background: 'transparent', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px' }}
+            className="flex items-start gap-3 p-3 cursor-pointer transition-colors"
           >
             <input
               type="radio"
@@ -106,8 +105,8 @@ export function TechniqueSelector({ projectId, onSelect }: TechniqueSelectorProp
               className="mt-0.5 text-indigo-600 focus:ring-indigo-500"
             />
             <div className="flex-1 min-w-0">
-              <span className="block text-sm font-semibold text-gray-900">{tech.label}</span>
-              <span className="block text-xs text-gray-500 mt-0.5">{tech.description}</span>
+              <span className="block text-sm font-semibold" style={{ color: '#f1f5f9' }}>{tech.label}</span>
+              <span className="block text-xs mt-0.5" style={{ color: '#94a3b8' }}>{tech.description}</span>
             </div>
           </label>
         ))}

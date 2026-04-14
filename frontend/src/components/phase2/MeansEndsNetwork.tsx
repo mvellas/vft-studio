@@ -14,7 +14,7 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import dagre from '@dagrejs/dagre'
-import html2canvas from 'html2canvas'
+import { toPng } from 'html-to-image'
 import { Loader2 } from 'lucide-react'
 import { useObjectivesStore } from '../../stores/objectivesStore'
 
@@ -65,22 +65,21 @@ function getLayoutedElements(
 // Custom node
 // ---------------------------------------------------------------------------
 
-const TYPE_COLORS: Record<string, string> = {
-  means: 'bg-amber-50 border-amber-400',
-  fundamental: 'bg-purple-50 border-purple-500',
-  strategic: 'bg-blue-50 border-blue-400',
+const TYPE_STYLES: Record<string, React.CSSProperties> = {
+  means:       { background: 'rgba(251,191,36,0.06)', border: '2px solid rgba(251,191,36,0.35)' },
+  fundamental: { background: 'rgba(167,139,250,0.08)', border: '2px solid rgba(167,139,250,0.4)' },
+  strategic:   { background: 'rgba(96,165,250,0.06)', border: '2px solid rgba(96,165,250,0.3)' },
 }
 
 function ObjectiveNode({ data }: { data: ObjectiveNodeData }) {
-  const colorClass = TYPE_COLORS[data.type] ?? 'bg-gray-50 border-gray-300'
+  const nodeStyle = TYPE_STYLES[data.type] ?? { background: 'rgba(255,255,255,0.04)', border: '2px solid rgba(255,255,255,0.1)' }
 
   return (
     <div
-      className={`rounded-lg border-2 p-3 text-sm text-center leading-snug ${colorClass}`}
-      style={{ width: NODE_WIDTH, minHeight: NODE_HEIGHT }}
+      style={{ width: NODE_WIDTH, minHeight: NODE_HEIGHT, borderRadius: '8px', padding: '12px', fontSize: '14px', textAlign: 'center', lineHeight: 1.4, ...nodeStyle }}
     >
       <Handle type="target" position={Position.Bottom} />
-      <p className="text-center text-xs font-medium text-gray-700 line-clamp-3">
+      <p style={{ textAlign: 'center', fontSize: '12px', fontWeight: 500, color: '#e2e8f0', margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
         {data.statement}
       </p>
       <Handle type="source" position={Position.Top} />
@@ -150,25 +149,20 @@ export function MeansEndsNetwork({ projectId }: MeansEndsNetworkProps) {
   const handleExportPng = async () => {
     if (!containerRef.current) return
     try {
-      const canvas = await html2canvas(containerRef.current, { scale: 2 })
-      canvas.toBlob(blob => {
-        if (!blob) return
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = 'means-ends-network.png'
-        a.click()
-        URL.revokeObjectURL(url)
-      })
+      const dataUrl = await toPng(containerRef.current, { backgroundColor: '#0e0e13', pixelRatio: 2 })
+      const a = document.createElement('a')
+      a.href = dataUrl
+      a.download = 'means-ends-network.png'
+      a.click()
     } catch {
-      // Export failed silently — user can retry
+      // Export failed silently
     }
   }
 
   if (loading) {
     return (
       <div className="h-full w-full flex items-center justify-center" style={{ minHeight: 500 }}>
-        <div className="flex items-center gap-2 text-gray-500 text-sm">
+        <div className="flex items-center gap-2 text-sm" style={{ color: '#475569' }}>
           <Loader2 className="w-4 h-4 animate-spin" />
           Carregando rede...
         </div>
@@ -179,7 +173,7 @@ export function MeansEndsNetwork({ projectId }: MeansEndsNetworkProps) {
   if (initialNodes.length === 0 || initialEdges.length === 0) {
     return (
       <div className="h-full w-full flex items-center justify-center" style={{ minHeight: 500 }}>
-        <p className="text-sm text-gray-400 text-center max-w-sm">
+        <p className="text-sm text-center max-w-sm" style={{ color: '#475569' }}>
           Nenhuma relacao causal definida. Aplique o WITI Test nos objetivos para criar vinculos.
         </p>
       </div>
@@ -187,7 +181,7 @@ export function MeansEndsNetwork({ projectId }: MeansEndsNetworkProps) {
   }
 
   return (
-    <div id="means-ends-network" ref={containerRef} className="h-full w-full" style={{ minHeight: 500 }}>
+    <div id="means-ends-network" ref={containerRef} className="h-full w-full" style={{ minHeight: 500, background: '#0e0e13' }}>
       <ReactFlow
         nodes={syncedNodes}
         edges={syncedEdges}
@@ -198,7 +192,7 @@ export function MeansEndsNetwork({ projectId }: MeansEndsNetworkProps) {
         nodesConnectable={false}
         elementsSelectable={true}
       >
-        <Background variant={'dots' as Parameters<typeof Background>[0]['variant']} />
+        <Background variant={'dots' as any} color="rgba(255,255,255,0.08)" />
         <Controls position="bottom-left" />
 
         {/* Export button */}
@@ -206,7 +200,7 @@ export function MeansEndsNetwork({ projectId }: MeansEndsNetworkProps) {
           <button
             type="button"
             onClick={handleExportPng}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm font-medium shadow-sm hover:bg-gray-50 transition-colors"
+            style={{ background: 'rgba(232,121,249,0.12)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.25)', borderRadius: '8px', padding: '4px 12px', fontSize: '13px', cursor: 'pointer' }}
           >
             Exportar PNG
           </button>
@@ -214,17 +208,17 @@ export function MeansEndsNetwork({ projectId }: MeansEndsNetworkProps) {
 
         {/* Legend */}
         <Panel position="bottom-right">
-          <div className="bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm flex items-center gap-4 text-xs text-gray-600">
-            <span className="flex items-center gap-1">
-              <span className="w-3 h-3 rounded-full bg-amber-400 inline-block" />
+          <div style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '12px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#fbbf24', display: 'inline-block' }} />
               Meios
             </span>
-            <span className="flex items-center gap-1">
-              <span className="w-3 h-3 rounded-full bg-purple-500 inline-block" />
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#a78bfa', display: 'inline-block' }} />
               Fundamentais
             </span>
-            <span className="flex items-center gap-1">
-              <span className="w-3 h-3 rounded-full bg-blue-400 inline-block" />
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#60a5fa', display: 'inline-block' }} />
               Estrategicos
             </span>
           </div>

@@ -1,16 +1,18 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-type View = 'project-list' | 'project-detail' | 'settings' | 'documents'
+type View = 'project-list' | 'project-detail' | 'settings' | 'documents' | 'guide'
 
 interface UiState {
   currentView: View
   chatPanelOpen: boolean
   sidebarCollapsed: boolean
+  pipelineView: 'idle' | 'running' | 'report'
   setView: (view: View) => void
   toggleChatPanel: () => void
   toggleSidebar: () => void
   setChatPanelOpen: (open: boolean) => void
+  setPipelineView: (v: 'idle' | 'running' | 'report') => void
 }
 
 export const useUiStore = create<UiState>()(
@@ -18,9 +20,11 @@ export const useUiStore = create<UiState>()(
     currentView: 'project-list' as View,
     chatPanelOpen: false,
     sidebarCollapsed: false,
+    pipelineView: 'idle' as const,
     setView: (view) => set((state) => { state.currentView = view }),
     toggleChatPanel: () => set((state) => { state.chatPanelOpen = !state.chatPanelOpen }),
     toggleSidebar: () => set((state) => { state.sidebarCollapsed = !state.sidebarCollapsed }),
     setChatPanelOpen: (open) => set((state) => { state.chatPanelOpen = open }),
+    setPipelineView: (v) => set((state) => { state.pipelineView = v }),
   }))
 )

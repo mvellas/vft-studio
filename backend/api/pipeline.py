@@ -1,0 +1,265 @@
+"""backend/api/pipeline.py — POST /api/pipeline/run (SSE) + GET /api/pipeline/{project_id}"""
+from __future__ import annotations
+
+import json
+import uuid
+from datetime import datetime, timezone
+from typing import AsyncIterator
+
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import Response
+from sse_starlette.sse import EventSourceResponse, ServerSentEvent
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from backend.db.base import get_session
+from backend.db.models import Document, PipelineRun, PipelineTurn, Project, StepCompletion
+from backend.schemas.pipeline import PipelineRunRequest, PipelineRunResponse
+from backend.pipeline.orchestrator import PipelineOrchestrator
+from backend.pipeline.war_room import WarRoomOrchestrator
+from backend.pipeline.report import ReportGenerator
+from backend.engine.process_manager import ProcessManager
+
+router = APIRouter(tags=["pipeline"])
+
+_process_manager = ProcessManager()
+
+
+async def _auto_complete_all_steps(project: Project, session: AsyncSession) -> None:
+    """Mark all applicable steps as completed after a full pipeline run."""
+    applicable = _process_manager.get_steps_for_config(
+        project.stakeholder_config, project.qualitative_modeling_tech
+    )
+    if not applicable:
+        return
+
+    result = await session.execute(
+        select(StepCompletion).where(StepCompletion.project_id == project.id)
+    )
+    completed_ids = {sc.step_id for sc in result.scalars().all()}
+
+    now = datetime.now(timezone.utc).isoformat()
+    for step in applicable:
+        if step.id not in completed_ids:
+            session.add(StepCompletion(
+                id=str(uuid.uuid4()),
+                project_id=project.id,
+                step_id=step.id,
+                completed_at=now,
+                data_json="{}",
+                notes="Auto-completed by full AI analysis pipeline.",
+            ))
+
+    last_step = applicable[-1]
+    project.current_step = last_step.id
+    await session.commit()
+
+
+def _build_full_document(
+    project_name: str,
+    phase_outputs: dict[str, str],
+    war_room_transcript: str,
+    final_report: str,
+) -> str:
+    """Assemble complete export document: phase analyses + war room + final report."""
+    sections: list[str] = [f"# Análise VFT Completa — {project_name}\n"]
+
+    agent_labels = {
+        "FRAME": "Fase 1 — Stakeholders (FRAME)",
+        "AXIOM": "Fase 2 — Valores e Objetivos (AXIOM)",
+        "NOVA": "Fase 3 — Alternativas (NOVA)",
+        "ANALYST": "Documentos Analisados (ANALYST)",
+    }
+    for agent, label in agent_labels.items():
+        if agent in phase_outputs and phase_outputs[agent].strip():
+            sections.append(f"## {label}\n\n{phase_outputs[agent]}")
+
+    if war_room_transcript.strip():
+        sections.append(f"## War Room — Transcrição do Debate\n\n{war_room_transcript}")
+
+    if final_report.strip():
+        sections.append(f"---\n\n{final_report}")
+
+    return "\n\n---\n\n".join(sections)
+
+
+async def run_full_pipeline(
+    project: Project,
+    documents: list[Document],
+    run_id: str,
+    session: AsyncSession,
+) -> AsyncIterator[dict]:
+    """Full pipeline: phases → war room → report. Yields SSE-ready dicts."""
+    yield {"event": "pipeline_start", "data": {"run_id": run_id, "project_id": project.id}}
+
+    # Sequential phases
+    orchestrator = PipelineOrchestrator(
+        project=project, documents=documents, session=session
+    )
+    sequence = 0
+    async for event in orchestrator.run():
+        yield event
+        if event["event"] == "agent_done":
+            data = event["data"]
+            turn = PipelineTurn(
+                id=str(uuid.uuid4()),
+                run_id=run_id,
+                agent_name=data.get("agent_name", data.get("agent", "")),
+                phase_label=data.get("phase_label", ""),
+                turn_type="analysis",
+                content=data.get("content", ""),
+                sequence=sequence,
+            )
+            session.add(turn)
+            sequence += 1
+
+    # War Room
+    war_room = WarRoomOrchestrator(
+        project_id=project.id,
+        project_name=project.name,
+        phase_outputs=orchestrator.phase_outputs,
+        session=session,
+    )
+    async for event in war_room.run():
+        yield event
+
+    war_room_transcript = war_room.get_transcript()
+
+    # Report
+    report_gen = ReportGenerator(
+        project_id=project.id,
+        project_name=project.name,
+        phase_outputs=orchestrator.phase_outputs,
+        war_room_transcript=war_room_transcript,
+        session=session,
+    )
+    full_report = ""
+    async for event in report_gen.run():
+        # Suppress the partial report_done from ReportGenerator — we'll emit
+        # a final report_done below with the fully assembled document.
+        if event["event"] != "report_done":
+            yield event
+        if event["event"] == "report_delta":
+            full_report += event["data"].get("text", "")
+
+    # Assemble full export document: phase analyses + war room + final report
+    full_document = _build_full_document(
+        project_name=project.name,
+        phase_outputs=orchestrator.phase_outputs,
+        war_room_transcript=war_room_transcript,
+        final_report=full_report,
+    )
+
+    # Persist full document
+    result = await session.execute(
+        select(PipelineRun).where(PipelineRun.id == run_id)
+    )
+    run = result.scalar_one_or_none()
+    if run:
+        run.report_md = full_document
+        run.status = "done"
+        run.completed_at = datetime.now(timezone.utc).isoformat()
+    await session.commit()
+
+    # Also send full document via SSE so frontend store has it
+    yield {"event": "report_done", "data": {"report_md": full_document}}
+
+    # Auto-complete all applicable steps now that the full analysis is done
+    await _auto_complete_all_steps(project, session)
+
+    yield {"event": "pipeline_done", "data": {}}
+
+
+@router.post("/pipeline/run", response_class=EventSourceResponse)
+async def start_pipeline(
+    body: PipelineRunRequest,
+    session: AsyncSession = Depends(get_session),
+) -> EventSourceResponse:
+    result = await session.execute(
+        select(Project).where(Project.id == body.project_id)
+    )
+    project = result.scalar_one_or_none()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    if body.problem_description:
+        project.description = body.problem_description
+
+    docs_result = await session.execute(
+        select(Document).where(Document.project_id == body.project_id)
+    )
+    documents = list(docs_result.scalars().all())
+
+    run_id = str(uuid.uuid4())
+    run = PipelineRun(
+        id=run_id,
+        project_id=body.project_id,
+        status="running",
+        report_md="",
+        created_at=datetime.now(timezone.utc).isoformat(),
+    )
+    session.add(run)
+    await session.flush()
+
+    async def generate():
+        try:
+            async for event_dict in run_full_pipeline(project, documents, run_id, session):
+                event_name = event_dict["event"]
+                data = json.dumps(event_dict["data"])
+                yield ServerSentEvent(data=data, event=event_name)
+        except Exception as exc:
+            yield ServerSentEvent(data=json.dumps({"message": str(exc)}), event="error")
+
+    return EventSourceResponse(generate())
+
+
+@router.get("/pipeline/export/{run_id}")
+async def export_report(
+    run_id: str,
+    session: AsyncSession = Depends(get_session),
+) -> Response:
+    result = await session.execute(
+        select(PipelineRun).where(PipelineRun.id == run_id)
+    )
+    run = result.scalar_one_or_none()
+    if not run:
+        raise HTTPException(status_code=404, detail="Run not found")
+
+    filename = f"vft-analise-{run.project_id[:8]}.md"
+    return Response(
+        content=run.report_md,
+        media_type="text/markdown; charset=utf-8",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+@router.get("/pipeline/{project_id}/runs", response_model=list[PipelineRunResponse])
+async def list_runs(
+    project_id: str,
+    session: AsyncSession = Depends(get_session),
+) -> list[PipelineRunResponse]:
+    result = await session.execute(
+        select(PipelineRun)
+        .where(PipelineRun.project_id == project_id)
+        .where(PipelineRun.status == "done")
+        .order_by(PipelineRun.created_at.desc())
+    )
+    runs = result.scalars().all()
+    return [PipelineRunResponse.model_validate(r) for r in runs]
+
+
+@router.get("/pipeline/{project_id}", response_model=PipelineRunResponse)
+async def get_latest_run(
+    project_id: str,
+    session: AsyncSession = Depends(get_session),
+) -> PipelineRunResponse:
+    result = await session.execute(
+        select(PipelineRun)
+        .where(PipelineRun.project_id == project_id)
+        .order_by(PipelineRun.created_at.desc())
+        .limit(1)
+    )
+    run = result.scalar_one_or_none()
+    if not run:
+        raise HTTPException(status_code=404, detail="No pipeline run found")
+    return PipelineRunResponse.model_validate(run)

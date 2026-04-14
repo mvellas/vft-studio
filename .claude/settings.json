@@ -1,12 +1,58 @@
 {
-  "allowedTools": [
-    "Bash",
-    "Read",
-    "Write",
-    "Edit",
-    "Glob",
-    "Grep"
-  ],
+  "permissions": {
+    "allow": [
+      "Read(//Users/mvellasquez/Claude Projects/ratioxtrade/src/**)",
+      "Read(//Users/mvellasquez/Claude Projects/ratioxtrade/**)",
+      "Bash(sed -i '' 's/\\\\$247/\\\\$147/g; s/\"247\"/\"147\"/g; s/: 247/: 147/g; s/price: 247/price: 147/g; s/value: 247/value: 147/g' src/pages/Index.tsx src/pages/IndexPT.tsx src/pages/IndexES.tsx src/components/ToolboxHeroSection.tsx src/components/ToolboxOfferSection.tsx src/components/ToolboxFinalCTASection.tsx src/components/ToolboxFAQSection.tsx src/components/SEOHead.tsx src/components/TestimonialsSection.tsx src/components/LeadCaptureModal.tsx src/components/blog/SmartCTA.tsx src/components/blog/RatioXBanner.tsx src/components/pt/ToolboxOfferSectionPT.tsx src/components/pt/ToolboxFAQSectionPT.tsx src/components/pt/TestimonialsSectionPT.tsx src/components/es/ToolboxOfferSectionES.tsx src/components/es/ToolboxFAQSectionES.tsx src/components/es/TestimonialsSection.tsx src/lib/product-schema-helpers.ts)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/ratioxtrade\" status)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/ratioxtrade\" log --oneline -5)",
+      "Bash(git -C '/Users/mvellasquez/Claude Projects/ratioxtrade' add src/components/LeadCaptureModal.tsx src/components/SEOHead.tsx src/components/TestimonialsSection.tsx src/components/ToolboxFAQSection.tsx src/components/ToolboxFinalCTASection.tsx src/components/ToolboxHeroSection.tsx src/components/ToolboxOfferSection.tsx src/components/blog/RatioXBanner.tsx src/components/blog/SmartCTA.tsx src/components/dna/DNAFinalCTASection.tsx src/components/dna/DNAOfferSection.tsx src/components/es/TestimonialsSection.tsx src/components/es/ToolboxFAQSectionES.tsx src/components/es/ToolboxOfferSectionES.tsx src/components/pt/TestimonialsSectionPT.tsx src/components/pt/ToolboxFAQSectionPT.tsx src/components/pt/ToolboxOfferSectionPT.tsx src/lib/product-schema-helpers.ts src/pages/Affiliate.tsx src/pages/AffiliateES.tsx src/pages/AffiliatePT.tsx src/pages/Index.tsx src/pages/IndexES.tsx src/pages/IndexPT.tsx)",
+      "Bash(git -C '/Users/mvellasquez/Claude Projects/ratioxtrade' commit -m ':*)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/ratioxtrade\" push origin main)",
+      "Bash(git -C '/Users/mvellasquez/Claude Projects/ratioxtrade' add src/components/dna/DNAOfferSection.tsx src/components/dna/DNAFinalCTASection.tsx src/components/dna/DNAFAQSection.tsx src/components/dna/DNAComparisonSection.tsx)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/ratioxtrade\" commit -m \"feat\\(dna\\): update price to \\\\$1,297 \\(4x \\\\$324.25 installments\\)\")",
+      "Read(//Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/**)",
+      "WebSearch",
+      "Skill(gsd:resume-work)",
+      "Skill(gsd:resume-work:*)",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/ -v)",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/test_pipeline_orchestrator.py -v)",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/test_war_room.py -v)",
+      "Bash(/opt/anaconda3/bin/python -c \"import ast; ast.parse\\(open\\('backend/api/pipeline.py'\\).read\\(\\)\\); print\\('syntax ok'\\)\")",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/test_war_room.py tests/test_pipeline_api.py -v)",
+      "Bash(python3 -m venv .venv)",
+      "Bash(.venv/bin/pytest tests/test_models.py -v)",
+      "Bash(npm run:*)",
+      "Bash(.venv/bin/pytest tests/test_cli.py -v)",
+      "Read(//Users/mvellasquez/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7/skills/brainstorming/**)",
+      "Bash(/Users/mvellasquez/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7/skills/brainstorming/scripts/start-server.sh --project-dir \"/Users/mvellasquez/Claude Projects/vft-studio\")",
+      "Read(//Users/mvellasquez/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7/skills/subagent-driven-development/**)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" add frontend/src/components/phase/PhaseProgress.tsx)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"feat\\(ui\\): PhaseProgress Midnight Ink dark theme\")",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" add frontend/src/components/pipeline/PipelineButton.tsx)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"feat\\(ui\\): PipelineButton Midnight Ink dark theme\")",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" add frontend/src/components/layout/ChatPanel.tsx)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"feat\\(ui\\): ChatPanel Midnight Ink dark theme + agent badge colors\")",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" add frontend/src/App.tsx)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"feat\\(ui\\): Framer Motion AnimatePresence page transitions\")",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" add frontend/src/components/pipeline/WarRoomGraph.tsx frontend/src/components/pipeline/WarRoomTimeline.tsx)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"feat\\(ui\\): WarRoomGraph vis-network animated graph + WarRoomTimeline dark theme\")",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" add frontend/src/components/phase2/ObjectivesHierarchy.tsx frontend/src/components/phase2/MeansEndsNetwork.tsx)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"feat\\(ui\\): ObjectivesHierarchy + MeansEndsNetwork dark theme + html-to-image export\")",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" add frontend/src/components/guide/GuideView.tsx)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"feat\\(ui\\): GuideView Midnight Ink dark theme\")",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" add -u)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"fix\\(ui\\): dark theme contrast audit — inputs/textareas/selects/modals across all phase components\")",
+      "Bash(gh pr:*)",
+      "Bash(git -C \"/Users/mvellasquez/Claude Projects/vft-studio\" commit -m \"fix\\(ui\\): dark theme sweep — phase1/2/3 components + DiagramExport\")"
+    ],
+    "additionalDirectories": [
+      "/Users/mvellasquez/Claude Projects/ratioxtrade/src/pages",
+      "/Users/mvellasquez/Claude Projects/ratioxtrade/src/components/dna",
+      "/Users/mvellasquez/Claude Projects/ebook-generator/docs/superpowers",
+      "/Users/mvellasquez/Claude Projects/ebook-generator"
+    ]
+  },
   "hooks": {
     "PostToolUse": [
       {
@@ -21,5 +67,13 @@
         ]
       }
     ]
-  }
+  },
+  "allowedTools": [
+    "Bash",
+    "Read",
+    "Write",
+    "Edit",
+    "Glob",
+    "Grep"
+  ]
 }

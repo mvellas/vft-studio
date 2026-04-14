@@ -15,13 +15,13 @@ interface IDFFieldProps {
 function IDFField({ label, value }: IDFFieldProps) {
   return (
     <div className="space-y-1">
-      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{label}</p>
+      <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#64748b' }}>{label}</p>
       {value.trim() ? (
-        <div className="bg-gray-50 rounded p-4 text-sm text-gray-800 whitespace-pre-wrap">
+        <div className="rounded p-4 text-sm whitespace-pre-wrap" style={{ background: 'rgba(255,255,255,0.03)', color: '#f8fafc' }}>
           {value}
         </div>
       ) : (
-        <div className="bg-amber-50 border border-amber-200 rounded p-4 text-sm text-amber-700 italic">
+        <div className="rounded p-4 text-sm italic" style={{ background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)', color: '#fbbf24' }}>
           Campo nao preenchido — volte ao passo anterior para completar.
         </div>
       )}
@@ -73,30 +73,30 @@ export function DocumentIDF({ projectId, onStepComplete }: DocumentIDFProps) {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <p className="text-sm text-gray-500">Carregando Quadro Decisorio Inicial...</p>
+      <div className="rounded-lg p-6" style={{ background: '#0e0e13' }}>
+        <p className="text-sm" style={{ color: '#64748b' }}>Carregando Quadro Decisorio Inicial...</p>
       </div>
     )
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+    <div className="rounded-lg p-6 space-y-6" style={{ background: '#0e0e13' }}>
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h3 className="font-semibold text-gray-900 text-base">
+          <h3 className="font-semibold text-base" style={{ color: '#f8fafc' }}>
             Revisao do Quadro Decisorio Inicial (IDF)
           </h3>
-          <p className="text-sm text-gray-500 mt-1">Passo 1.6 — Documentacao do IDF</p>
+          <p className="text-sm mt-1" style={{ color: '#64748b' }}>Passo 1.6 — Documentacao do IDF</p>
         </div>
         {idf?.idf_documented_at && (
-          <span className="shrink-0 text-xs font-mono text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded">
+          <span className="shrink-0 text-xs font-mono px-2 py-1 rounded" style={{ background: 'rgba(52,211,153,0.15)', color: '#34d399' }}>
             Documentado
           </span>
         )}
       </div>
 
-      <div className="border-t border-gray-100" />
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }} />
 
       {/* IDF Fields — read-only */}
       <div className="space-y-4">
@@ -105,25 +105,25 @@ export function DocumentIDF({ projectId, onStepComplete }: DocumentIDFProps) {
         <IDFField label="Escopo (Scope)" value={idf?.idf_scope ?? ''} />
       </div>
 
-      <div className="border-t border-gray-100" />
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }} />
 
       {/* Confirmation section */}
       <div className="space-y-4">
         <div className="pl-4 border-l-2 border-blue-500">
-          <p className="text-sm text-gray-700">
+          <p className="text-sm" style={{ color: '#94a3b8' }}>
             Revise o Quadro Decisorio Inicial acima. Ao confirmar, o IDF sera documentado com
             timestamp e servira como referencia para todo o processo VFT.
           </p>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded p-3 text-sm text-red-700">
+          <div className="rounded p-3 text-sm" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171' }}>
             {error}
           </div>
         )}
 
         {!allFieldsFilled && (
-          <div className="bg-amber-50 border border-amber-200 rounded p-3 text-sm text-amber-700">
+          <div className="rounded p-3 text-sm" style={{ background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)', color: '#fbbf24' }}>
             Preencha todos os campos do IDF (Proposito, Perspectiva e Escopo) antes de confirmar.
           </div>
         )}
@@ -135,9 +135,10 @@ export function DocumentIDF({ projectId, onStepComplete }: DocumentIDFProps) {
           className={[
             'w-full py-2.5 px-4 rounded-lg text-sm font-medium transition-colors',
             allFieldsFilled && !confirming
-              ? 'bg-blue-600 text-white hover:bg-blue-700'
-              : 'bg-gray-100 text-gray-400 cursor-not-allowed',
+              ? 'bg-blue-600 text-white'
+              : 'cursor-not-allowed',
           ].join(' ')}
+          style={!(allFieldsFilled && !confirming) ? { background: 'rgba(255,255,255,0.06)', color: '#64748b' } : {}}
         >
           {confirming ? 'Confirmando...' : 'Confirmar e Documentar'}
         </button>

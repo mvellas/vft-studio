@@ -29,7 +29,12 @@ export function AlternativeCard({ alternative, onUpdate, onDelete }: Alternative
   }
 
   return (
-    <div className={`bg-white rounded-lg border p-4 space-y-3 ${alternative.is_status_quo ? 'border-amber-300 bg-amber-50' : 'border-gray-200'}`}>
+    <div
+      className="rounded-lg p-4 space-y-3"
+      style={alternative.is_status_quo
+        ? { background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.3)' }
+        : { background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}
+    >
       <div className="flex items-center gap-2">
         <button
           onClick={toggleStatusQuo}
@@ -42,7 +47,8 @@ export function AlternativeCard({ alternative, onUpdate, onDelete }: Alternative
           value={name}
           onChange={e => setName(e.target.value)}
           onBlur={handleNameBlur}
-          className="flex-1 font-semibold text-gray-900 text-sm bg-transparent border-b border-transparent hover:border-gray-300 focus:border-indigo-500 focus:outline-none px-1 py-0.5"
+          className="flex-1 font-semibold text-sm bg-transparent border-b border-transparent hover:border-gray-600 focus:border-indigo-400 focus:outline-none px-1 py-0.5"
+        style={{ color: '#f1f5f9' }}
           placeholder="Nome da alternativa"
         />
         <button
@@ -58,7 +64,8 @@ export function AlternativeCard({ alternative, onUpdate, onDelete }: Alternative
         onChange={e => setDescription(e.target.value)}
         onBlur={handleDescriptionBlur}
         rows={2}
-        className="w-full text-sm text-gray-600 bg-transparent border border-transparent hover:border-gray-200 focus:border-indigo-400 focus:outline-none rounded px-2 py-1 resize-none"
+        className="w-full text-sm bg-transparent border border-transparent hover:border-gray-600 focus:border-indigo-400 focus:outline-none rounded px-2 py-1 resize-none"
+        style={{ color: '#94a3b8' }}
         placeholder="Descrição da alternativa (opcional)"
       />
       {alternative.is_status_quo === 1 && (

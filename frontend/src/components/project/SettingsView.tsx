@@ -107,15 +107,15 @@ export function SettingsView() {
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Configurações</h1>
-        <p className="text-sm text-gray-500 mt-1">Gerencie a API key da Anthropic e preferências do VFT Studio.</p>
+        <h1 className="text-2xl font-bold" style={{ color: '#f1f5f9' }}>Configurações</h1>
+        <p className="text-sm mt-1" style={{ color: '#94a3b8' }}>Gerencie a API key da Anthropic e preferências do VFT Studio.</p>
       </div>
 
       {/* API Key section */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+      <div className="rounded-xl p-6 space-y-5" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
         <div className="flex items-center gap-2">
           <Key size={18} className="text-indigo-600" />
-          <h2 className="font-semibold text-gray-900">Anthropic API Key</h2>
+          <h2 className="font-semibold" style={{ color: '#f1f5f9' }}>Anthropic API Key</h2>
         </div>
 
         {/* Current key status */}
@@ -144,7 +144,7 @@ export function SettingsView() {
 
         {/* Input */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium" style={{ color: '#94a3b8' }}>
             {status?.has_key ? 'Atualizar API Key' : 'Inserir API Key'}
           </label>
           <div className="flex gap-2">
@@ -154,7 +154,8 @@ export function SettingsView() {
                 value={inputKey}
                 onChange={e => setInputKey(e.target.value)}
                 placeholder="sk-ant-api03-..."
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
+                style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+                className="w-full px-3 py-2 text-sm focus:outline-none pr-10"
               />
               <button
                 type="button"
@@ -167,13 +168,14 @@ export function SettingsView() {
             <button
               onClick={handleSave}
               disabled={saving || !inputKey.trim()}
-              className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)', borderRadius: '8px' }}
+            className="px-4 py-2 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? <Loader2 size={15} className="animate-spin" /> : 'Salvar'}
             </button>
           </div>
           {saveError && <p className="text-xs text-red-600">{saveError}</p>}
-          <p className="text-xs text-gray-400">
+          <p className="text-xs" style={{ color: '#64748b' }}>
             A chave é armazenada no macOS Keychain — nunca em texto simples.
             Obtenha sua key em <span className="font-mono">console.anthropic.com</span>.
           </p>
@@ -199,13 +201,13 @@ export function SettingsView() {
       </div>
 
       {/* Brave Search API Key section */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+      <div className="rounded-xl p-6 space-y-5" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
         <div className="flex items-center gap-2">
           <Globe size={18} className="text-indigo-600" />
-          <h2 className="font-semibold text-gray-900">Brave Search API Key</h2>
-          <span className="text-xs text-gray-400 ml-1">(opcional)</span>
+          <h2 className="font-semibold" style={{ color: '#f1f5f9' }}>Brave Search API Key</h2>
+          <span className="text-xs ml-1" style={{ color: '#64748b' }}>(opcional)</span>
         </div>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm" style={{ color: '#94a3b8' }}>
           Permite que ARIA, FRAME e ANALYST pesquisem na internet. Obtenha gratuitamente em{' '}
           <span className="font-mono text-xs">brave.com/search/api</span> (2.000 buscas/mês).
         </p>
@@ -231,7 +233,7 @@ export function SettingsView() {
         )}
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium" style={{ color: '#94a3b8' }}>
             {braveStatus?.has_key ? 'Atualizar Brave Key' : 'Inserir Brave Key'}
           </label>
           <div className="flex gap-2">
@@ -240,12 +242,14 @@ export function SettingsView() {
               value={braveInput}
               onChange={e => setBraveInput(e.target.value)}
               placeholder="BSA..."
-              className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#f1f5f9', borderRadius: '8px' }}
+              className="flex-1 px-3 py-2 text-sm focus:outline-none"
             />
             <button
               onClick={handleSaveBrave}
               disabled={braveSaving || !braveInput.trim()}
-              className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+              style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)', borderRadius: '8px' }}
+              className="px-4 py-2 text-sm transition-colors disabled:opacity-50"
             >
               {braveSaving ? <Loader2 size={15} className="animate-spin" /> : 'Salvar'}
             </button>
@@ -272,9 +276,9 @@ export function SettingsView() {
       </div>
 
       {/* About */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-2">
-        <h2 className="font-semibold text-gray-900">Sobre</h2>
-        <p className="text-sm text-gray-500">
+      <div className="rounded-xl p-6 space-y-2" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <h2 className="font-semibold" style={{ color: '#f1f5f9' }}>Sobre</h2>
+        <p className="text-sm" style={{ color: '#94a3b8' }}>
           <strong>VFT Studio</strong> — Facilitador inteligente do processo Value-Focused Thinking
           (Vieira et al., 2024). Versão 1.0.0 MVP.
         </p>
