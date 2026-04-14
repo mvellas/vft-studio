@@ -56,9 +56,12 @@ export function PipelinePanel({ projectName }: Props) {
   return (
     <div className="space-y-6">
       {status === 'running' && (
-        <div className="flex items-center gap-3 bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-3">
-          <Loader2 size={16} className="text-indigo-600 animate-spin shrink-0" />
-          <span className="text-sm text-indigo-700 font-medium">
+        <div
+          className="flex items-center gap-3 px-4 py-3"
+          style={{ background: 'rgba(232,121,249,0.08)', border: '1px solid rgba(232,121,249,0.2)', borderRadius: '12px' }}
+        >
+          <Loader2 size={16} className="animate-spin shrink-0" style={{ color: '#e879f9' }} />
+          <span className="text-sm font-medium" style={{ color: '#e879f9' }}>
             {activeAgent ? `${activeAgent} — ` : ''}
             <RotatingStatus />
           </span>
@@ -67,7 +70,7 @@ export function PipelinePanel({ projectName }: Props) {
 
       {phaseTurns.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-gray-700">Análise sequencial</h3>
+          <h3 className="text-sm font-semibold" style={{ color: '#94a3b8' }}>Análise sequencial</h3>
           {phaseTurns.map((turn, idx) => (
             <AgentTurnCard
               key={turn.id}
@@ -95,9 +98,18 @@ export function PipelinePanel({ projectName }: Props) {
       )}
 
       {status === 'error' && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
+        <div
+          className="rounded-xl p-4 text-sm"
+          style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171' }}
+        >
           Erro: {errorMessage}
-          <button onClick={handleRedo} className="ml-3 underline">Tentar novamente</button>
+          <button
+            onClick={handleRedo}
+            className="ml-3"
+            style={{ textDecoration: 'underline', color: '#f87171' }}
+          >
+            Tentar novamente
+          </button>
         </div>
       )}
 

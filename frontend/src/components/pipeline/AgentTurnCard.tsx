@@ -1,13 +1,40 @@
+import { CSSProperties } from 'react'
+import { motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import type { AgentTurn } from '../../stores/pipelineStore'
 
-const AGENT_COLORS: Record<string, { bg: string; badge: string; border: string }> = {
-  ARIA:    { bg: 'bg-indigo-50',  badge: 'bg-indigo-100 text-indigo-700',   border: 'border-indigo-200' },
-  FRAME:   { bg: 'bg-blue-50',    badge: 'bg-blue-100 text-blue-700',       border: 'border-blue-200' },
-  AXIOM:   { bg: 'bg-amber-50',   badge: 'bg-amber-100 text-amber-700',     border: 'border-amber-200' },
-  NOVA:    { bg: 'bg-emerald-50', badge: 'bg-emerald-100 text-emerald-700', border: 'border-emerald-200' },
-  ANALYST: { bg: 'bg-purple-50',  badge: 'bg-purple-100 text-purple-700',   border: 'border-purple-200' },
+interface ColorScheme {
+  bg: CSSProperties
+  badge: CSSProperties
+}
+
+const AGENT_COLORS: Record<string, ColorScheme> = {
+  ARIA: {
+    bg: { background: 'rgba(232,121,249,0.06)', border: '1px solid rgba(232,121,249,0.15)' } as CSSProperties,
+    badge: { background: 'rgba(232,121,249,0.15)', color: '#e879f9' } as CSSProperties,
+  },
+  FRAME: {
+    bg: { background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.15)' } as CSSProperties,
+    badge: { background: 'rgba(96,165,250,0.15)', color: '#60a5fa' } as CSSProperties,
+  },
+  AXIOM: {
+    bg: { background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.15)' } as CSSProperties,
+    badge: { background: 'rgba(251,191,36,0.15)', color: '#fbbf24' } as CSSProperties,
+  },
+  NOVA: {
+    bg: { background: 'rgba(52,211,153,0.06)', border: '1px solid rgba(52,211,153,0.15)' } as CSSProperties,
+    badge: { background: 'rgba(52,211,153,0.15)', color: '#34d399' } as CSSProperties,
+  },
+  ANALYST: {
+    bg: { background: 'rgba(167,139,250,0.06)', border: '1px solid rgba(167,139,250,0.15)' } as CSSProperties,
+    badge: { background: 'rgba(167,139,250,0.15)', color: '#a78bfa' } as CSSProperties,
+  },
+}
+
+const DEFAULT_COLORS: ColorScheme = {
+  bg: { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' } as CSSProperties,
+  badge: { background: 'rgba(255,255,255,0.08)', color: '#94a3b8' } as CSSProperties,
 }
 
 interface Props {
@@ -16,26 +43,39 @@ interface Props {
 }
 
 export function AgentTurnCard({ turn, isActive }: Props) {
-  const colors = AGENT_COLORS[turn.agentName] ?? {
-    bg: 'bg-gray-50', badge: 'bg-gray-100 text-gray-600', border: 'border-gray-200',
-  }
+  const colors = AGENT_COLORS[turn.agentName] ?? DEFAULT_COLORS
 
   return (
-    <div className={`rounded-xl border ${colors.border} ${colors.bg} p-4 space-y-2`}>
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
+      className="rounded-xl p-4 space-y-2"
+      style={colors.bg}
+    >
       <div className="flex items-center gap-2">
-        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${colors.badge}`}>
+        <span
+          className="text-xs font-semibold px-2 py-0.5 rounded-full"
+          style={colors.badge}
+        >
           {turn.agentName}
         </span>
-        <span className="text-xs text-gray-500">{turn.phaseLabel}</span>
+        <span style={{ color: '#475569' }} className="text-xs">{turn.phaseLabel}</span>
         {isActive && (
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse ml-auto" />
+          <span
+            className="inline-block w-1.5 h-1.5 rounded-full animate-pulse ml-auto"
+            style={{ background: '#e879f9' }}
+          />
         )}
       </div>
       {turn.text && (
-        <div className="prose prose-sm max-w-none text-gray-800 prose-p:my-1 prose-headings:my-2">
+        <div
+          className="prose prose-sm prose-invert max-w-none prose-p:my-1 prose-headings:my-2"
+          style={{ color: '#e2e8f0' }}
+        >
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{turn.text}</ReactMarkdown>
         </div>
       )}
-    </div>
+    </motion.div>
   )
 }
