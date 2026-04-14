@@ -4,32 +4,52 @@
 @import "@fontsource/inter/500.css";
 @import "@fontsource/inter/600.css";
 @import "@fontsource/inter/700.css";
+@import "@fontsource/inter/800.css";
 
 @theme {
   --font-sans: "Inter", sans-serif;
+
+  /* Midnight Ink palette */
+  --color-ink-900: #07070c;
+  --color-ink-800: #0e0e13;
+  --color-ink-700: #0a0a0f;
+  --color-ink-600: #13131f;
+
+  /* Accent */
+  --color-accent: #e879f9;
+  --color-accent-dark: #a21caf;
+
+  /* Agent colors */
+  --color-agent-aria: #e879f9;
+  --color-agent-frame: #60a5fa;
+  --color-agent-axiom: #fbbf24;
+  --color-agent-nova: #34d399;
+  --color-agent-analyst: #a78bfa;
 }
 
-/* Scrollbars visíveis no WebKit/pywebview */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+html, body, #root {
+  background-color: #07070c;
+  color: #f8fafc;
+  min-height: 100vh;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+/* Dark scrollbars */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(232,121,249,0.3); }
+* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.18);
-  border-radius: 3px;
+/* ReactFlow dark override */
+.react-flow { background: #07070c !important; }
+.react-flow__background { background: #07070c !important; }
+.react-flow__controls button {
+  background: #13131f !important;
+  border-color: rgba(255,255,255,0.07) !important;
+  color: #94a3b8 !important;
 }
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.32);
+.react-flow__controls button:hover {
+  background: rgba(232,121,249,0.1) !important;
+  color: #e879f9 !important;
 }
-
-/* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
-}
+.react-flow__minimap { background: #0e0e13 !important; }
