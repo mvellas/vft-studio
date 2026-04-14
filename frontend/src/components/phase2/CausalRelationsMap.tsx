@@ -63,22 +63,22 @@ function getLayoutedElements(
 // Custom node
 // ---------------------------------------------------------------------------
 
-const TYPE_COLORS: Record<string, string> = {
-  means: 'bg-amber-50 border-amber-400',
-  fundamental: 'bg-purple-50 border-purple-500',
-  strategic: 'bg-blue-50 border-blue-400',
+const TYPE_STYLES: Record<string, React.CSSProperties> = {
+  means: { background: 'rgba(251,191,36,0.06)', border: '2px solid rgba(251,191,36,0.4)', color: '#94a3b8' },
+  fundamental: { background: 'rgba(167,139,250,0.06)', border: '2px solid rgba(167,139,250,0.4)', color: '#94a3b8' },
+  strategic: { background: 'rgba(96,165,250,0.06)', border: '2px solid rgba(96,165,250,0.4)', color: '#94a3b8' },
 }
 
 function ObjectiveNode({ data }: { data: ObjectiveNodeData }) {
-  const colorClass = TYPE_COLORS[data.type] ?? 'bg-gray-50 border-gray-300'
+  const nodeStyle = TYPE_STYLES[data.type] ?? { background: 'rgba(255,255,255,0.03)', border: '2px solid rgba(255,255,255,0.1)', color: '#94a3b8' }
 
   return (
     <div
-      className={`rounded-lg border-2 p-3 text-sm text-center leading-snug ${colorClass}`}
-      style={{ width: NODE_WIDTH, minHeight: NODE_HEIGHT }}
+      className="rounded-lg p-3 text-sm text-center leading-snug"
+      style={{ ...nodeStyle, width: NODE_WIDTH, minHeight: NODE_HEIGHT }}
     >
       <Handle type="target" position={Position.Bottom} />
-      <p className="text-center text-xs font-medium text-gray-700 line-clamp-3">
+      <p className="text-center text-xs font-medium line-clamp-3" style={{ color: '#94a3b8' }}>
         {data.statement}
       </p>
       <Handle type="source" position={Position.Top} />
@@ -149,7 +149,7 @@ export function CausalRelationsMap({ projectId }: CausalRelationsMapProps) {
   if (loading) {
     return (
       <div className="h-full w-full flex items-center justify-center" style={{ minHeight: 400 }}>
-        <div className="flex items-center gap-2 text-gray-500 text-sm">
+        <div className="flex items-center gap-2 text-sm" style={{ color: '#64748b' }}>
           <Loader2 className="w-4 h-4 animate-spin" />
           Carregando relacoes causais...
         </div>
@@ -160,7 +160,7 @@ export function CausalRelationsMap({ projectId }: CausalRelationsMapProps) {
   if (objectives.length === 0 || causalLinks.length === 0) {
     return (
       <div className="h-full w-full flex items-center justify-center" style={{ minHeight: 400 }}>
-        <p className="text-sm text-gray-400 text-center max-w-sm">
+        <p className="text-sm text-center max-w-sm" style={{ color: '#334155' }}>
           Nenhuma relacao causal definida. Aplique o WITI Test nos objetivos para criar vinculos.
         </p>
       </div>

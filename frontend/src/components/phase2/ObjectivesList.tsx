@@ -62,12 +62,13 @@ export function ObjectivesList({ projectId, onWITI, onCoC }: ObjectivesListProps
   return (
     <div className="rounded-lg flex flex-col" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-100">
-        <h3 className="text-xl font-semibold text-gray-900">Objetivos</h3>
+      <div className="flex items-center justify-between p-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <h3 className="text-xl font-semibold" style={{ color: '#f8fafc' }}>Objetivos</h3>
         <button
           type="button"
           onClick={() => setShowAddForm(v => !v)}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-colors"
+          style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
         >
           <Plus className="w-4 h-4" />
           Adicionar Objetivo
@@ -75,7 +76,7 @@ export function ObjectivesList({ projectId, onWITI, onCoC }: ObjectivesListProps
       </div>
 
       {/* Filter tabs */}
-      <div className="flex gap-0 border-b border-gray-100">
+      <div className="flex gap-0" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         {TABS.map(tab => (
           <button
             key={tab.value}
@@ -83,9 +84,10 @@ export function ObjectivesList({ projectId, onWITI, onCoC }: ObjectivesListProps
             onClick={() => setActiveTab(tab.value)}
             className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px ${
               activeTab === tab.value
-                ? 'border-indigo-600 text-indigo-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'border-indigo-400'
+                : 'border-transparent'
             }`}
+            style={activeTab === tab.value ? { color: '#e879f9' } : { color: '#64748b' }}
           >
             {tab.label}
           </button>
@@ -107,7 +109,7 @@ export function ObjectivesList({ projectId, onWITI, onCoC }: ObjectivesListProps
               if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleAdd()
             }}
           />
-          {saveError && <p className="text-xs text-red-600">{saveError}</p>}
+          {saveError && <p className="text-xs" style={{ color: '#f87171' }}>{saveError}</p>}
           <div className="flex gap-2 justify-end">
             <button
               type="button"
@@ -116,7 +118,8 @@ export function ObjectivesList({ projectId, onWITI, onCoC }: ObjectivesListProps
                 setNewStatement('')
                 setSaveError(null)
               }}
-              className="px-3 py-1.5 text-sm border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50 transition-colors"
+              className="px-3 py-1.5 text-sm rounded-md transition-colors"
+              style={{ border: '1px solid rgba(255,255,255,0.07)', color: '#94a3b8' }}
             >
               Cancelar
             </button>
@@ -124,7 +127,8 @@ export function ObjectivesList({ projectId, onWITI, onCoC }: ObjectivesListProps
               type="button"
               onClick={handleAdd}
               disabled={!newStatement.trim() || saving}
-              className="px-3 py-1.5 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-3 py-1.5 text-sm rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
             >
               {saving ? 'Salvando...' : 'Salvar'}
             </button>
@@ -139,24 +143,25 @@ export function ObjectivesList({ projectId, onWITI, onCoC }: ObjectivesListProps
             {[1, 2, 3].map(i => (
               <div
                 key={i}
-                className="h-24 rounded-lg border border-gray-100 bg-gray-50 animate-pulse"
+                className="h-24 rounded-lg animate-pulse"
+                style={{ border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}
               />
             ))}
           </>
         )}
 
         {!loading && error && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-3">
-            <p className="text-sm text-red-700">{error}</p>
+          <div className="rounded-md p-3" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+            <p className="text-sm" style={{ color: '#f87171' }}>{error}</p>
           </div>
         )}
 
         {!loading && !error && filteredObjectives.length === 0 && (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <p className="text-lg font-medium text-gray-500">
+            <p className="text-lg font-medium" style={{ color: '#64748b' }}>
               Nenhum objetivo elicitado ainda
             </p>
-            <p className="text-sm text-gray-400 mt-2 max-w-sm">
+            <p className="text-sm mt-2 max-w-sm" style={{ color: '#334155' }}>
               Adicione objetivos manualmente ou use um dos dispositivos VFT para elicitar valores com o stakeholder.
             </p>
           </div>
@@ -175,8 +180,8 @@ export function ObjectivesList({ projectId, onWITI, onCoC }: ObjectivesListProps
 
       {/* Summary row */}
       {objectives.length > 0 && (
-        <div className="px-4 py-3 border-t rounded-b-lg" style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}>
-          <p className="text-xs text-gray-500">
+        <div className="px-4 py-3 rounded-b-lg" style={{ borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}>
+          <p className="text-xs" style={{ color: '#64748b' }}>
             {objectives.length} objetivos total
             {' | '}
             {countByType.fundamental} fundamentais

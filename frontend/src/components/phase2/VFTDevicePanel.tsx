@@ -74,15 +74,15 @@ export function VFTDevicePanel({ projectId: _projectId, stakeholderId }: VFTDevi
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-gray-900">Dispositivos VFT</h3>
-        <span className="text-xs text-gray-500">
+        <h3 className="text-xl font-semibold" style={{ color: '#f8fafc' }}>Dispositivos VFT</h3>
+        <span className="text-xs" style={{ color: '#64748b' }}>
           {VFT_DEVICES.length} dispositivos disponíveis
         </span>
       </div>
 
       {!stakeholderId && (
-        <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-          <p className="text-sm text-blue-700">
+        <div className="rounded-md p-3" style={{ background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.2)' }}>
+          <p className="text-sm" style={{ color: '#60a5fa' }}>
             Selecione um stakeholder para iniciar a elicitacao com dispositivos VFT
           </p>
         </div>
@@ -92,23 +92,25 @@ export function VFTDevicePanel({ projectId: _projectId, stakeholderId }: VFTDevi
         {VFT_DEVICES.map(device => (
           <div
             key={device.id}
-            className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm flex flex-col gap-3"
+            className="rounded-lg p-4 flex flex-col gap-3"
+            style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.07)' }}
           >
             <div className="flex items-start gap-2">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-semibold flex items-center justify-center">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full text-xs font-semibold flex items-center justify-center" style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9' }}>
                 {device.id}
               </span>
-              <span className="text-sm font-semibold text-gray-900">{device.name}</span>
+              <span className="text-sm font-semibold" style={{ color: '#f8fafc' }}>{device.name}</span>
             </div>
 
-            <p className="text-sm text-gray-600 leading-relaxed flex-1">{device.question}</p>
+            <p className="text-sm leading-relaxed flex-1" style={{ color: '#94a3b8' }}>{device.question}</p>
 
             <div className="flex justify-end">
               <button
                 type="button"
                 onClick={() => handleStart(device)}
                 disabled={!stakeholderId}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
               >
                 <Play className="w-3.5 h-3.5" />
                 Iniciar

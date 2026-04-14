@@ -90,22 +90,22 @@ export function OrgDocumentPanel({ projectId }: OrgDocumentPanelProps) {
   return (
     <div className="rounded-lg p-6 space-y-4" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       <div className="flex items-center justify-between">
-        <h3 className="text-base font-semibold text-gray-900">
+        <h3 className="text-base font-semibold" style={{ color: '#f8fafc' }}>
           Analise de Documentos Organizacionais
         </h3>
-        <span className="text-xs text-gray-400">
+        <span className="text-xs" style={{ color: '#334155' }}>
           {savedIndicator && 'Salvo'}
         </span>
       </div>
 
-      <p className="text-xs text-gray-500">
+      <p className="text-xs" style={{ color: '#64748b' }}>
         Cole o texto de documentos organizacionais (planejamento estrategico, politicas, relatorios)
         para que o AXIOM identifique valores e objetivos implicitos.
       </p>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-md p-3">
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="rounded-md p-3" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+          <p className="text-sm" style={{ color: '#f87171' }}>{error}</p>
         </div>
       )}
 
@@ -122,7 +122,8 @@ export function OrgDocumentPanel({ projectId }: OrgDocumentPanelProps) {
           type="button"
           onClick={handleExtract}
           disabled={!text.trim() || extracting}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
         >
           {extracting && <Loader2 className="w-4 h-4 animate-spin" />}
           {extracting ? 'Extraindo valores...' : 'Extrair Valores'}
@@ -131,15 +132,16 @@ export function OrgDocumentPanel({ projectId }: OrgDocumentPanelProps) {
 
       {extractedValues.length > 0 && (
         <div className="space-y-3">
-          <div className="border border-gray-200 rounded-md p-3 bg-gray-50">
-            <p className="text-xs font-semibold text-gray-600 mb-2">
+          <div className="rounded-md p-3" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+            <p className="text-xs font-semibold mb-2" style={{ color: '#94a3b8' }}>
               Valores extraidos ({extractedValues.length}):
             </p>
             <ul className="space-y-1">
               {extractedValues.map((value, index) => (
                 <li
                   key={index}
-                  className="text-sm text-gray-700 flex items-start gap-2"
+                  className="text-sm flex items-start gap-2"
+                  style={{ color: '#94a3b8' }}
                 >
                   <span className="mt-1 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-indigo-400" />
                   {value}
@@ -153,7 +155,8 @@ export function OrgDocumentPanel({ projectId }: OrgDocumentPanelProps) {
               type="button"
               onClick={handleAddAll}
               disabled={addingAll}
-              className="inline-flex items-center gap-2 px-4 py-2 border border-indigo-600 text-indigo-600 text-sm font-medium rounded-md hover:bg-indigo-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              style={{ border: '1px solid rgba(232,121,249,0.25)', color: '#e879f9' }}
             >
               {addingAll && <Loader2 className="w-4 h-4 animate-spin" />}
               {addingAll ? 'Adicionando...' : 'Adicionar como Objetivos'}

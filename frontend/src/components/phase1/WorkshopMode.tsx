@@ -127,21 +127,21 @@ export function WorkshopMode({ projectId, onStepComplete }: WorkshopModeProps) {
     <div className="rounded-lg p-6 space-y-6" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Header */}
       <div>
-        <h3 className="font-semibold text-gray-900 text-base">
+        <h3 className="font-semibold text-base" style={{ color: '#f8fafc' }}>
           Workshop de Facilitacao — Quadro Decisorio Compartilhado
         </h3>
-        <p className="text-sm text-gray-500 mt-1">Passo 1.4 — Sessao com multiplos DMs</p>
+        <p className="text-sm mt-1" style={{ color: '#64748b' }}>Passo 1.4 — Sessao com multiplos DMs</p>
       </div>
 
       {/* Progress bar */}
       <div className="space-y-1">
-        <div className="flex items-center justify-between text-xs text-gray-500">
+        <div className="flex items-center justify-between text-xs" style={{ color: '#64748b' }}>
           <span>
             Passo {currentStep + 1} de {totalSteps}
           </span>
           <span>{progressPercent}% concluido</span>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-2">
+        <div className="w-full rounded-full h-2" style={{ background: 'rgba(255,255,255,0.06)' }}>
           <div
             className="bg-blue-500 h-2 rounded-full transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
@@ -160,22 +160,23 @@ export function WorkshopMode({ projectId, onStepComplete }: WorkshopModeProps) {
                   ? 'bg-emerald-500'
                   : idx === currentStep
                     ? 'bg-blue-400'
-                    : 'bg-gray-200',
+                    : '',
               ].join(' ')}
+              style={!completed.has(idx) && idx !== currentStep ? { background: 'rgba(255,255,255,0.1)' } : {}}
               title={WORKSHOP_STEPS[idx].title}
             />
           ))}
         </div>
       </div>
 
-      <div className="border-t border-gray-100" />
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }} />
 
       {/* Current step card */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h4 className="font-semibold text-gray-900">{step.title}</h4>
+          <h4 className="font-semibold" style={{ color: '#f8fafc' }}>{step.title}</h4>
           {completed.has(currentStep) && (
-            <span className="text-xs text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+            <span className="text-xs px-2 py-0.5 rounded" style={{ background: 'rgba(52,211,153,0.15)', color: '#34d399' }}>
               Concluida
             </span>
           )}
@@ -183,25 +184,26 @@ export function WorkshopMode({ projectId, onStepComplete }: WorkshopModeProps) {
 
         {/* Prompt */}
         <div className="pl-4 border-l-2 border-blue-500">
-          <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-1">
+          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#60a5fa' }}>
             Prompt para o facilitador
           </p>
-          <p className="text-sm text-gray-700">{step.prompt}</p>
+          <p className="text-sm" style={{ color: '#94a3b8' }}>{step.prompt}</p>
         </div>
 
         {/* Guidance */}
         <div className="pl-4 border-l-2 border-amber-500">
-          <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-1">
+          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#fbbf24' }}>
             Orientacao
           </p>
-          <p className="text-sm text-gray-700">{step.guidance}</p>
+          <p className="text-sm" style={{ color: '#94a3b8' }}>{step.guidance}</p>
         </div>
 
         {/* Notes textarea */}
         <div className="space-y-1">
           <label
             htmlFor={`workshop-notes-${currentStep}`}
-            className="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+            className="text-xs font-semibold uppercase tracking-wider"
+            style={{ color: '#64748b' }}
           >
             Anotacoes
           </label>
@@ -221,13 +223,13 @@ export function WorkshopMode({ projectId, onStepComplete }: WorkshopModeProps) {
             type="checkbox"
             checked={completed.has(currentStep)}
             onChange={handleToggleCompleted}
-            className="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+            className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
           />
-          <span className="text-sm text-gray-700 font-medium">Etapa concluida</span>
+          <span className="text-sm font-medium" style={{ color: '#94a3b8' }}>Etapa concluida</span>
         </label>
       </div>
 
-      <div className="border-t border-gray-100" />
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }} />
 
       {/* Navigation */}
       <div className="flex items-center gap-3">
@@ -235,12 +237,10 @@ export function WorkshopMode({ projectId, onStepComplete }: WorkshopModeProps) {
           type="button"
           onClick={handlePrev}
           disabled={currentStep === 0}
-          className={[
-            'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-            currentStep > 0
-              ? 'border border-gray-300 text-gray-700 hover:bg-gray-50'
-              : 'border border-gray-100 text-gray-300 cursor-not-allowed',
-          ].join(' ')}
+          className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          style={currentStep > 0
+            ? { border: '1px solid rgba(255,255,255,0.07)', color: '#94a3b8' }
+            : { border: '1px solid rgba(255,255,255,0.04)', color: '#334155', cursor: 'not-allowed' }}
         >
           Anterior
         </button>
@@ -250,12 +250,10 @@ export function WorkshopMode({ projectId, onStepComplete }: WorkshopModeProps) {
             type="button"
             onClick={handleNext}
             disabled={!completed.has(currentStep)}
-            className={[
-              'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-              completed.has(currentStep)
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed',
-            ].join(' ')}
+            className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            style={completed.has(currentStep)
+              ? { background: 'rgba(96,165,250,0.15)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.3)' }
+              : { background: 'rgba(255,255,255,0.06)', color: '#64748b', cursor: 'not-allowed' }}
           >
             Proxima
           </button>
@@ -266,7 +264,8 @@ export function WorkshopMode({ projectId, onStepComplete }: WorkshopModeProps) {
             type="button"
             onClick={handleFinish}
             disabled={finishing}
-            className="px-4 py-2 rounded-lg text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition-colors disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
+            className="px-4 py-2 rounded-lg text-sm font-medium bg-emerald-600 text-white transition-colors disabled:cursor-not-allowed"
+            style={finishing ? { background: 'rgba(255,255,255,0.06)', color: '#64748b' } : {}}
           >
             {finishing ? 'Concluindo...' : 'Concluir Workshop'}
           </button>
@@ -274,13 +273,13 @@ export function WorkshopMode({ projectId, onStepComplete }: WorkshopModeProps) {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded p-3 text-sm text-red-700">
+        <div className="rounded p-3 text-sm" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171' }}>
           {error}
         </div>
       )}
 
       {/* Chat hint */}
-      <p className="text-xs text-gray-400 italic text-center">
+      <p className="text-xs italic text-center" style={{ color: '#334155' }}>
         Use o painel de chat para consultar o FRAME sobre duvidas de facilitacao.
       </p>
     </div>

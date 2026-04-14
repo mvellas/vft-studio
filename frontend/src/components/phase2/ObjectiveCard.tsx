@@ -10,13 +10,13 @@ interface ObjectiveCardProps {
   onCoC: (id: string) => void
 }
 
-type BadgeInfo = { bg: string; text: string; label: string }
+type BadgeInfo = { style: React.CSSProperties; label: string }
 
 const TYPE_BADGE: Record<string, BadgeInfo> = {
-  means: { bg: 'bg-amber-100', text: 'text-amber-700', label: 'Meio' },
-  fundamental: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Fundamental' },
-  strategic: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Estrategico' },
-  uncategorized: { bg: 'bg-gray-100', text: 'text-gray-500', label: 'Nao categorizado' },
+  means: { style: { background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)', color: '#fbbf24' }, label: 'Meio' },
+  fundamental: { style: { background: 'rgba(167,139,250,0.06)', border: '1px solid rgba(167,139,250,0.2)', color: '#a78bfa' }, label: 'Fundamental' },
+  strategic: { style: { background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.2)', color: '#60a5fa' }, label: 'Estrategico' },
+  uncategorized: { style: { background: 'rgba(255,255,255,0.03)', color: '#64748b' }, label: 'Nao categorizado' },
 }
 
 export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: ObjectiveCardProps) {
@@ -91,7 +91,8 @@ export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: Objective
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span
-            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${badge.bg} ${badge.text}`}
+            className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold"
+            style={badge.style}
           >
             {badge.label}
           </span>
@@ -130,7 +131,7 @@ export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: Objective
             rows={3}
           />
         ) : (
-          <p className={`text-sm text-gray-800 leading-relaxed ${savingEdit ? 'opacity-50' : ''}`}>
+          <p className={`text-sm leading-relaxed ${savingEdit ? 'opacity-50' : ''}`} style={{ color: '#f8fafc' }}>
             {objective.statement}
           </p>
         )}
@@ -138,27 +139,28 @@ export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: Objective
 
       {/* AXIOM suggestion popover */}
       {showSuggestion && suggestion && (
-        <div className="border border-indigo-200 bg-indigo-50 rounded-md p-3 text-xs space-y-1">
+        <div className="rounded-md p-3 text-xs space-y-1" style={{ border: '1px solid rgba(232,121,249,0.25)', background: 'rgba(232,121,249,0.06)' }}>
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-indigo-700">
+            <span className="font-semibold" style={{ color: '#e879f9' }}>
               Sugestao AXIOM: {suggestion.suggested_type}
             </span>
             <button
               type="button"
               onClick={() => setShowSuggestion(false)}
-              className="text-indigo-400 hover:text-indigo-600"
+              style={{ color: '#e879f9' }}
             >
               ×
             </button>
           </div>
-          <p className="text-gray-600">{suggestion.reasoning}</p>
+          <p style={{ color: '#94a3b8' }}>{suggestion.reasoning}</p>
           <button
             type="button"
             onClick={() => {
               handleTypeChange(suggestion.suggested_type)
               setShowSuggestion(false)
             }}
-            className="mt-1 text-xs text-indigo-600 hover:underline font-medium"
+            className="mt-1 text-xs font-medium hover:underline"
+            style={{ color: '#e879f9' }}
           >
             Aplicar sugestao
           </button>
@@ -166,14 +168,15 @@ export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: Objective
       )}
 
       {/* Action buttons */}
-      <div className="flex items-center gap-1 pt-1 border-t border-gray-100">
+      <div className="flex items-center gap-1 pt-1" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         {/* Suggest with AXIOM */}
         <button
           type="button"
           onClick={handleSuggest}
           disabled={suggesting}
           title="Sugerir com AXIOM"
-          className="flex items-center gap-1 px-2 py-1.5 text-xs text-indigo-600 border border-indigo-200 rounded-md hover:bg-indigo-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors min-w-[44px] min-h-[44px] justify-center"
+          className="flex items-center gap-1 px-2 py-1.5 text-xs rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors min-w-[44px] min-h-[44px] justify-center"
+          style={{ color: '#e879f9', border: '1px solid rgba(232,121,249,0.25)' }}
         >
           <Brain className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Sugerir com AXIOM</span>
@@ -185,11 +188,10 @@ export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: Objective
           onClick={() => !witiDone && onWITI(objective.id)}
           disabled={witiDone}
           title={witiDone ? 'WITI Test ja aplicado' : 'Aplicar WITI Test'}
-          className={`flex items-center gap-1 px-2 py-1.5 text-xs rounded-md border transition-colors min-w-[44px] min-h-[44px] justify-center ${
-            witiDone
-              ? 'border-emerald-200 text-emerald-600 bg-emerald-50 cursor-default'
-              : 'border-gray-200 text-gray-600 hover:bg-gray-50'
-          }`}
+          className="flex items-center gap-1 px-2 py-1.5 text-xs rounded-md transition-colors min-w-[44px] min-h-[44px] justify-center"
+          style={witiDone
+            ? { border: '1px solid rgba(52,211,153,0.3)', color: '#34d399', background: 'rgba(52,211,153,0.08)', cursor: 'default' }
+            : { border: '1px solid rgba(255,255,255,0.07)', color: '#94a3b8' }}
         >
           {witiDone ? (
             <CheckCircle className="w-3.5 h-3.5" />
@@ -206,11 +208,10 @@ export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: Objective
             onClick={() => !cocDone && onCoC(objective.id)}
             disabled={cocDone}
             title={cocDone ? 'CoC ja aplicado' : 'Aplicar CoC'}
-            className={`flex items-center gap-1 px-2 py-1.5 text-xs rounded-md border transition-colors min-w-[44px] min-h-[44px] justify-center ${
-              cocDone
-                ? 'border-emerald-200 text-emerald-600 bg-emerald-50 cursor-default'
-                : 'border-purple-200 text-purple-600 hover:bg-purple-50'
-            }`}
+            className="flex items-center gap-1 px-2 py-1.5 text-xs rounded-md transition-colors min-w-[44px] min-h-[44px] justify-center"
+            style={cocDone
+              ? { border: '1px solid rgba(52,211,153,0.3)', color: '#34d399', background: 'rgba(52,211,153,0.08)', cursor: 'default' }
+              : { border: '1px solid rgba(167,139,250,0.25)', color: '#a78bfa' }}
           >
             {cocDone ? (
               <CheckCircle className="w-3.5 h-3.5" />
@@ -227,20 +228,21 @@ export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: Objective
         {/* Delete */}
         {showDeleteConfirm ? (
           <div className="flex items-center gap-1">
-            <span className="text-xs text-gray-500">
+            <span className="text-xs" style={{ color: '#64748b' }}>
               Remover este objetivo? Todas as relacoes causais associadas tambem serao removidas. Esta acao nao pode ser desfeita.
             </span>
             <button
               type="button"
               onClick={handleDelete}
-              className="px-2 py-1 text-xs bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              className="px-2 py-1 text-xs bg-red-600 text-white rounded-md transition-colors"
             >
               Confirmar
             </button>
             <button
               type="button"
               onClick={() => setShowDeleteConfirm(false)}
-              className="px-2 py-1 text-xs border border-gray-200 text-gray-600 rounded-md hover:bg-gray-50 transition-colors"
+              className="px-2 py-1 text-xs rounded-md transition-colors"
+              style={{ border: '1px solid rgba(255,255,255,0.07)', color: '#94a3b8' }}
             >
               Cancelar
             </button>
@@ -250,7 +252,8 @@ export function ObjectiveCard({ objective, projectId, onWITI, onCoC }: Objective
             type="button"
             onClick={() => setShowDeleteConfirm(true)}
             title="Remover Objetivo"
-            className="flex items-center justify-center w-[44px] h-[44px] text-gray-400 hover:text-red-600 rounded-md hover:bg-red-50 transition-colors"
+            className="flex items-center justify-center w-[44px] h-[44px] rounded-md transition-colors"
+            style={{ color: '#64748b' }}
           >
             <Trash2 className="w-4 h-4" />
           </button>

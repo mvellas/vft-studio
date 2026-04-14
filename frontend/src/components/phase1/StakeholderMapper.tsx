@@ -63,10 +63,10 @@ const VARIANT_LABELS: Record<string, string> = {
   multi_dm_multi: 'Passos 1.4-1.5 - Multiplos DMs',
 }
 
-const VARIANT_COLORS: Record<string, string> = {
-  single_dm_single: 'bg-blue-100 text-blue-700',
-  single_dm_multi: 'bg-amber-100 text-amber-700',
-  multi_dm_multi: 'bg-purple-100 text-purple-700',
+const VARIANT_STYLES: Record<string, React.CSSProperties> = {
+  single_dm_single: { background: 'rgba(96,165,250,0.06)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.2)' },
+  single_dm_multi: { background: 'rgba(251,191,36,0.06)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.2)' },
+  multi_dm_multi: { background: 'rgba(167,139,250,0.06)', color: '#a78bfa', border: '1px solid rgba(167,139,250,0.2)' },
 }
 
 export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapperProps) {
@@ -204,8 +204,8 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <p className="text-sm text-gray-500">Carregando stakeholders...</p>
+      <div className="rounded-lg p-6" style={{ background: '#0e0e13' }}>
+        <p className="text-sm" style={{ color: '#64748b' }}>Carregando stakeholders...</p>
       </div>
     )
   }
@@ -216,13 +216,13 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
       <div className="rounded-lg p-6" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h3 className="font-semibold text-gray-900 text-base">Passo 1.1 — Mapeamento de Stakeholders</h3>
-            <p className="text-sm text-gray-500 mt-1">
+            <h3 className="font-semibold text-base" style={{ color: '#f8fafc' }}>Passo 1.1 — Mapeamento de Stakeholders</h3>
+            <p className="text-sm mt-1" style={{ color: '#64748b' }}>
               Identifique todos os stakeholders e ao menos uma Autoridade Decisora para determinar o variante IDF.
             </p>
           </div>
           {stakeholders.length > 0 && (
-            <span className={`shrink-0 text-xs font-semibold px-3 py-1 rounded-full ${VARIANT_COLORS[computedConfig]}`}>
+            <span className="shrink-0 text-xs font-semibold px-3 py-1 rounded-full" style={VARIANT_STYLES[computedConfig]}>
               {VARIANT_LABELS[computedConfig]}
             </span>
           )}
@@ -231,8 +231,8 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
 
       {/* Global error */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="rounded-lg px-4 py-3" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+          <p className="text-sm" style={{ color: '#f87171' }}>{error}</p>
         </div>
       )}
 
@@ -243,30 +243,32 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
             <div key={s.id} className="flex items-start justify-between gap-4 p-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-medium text-gray-900 text-sm">{s.name}</span>
-                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                  <span className="font-medium text-sm" style={{ color: '#f8fafc' }}>{s.name}</span>
+                  <span className="text-xs px-2 py-0.5 rounded" style={{ background: 'rgba(255,255,255,0.06)', color: '#94a3b8' }}>
                     {ROLE_LABELS[s.role] ?? s.role}
                   </span>
                   {s.is_decision_maker === 1 && (
-                    <span className="text-xs bg-emerald-100 text-emerald-700 font-semibold px-2 py-0.5 rounded">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded" style={{ background: 'rgba(52,211,153,0.15)', color: '#34d399' }}>
                       DM
                     </span>
                   )}
                 </div>
                 {s.profile && (
-                  <p className="text-xs text-gray-500 mt-1 truncate">{s.profile}</p>
+                  <p className="text-xs mt-1 truncate" style={{ color: '#64748b' }}>{s.profile}</p>
                 )}
               </div>
               <div className="flex gap-2 shrink-0">
                 <button
                   onClick={() => openEditForm(s)}
-                  className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                  className="text-xs font-medium"
+                  style={{ color: '#60a5fa' }}
                 >
                   Editar
                 </button>
                 <button
                   onClick={() => void handleDelete(s.id)}
-                  className="text-xs text-red-500 hover:text-red-700 font-medium"
+                  className="text-xs font-medium"
+                  style={{ color: '#f87171' }}
                 >
                   Remover
                 </button>
@@ -279,22 +281,22 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
       {/* Empty state */}
       {stakeholders.length === 0 && !showForm && (
         <div className="rounded-lg p-8 text-center" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <p className="text-sm text-gray-500">Nenhum stakeholder cadastrado ainda.</p>
-          <p className="text-xs text-gray-400 mt-1">Adicione ao menos uma Autoridade Decisora para continuar.</p>
+          <p className="text-sm" style={{ color: '#64748b' }}>Nenhum stakeholder cadastrado ainda.</p>
+          <p className="text-xs mt-1" style={{ color: '#334155' }}>Adicione ao menos uma Autoridade Decisora para continuar.</p>
         </div>
       )}
 
       {/* Add/Edit form */}
       {showForm && (
         <div className="rounded-lg p-6" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <h4 className="text-sm font-semibold text-gray-800 mb-4">
+          <h4 className="text-sm font-semibold mb-4" style={{ color: '#f8fafc' }}>
             {editingId ? 'Editar Stakeholder' : 'Adicionar Stakeholder'}
           </h4>
           <form onSubmit={e => void handleSubmit(e)} className="space-y-4">
             {/* Name */}
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Nome <span className="text-red-500">*</span>
+              <label className="block text-xs font-medium mb-1" style={{ color: '#94a3b8' }}>
+                Nome <span style={{ color: '#f87171' }}>*</span>
               </label>
               <input
                 type="text"
@@ -309,7 +311,7 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
 
             {/* Role */}
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Papel</label>
+              <label className="block text-xs font-medium mb-1" style={{ color: '#94a3b8' }}>Papel</label>
               <select
                 value={form.role}
                 onChange={e => handleRoleChange(e.target.value)}
@@ -338,14 +340,14 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
                   }`}
                 />
               </button>
-              <span className="text-sm text-gray-700">
+              <span className="text-sm" style={{ color: '#94a3b8' }}>
                 Decision Maker (Autoridade Decisora)
               </span>
             </div>
 
             {/* Profile */}
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
+              <label className="block text-xs font-medium mb-1" style={{ color: '#94a3b8' }}>
                 Perfil e experiencia
               </label>
               <textarea
@@ -360,7 +362,7 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
 
             {/* Interests */}
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
+              <label className="block text-xs font-medium mb-1" style={{ color: '#94a3b8' }}>
                 Interesses e preocupacoes
               </label>
               <textarea
@@ -375,7 +377,7 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
 
             {/* Elicitation mode */}
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Modo de elicitacao</label>
+              <label className="block text-xs font-medium mb-1" style={{ color: '#94a3b8' }}>Modo de elicitacao</label>
               <select
                 value={form.elicitation_mode}
                 onChange={e => setForm(prev => ({ ...prev, elicitation_mode: e.target.value }))}
@@ -393,14 +395,16 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-sm font-medium rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ background: 'rgba(96,165,250,0.15)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.3)' }}
               >
                 {submitting ? 'Salvando...' : editingId ? 'Salvar alteracoes' : 'Adicionar'}
               </button>
               <button
                 type="button"
                 onClick={cancelForm}
-                className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200"
+                className="px-4 py-2 text-sm font-medium rounded-md"
+                style={{ background: 'rgba(255,255,255,0.06)', color: '#94a3b8' }}
               >
                 Cancelar
               </button>
@@ -413,7 +417,8 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
       {!showForm && (
         <button
           onClick={openAddForm}
-          className="w-full border-2 border-dashed border-gray-300 rounded-lg p-4 text-sm text-gray-500 hover:border-blue-400 hover:text-blue-600 transition-colors"
+          className="w-full border-2 border-dashed rounded-lg p-4 text-sm transition-colors"
+          style={{ borderColor: 'rgba(255,255,255,0.1)', color: '#64748b' }}
         >
           + Adicionar Stakeholder
         </button>
@@ -421,8 +426,8 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
 
       {/* Validation error */}
       {validationError && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
-          <p className="text-sm text-amber-800">{validationError}</p>
+        <div className="rounded-lg px-4 py-3" style={{ background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)' }}>
+          <p className="text-sm" style={{ color: '#fbbf24' }}>{validationError}</p>
         </div>
       )}
 
@@ -430,13 +435,13 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
       <div className="rounded-lg p-4 flex items-center justify-between gap-4" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
         <div>
           {stakeholders.length === 0 ? (
-            <p className="text-xs text-gray-500">Adicione ao menos uma Autoridade Decisora para completar este passo.</p>
+            <p className="text-xs" style={{ color: '#64748b' }}>Adicione ao menos uma Autoridade Decisora para completar este passo.</p>
           ) : !canComplete ? (
-            <p className="text-xs text-amber-700">Nenhum stakeholder marcado como Decision Maker ainda.</p>
+            <p className="text-xs" style={{ color: '#fbbf24' }}>Nenhum stakeholder marcado como Decision Maker ainda.</p>
           ) : (
-            <p className="text-xs text-gray-500">
+            <p className="text-xs" style={{ color: '#64748b' }}>
               {stakeholders.length} stakeholder{stakeholders.length !== 1 ? 's' : ''} mapeado{stakeholders.length !== 1 ? 's' : ''} —{' '}
-              <span className={`font-semibold ${VARIANT_COLORS[computedConfig].split(' ')[1]}`}>
+              <span className="font-semibold" style={VARIANT_STYLES[computedConfig]}>
                 {VARIANT_LABELS[computedConfig]}
               </span>
             </p>
@@ -445,7 +450,7 @@ export function StakeholderMapper({ projectId, onStepComplete }: StakeholderMapp
         <button
           onClick={() => void handleCompleteStep()}
           disabled={!canComplete || completing}
-          className="shrink-0 px-5 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-md hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="shrink-0 px-5 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {completing ? 'Salvando...' : 'Concluir Passo 1.1'}
         </button>

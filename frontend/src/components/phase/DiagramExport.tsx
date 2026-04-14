@@ -21,7 +21,7 @@ async function captureElement(elementId: string): Promise<string | null> {
     const canvas = await html2canvas(el, {
       useCORS: true,
       scale: 2,
-      backgroundColor: '#ffffff',
+      backgroundColor: '#0e0e13',
     })
     return canvas.toDataURL('image/png')
   } catch {
@@ -89,7 +89,8 @@ export function DiagramExport({ projectId, projectName }: DiagramExportProps) {
         onClick={handleExportMarkdown}
         disabled={exportingMarkdown}
         title="Exportar relatório Markdown via SCRIBE"
-        className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-indigo-700 border border-gray-200 hover:border-indigo-300 bg-white px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+        style={{ color: '#94a3b8', border: '1px solid rgba(255,255,255,0.07)', background: 'transparent' }}
       >
         {exportingMarkdown ? <Loader2 size={13} className="animate-spin" /> : <FileText size={13} />}
         Relatório .md
@@ -98,13 +99,14 @@ export function DiagramExport({ projectId, projectName }: DiagramExportProps) {
         onClick={handleExportDiagrams}
         disabled={capturingDiagrams}
         title="Exportar diagramas como PNG"
-        className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-indigo-700 border border-gray-200 hover:border-indigo-300 bg-white px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+        style={{ color: '#94a3b8', border: '1px solid rgba(255,255,255,0.07)', background: 'transparent' }}
       >
         {capturingDiagrams ? <Loader2 size={13} className="animate-spin" /> : <Image size={13} />}
         Diagramas .png
       </button>
       {status && (
-        <span className="text-xs text-gray-500 ml-1">{status}</span>
+        <span className="text-xs ml-1" style={{ color: '#64748b' }}>{status}</span>
       )}
     </div>
   )

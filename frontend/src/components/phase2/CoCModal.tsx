@@ -130,21 +130,21 @@ export function CoCModal({ isOpen, onClose, objectiveId, projectId }: CoCModalPr
 
   if (!isOpen) return null
 
-  const resultBadge = (): { className: string; label: string } => {
-    if (!result) return { className: '', label: '' }
+  const resultBadge = (): { badgeStyle: React.CSSProperties; label: string } => {
+    if (!result) return { badgeStyle: {}, label: '' }
     if (result.q1_result === 'aligned' && result.q2_result === 'internal') {
       return {
-        className: 'bg-emerald-100 text-emerald-700',
+        badgeStyle: { background: 'rgba(52,211,153,0.15)', color: '#34d399' },
         label: 'Confirmado — Objetivo fundamental validado',
       }
     }
     return {
-      className: 'bg-amber-100 text-amber-700',
+      badgeStyle: { background: 'rgba(251,191,36,0.06)', color: '#fbbf24' },
       label: 'Reclassificado — Objetivo reclassificado como estrategico',
     }
   }
 
-  const badge = resultBadge()
+  const { badgeStyle, label } = resultBadge()
 
   return (
     <div
@@ -153,14 +153,15 @@ export function CoCModal({ isOpen, onClose, objectiveId, projectId }: CoCModalPr
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="rounded-xl p-6 max-w-lg w-full shadow-xl space-y-4" style={{ background: '#13131f' }}>
+      <div className="rounded-xl p-6 max-w-lg w-full space-y-4" style={{ background: '#13131f' }}>
         {/* Header */}
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold" style={{ color: '#f1f5f9' }}>Controle de Consequencias</h2>
           <button
             type="button"
             onClick={onClose}
-            className="flex items-center justify-center w-8 h-8 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-md transition-colors"
+            style={{ color: '#64748b' }}
             aria-label="Fechar"
           >
             <X className="w-5 h-5" />
@@ -196,7 +197,8 @@ export function CoCModal({ isOpen, onClose, objectiveId, projectId }: CoCModalPr
                 type="button"
                 onClick={() => setStep('q2')}
                 disabled={q1Answer.trim().length === 0}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
               >
                 Proxima
               </button>
@@ -218,15 +220,16 @@ export function CoCModal({ isOpen, onClose, objectiveId, projectId }: CoCModalPr
               className="w-full p-3 text-sm focus:outline-none"
             />
             {errorMessage && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-sm text-red-700">{errorMessage}</p>
+              <div className="rounded-lg p-3" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+                <p className="text-sm" style={{ color: '#f87171' }}>{errorMessage}</p>
               </div>
             )}
             <div className="flex justify-between">
               <button
                 type="button"
                 onClick={() => setStep('q1')}
-                className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm rounded-lg transition-colors"
+                style={{ border: '1px solid rgba(255,255,255,0.07)', color: '#94a3b8' }}
               >
                 Voltar
               </button>
@@ -234,7 +237,8 @@ export function CoCModal({ isOpen, onClose, objectiveId, projectId }: CoCModalPr
                 type="button"
                 onClick={() => setStep('evaluating')}
                 disabled={q2Answer.trim().length === 0}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
               >
                 Avaliar
               </button>
@@ -245,8 +249,8 @@ export function CoCModal({ isOpen, onClose, objectiveId, projectId }: CoCModalPr
         {/* Step: Evaluating */}
         {step === 'evaluating' && (
           <div className="flex flex-col items-center justify-center py-6 gap-3">
-            <Loader2 className="w-6 h-6 animate-spin text-indigo-600" />
-            <p className="text-sm text-gray-600">Avaliando com AXIOM...</p>
+            <Loader2 className="w-6 h-6 animate-spin text-indigo-400" />
+            <p className="text-sm" style={{ color: '#94a3b8' }}>Avaliando com AXIOM...</p>
           </div>
         )}
 
@@ -254,18 +258,20 @@ export function CoCModal({ isOpen, onClose, objectiveId, projectId }: CoCModalPr
         {step === 'result' && result && (
           <div className="space-y-3">
             <span
-              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${badge.className}`}
+              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold"
+              style={badgeStyle}
             >
-              {badge.label}
+              {label}
             </span>
             {result.reasoning && (
-              <p className="text-sm text-gray-600 leading-relaxed">{result.reasoning}</p>
+              <p className="text-sm leading-relaxed" style={{ color: '#94a3b8' }}>{result.reasoning}</p>
             )}
             <div className="flex justify-end pt-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
               >
                 Fechar
               </button>
@@ -276,7 +282,7 @@ export function CoCModal({ isOpen, onClose, objectiveId, projectId }: CoCModalPr
         {/* Step: Refining */}
         {step === 'refining' && result && (
           <div className="space-y-3">
-            <p className="text-sm text-gray-600 leading-relaxed">
+            <p className="text-sm leading-relaxed" style={{ color: '#94a3b8' }}>
               O enunciado do objetivo precisa ser refinado para se adequar ao escopo da decisao.
             </p>
             <textarea
@@ -287,15 +293,16 @@ export function CoCModal({ isOpen, onClose, objectiveId, projectId }: CoCModalPr
               className="w-full p-3 text-sm focus:outline-none"
             />
             {errorMessage && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-sm text-red-700">{errorMessage}</p>
+              <div className="rounded-lg p-3" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+                <p className="text-sm" style={{ color: '#f87171' }}>{errorMessage}</p>
               </div>
             )}
             <div className="flex justify-between items-center pt-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm rounded-lg transition-colors"
+                style={{ border: '1px solid rgba(255,255,255,0.07)', color: '#94a3b8' }}
               >
                 Cancelar
               </button>
@@ -303,7 +310,8 @@ export function CoCModal({ isOpen, onClose, objectiveId, projectId }: CoCModalPr
                 type="button"
                 onClick={handleConfirmRefinement}
                 disabled={refinedStatement.trim().length === 0 || saving}
-                className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
               >
                 {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                 Confirmar Refinamento
