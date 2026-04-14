@@ -203,6 +203,68 @@ async def upsert_consequence(
         return ConsequenceResponse.model_validate(consequence)
 
 
+@router.post("/suggest-names")
+async def suggest_alternative_names(
+    project_id: str,
+    session: AsyncSession = Depends(get_session),
+) -> dict:
+    """Use NOVA to suggest 4-6 alternative names based on project context and objectives."""
+    import json
+    import re
+    from backend.agents.phase3_specialist import Phase3SpecialistAgent
+
+    project = await _require_project(project_id, session)
+
+    # Load fundamental objectives to give NOVA context
+    obj_result = await session.execute(
+        select(Objective).where(
+            Objective.project_id == project_id,
+            Objective.deleted == 0,
+            Objective.witi_classification == "fundamental",
+        ).order_by(Objective.order_index)
+    )
+    fundamentals = obj_result.scalars().all()
+
+    # Load existing alternatives so NOVA doesn't duplicate
+    existing_result = await session.execute(
+        select(Alternative).where(
+            Alternative.project_id == project_id,
+            Alternative.deleted == 0,
+        )
+    )
+    existing = existing_result.scalars().all()
+    existing_names = [a.name for a in existing]
+
+    agent = await Phase3SpecialistAgent.from_project_id(project_id, session)
+
+    obj_list = "\n".join([f"- {obj.statement}" for obj in fundamentals]) if fundamentals else "(objetivos ainda não definidos)"
+    existing_str = ", ".join(existing_names) if existing_names else "(nenhuma)"
+    project_desc = project.description or project.name
+
+    prompt = (
+        f"Contexto do projeto: {project_desc}\n\n"
+        f"Objetivos fundamentais:\n{obj_list}\n\n"
+        f"Alternativas já cadastradas: {existing_str}\n\n"
+        f"Sugira de 4 a 6 alternativas de decisão DIFERENTES das já existentes, "
+        f"criativas e relevantes para este contexto de decisão. "
+        f"Cada alternativa deve ter um nome curto (3-7 palavras) e uma descrição de 1-2 frases.\n\n"
+        f"Responda SOMENTE com JSON no formato:\n"
+        f'[{{"name": "Nome da Alternativa", "description": "Descrição concisa."}}]'
+    )
+
+    response = await agent.invoke([{"role": "user", "content": prompt}])
+
+    suggestions: list[dict] = []
+    try:
+        match = re.search(r"\[.*\]", response, re.DOTALL)
+        if match:
+            suggestions = json.loads(match.group(0))
+    except (json.JSONDecodeError, AttributeError):
+        suggestions = []
+
+    return {"suggestions": suggestions}
+
+
 @router.post("/{alternative_id}/suggest-consequences")
 async def suggest_consequences(
     project_id: str,
