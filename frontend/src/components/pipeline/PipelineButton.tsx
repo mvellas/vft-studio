@@ -12,6 +12,9 @@ interface Props {
 export function PipelineButton({ projectId, projectDescription }: Props) {
   const [showModal, setShowModal] = useState(false)
   const [description, setDescription] = useState(projectDescription)
+  const [mainButtonHovered, setMainButtonHovered] = useState(false)
+  const [closeButtonHovered, setCloseButtonHovered] = useState(false)
+  const [textareaFocused, setTextareaFocused] = useState(false)
   const { status, startRun, appendDelta, addWarRoomTurn, appendReportDelta, finishRun, setError } =
     usePipelineStore()
   const { setPipelineView } = useUiStore()
@@ -70,41 +73,181 @@ export function PipelineButton({ projectId, projectDescription }: Props) {
       <button
         onClick={handleStart}
         disabled={isRunning}
-        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-indigo-300 text-indigo-700 hover:bg-indigo-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+        onMouseEnter={() => setMainButtonHovered(true)}
+        onMouseLeave={() => setMainButtonHovered(false)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.375rem',
+          fontSize: '0.75rem',
+          paddingLeft: '0.75rem',
+          paddingRight: '0.75rem',
+          paddingTop: '0.375rem',
+          paddingBottom: '0.375rem',
+          borderRadius: '0.5rem',
+          border: '1px solid rgba(232,121,249,0.3)',
+          color: '#e879f9',
+          background: mainButtonHovered ? 'rgba(232,121,249,0.15)' : 'rgba(232,121,249,0.08)',
+          transition: 'background-color 0.2s',
+          fontWeight: 500,
+          cursor: isRunning ? 'not-allowed' : 'pointer',
+          opacity: isRunning ? 0.5 : 1,
+        }}
       >
         <Play size={13} />
         VFT com IA
       </button>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full mx-4 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-base font-semibold text-gray-900">Contexto do projeto</h2>
-              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-700">
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 50,
+          }}
+        >
+          <div
+            style={{
+              background: '#13131f',
+              borderRadius: '12px',
+              padding: '1.5rem',
+              maxWidth: '28rem',
+              width: '100%',
+              marginLeft: '1rem',
+              marginRight: '1rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              border: '1px solid rgba(255,255,255,0.08)',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  color: '#f8fafc',
+                  margin: 0,
+                }}
+              >
+                Contexto do projeto
+              </h2>
+              <button
+                onClick={() => setShowModal(false)}
+                onMouseEnter={() => setCloseButtonHovered(true)}
+                onMouseLeave={() => setCloseButtonHovered(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: closeButtonHovered ? '#94a3b8' : '#475569',
+                  transition: 'color 0.2s',
+                  padding: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <X size={18} />
               </button>
             </div>
-            <p className="text-sm text-gray-500">
+            <p
+              style={{
+                fontSize: '0.875rem',
+                color: '#64748b',
+                margin: 0,
+              }}
+            >
               Descreva o problema de decisão para que os agentes tenham contexto adequado.
             </p>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              onFocus={() => setTextareaFocused(true)}
+              onBlur={() => setTextareaFocused(false)}
               placeholder="Ex: Decidir qual tecnologia adotar para o novo sistema de pagamentos..."
               rows={4}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+              style={{
+                width: '100%',
+                border: textareaFocused
+                  ? '1px solid rgba(232,121,249,0.4)'
+                  : '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '8px',
+                paddingLeft: '0.75rem',
+                paddingRight: '0.75rem',
+                paddingTop: '0.5rem',
+                paddingBottom: '0.5rem',
+                fontSize: '0.875rem',
+                color: '#f1f5f9',
+                background: '#0e0e13',
+                outline: 'none',
+                resize: 'none',
+                transition: 'border-color 0.2s',
+                boxSizing: 'border-box',
+              }}
             />
-            <div className="flex justify-end gap-2">
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '0.5rem',
+              }}
+            >
               <button
                 onClick={() => setShowModal(false)}
-                className="text-sm px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50"
+                style={{
+                  fontSize: '0.875rem',
+                  paddingLeft: '1rem',
+                  paddingRight: '1rem',
+                  paddingTop: '0.5rem',
+                  paddingBottom: '0.5rem',
+                  borderRadius: '0.5rem',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  color: '#94a3b8',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  transition: 'color 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#cbd5e1'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#94a3b8'
+                }}
               >
                 Cancelar
               </button>
               <button
                 onClick={handleModalConfirm}
-                className="text-sm px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+                style={{
+                  fontSize: '0.875rem',
+                  paddingLeft: '1rem',
+                  paddingRight: '1rem',
+                  paddingTop: '0.5rem',
+                  paddingBottom: '0.5rem',
+                  borderRadius: '0.5rem',
+                  background: 'rgba(232,121,249,0.15)',
+                  color: '#e879f9',
+                  border: '1px solid rgba(232,121,249,0.3)',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(232,121,249,0.25)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(232,121,249,0.15)'
+                }}
               >
                 Iniciar análise
               </button>
