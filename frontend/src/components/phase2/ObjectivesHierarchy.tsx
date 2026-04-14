@@ -14,7 +14,7 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import dagre from '@dagrejs/dagre'
-import html2canvas from 'html2canvas'
+import { toPng } from 'html-to-image'
 import { Loader2 } from 'lucide-react'
 import { objectivesApi } from '../../api/objectives'
 import { useObjectivesStore } from '../../stores/objectivesStore'
@@ -73,9 +73,9 @@ function getLayoutedElements(
 
 function HierarchyNode({ data }: { data: HierarchyNodeData }) {
   const isFundamental = data.type === 'fundamental'
-  const colorClass = isFundamental
-    ? 'bg-purple-50 border-purple-500'
-    : 'bg-gray-50 border-gray-300'
+  const nodeStyle: React.CSSProperties = isFundamental
+    ? { background: 'rgba(167,139,250,0.08)', border: '2px solid rgba(167,139,250,0.4)' }
+    : { background: 'rgba(255,255,255,0.04)', border: '2px solid rgba(255,255,255,0.1)' }
 
   const handleParentChange = async (newParentId: string) => {
     if (!newParentId || newParentId === data.objectiveId) return
@@ -95,26 +95,25 @@ function HierarchyNode({ data }: { data: HierarchyNodeData }) {
 
   return (
     <div
-      className={`rounded-lg border-2 p-3 text-sm leading-snug ${colorClass}`}
-      style={{ width: NODE_WIDTH, minHeight: NODE_HEIGHT }}
+      style={{ width: NODE_WIDTH, minHeight: NODE_HEIGHT, borderRadius: '8px', padding: '12px', fontSize: '14px', lineHeight: 1.4, ...nodeStyle }}
     >
       <Handle type="target" position={Position.Top} />
-      <p className="text-xs font-medium text-gray-700 line-clamp-2 mb-1">{data.statement}</p>
+      <p style={{ fontSize: '12px', fontWeight: 500, color: '#e2e8f0', margin: '0 0 4px', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{data.statement}</p>
 
       {data.hasAttribute && (
-        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-700">
+        <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 6px', borderRadius: '4px', fontSize: '12px', fontWeight: 500, background: 'rgba(52,211,153,0.15)', color: '#34d399' }}>
           Atributo definido
         </span>
       )}
 
       {/* Parent selector — only for non-root fundamentals to allow re-parenting */}
       {data.fundamentalOptions.length > 0 && (
-        <div className="mt-1">
+        <div style={{ marginTop: '4px' }}>
           <select
             value={data.parentId ?? ''}
             onChange={e => handleParentChange(e.target.value)}
             onClick={e => e.stopPropagation()}
-            className="w-full text-xs border border-gray-200 rounded px-1 py-0.5 text-gray-500 bg-white focus:outline-none focus:ring-1 focus:ring-indigo-400"
+            style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', fontSize: '11px', borderRadius: '4px', padding: '2px 4px', width: '100%' }}
           >
             <option value="">Pai: (raiz)</option>
             {data.fundamentalOptions
@@ -209,25 +208,20 @@ export function ObjectivesHierarchy({ projectId }: ObjectivesHierarchyProps) {
   const handleExportPng = async () => {
     if (!containerRef.current) return
     try {
-      const canvas = await html2canvas(containerRef.current, { scale: 2 })
-      canvas.toBlob(blob => {
-        if (!blob) return
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = 'objectives-hierarchy.png'
-        a.click()
-        URL.revokeObjectURL(url)
-      })
+      const dataUrl = await toPng(containerRef.current, { backgroundColor: '#0e0e13', pixelRatio: 2 })
+      const a = document.createElement('a')
+      a.href = dataUrl
+      a.download = 'objectives-hierarchy.png'
+      a.click()
     } catch {
-      // Export failed silently — user can retry
+      // Export failed silently
     }
   }
 
   if (loading) {
     return (
       <div className="h-full w-full flex items-center justify-center" style={{ minHeight: 500 }}>
-        <div className="flex items-center gap-2 text-gray-500 text-sm">
+        <div className="flex items-center gap-2 text-sm" style={{ color: '#475569' }}>
           <Loader2 className="w-4 h-4 animate-spin" />
           Carregando hierarquia...
         </div>
@@ -238,7 +232,7 @@ export function ObjectivesHierarchy({ projectId }: ObjectivesHierarchyProps) {
   if (initialNodes.length === 0) {
     return (
       <div className="h-full w-full flex items-center justify-center" style={{ minHeight: 500 }}>
-        <p className="text-sm text-gray-400 text-center max-w-sm">
+        <p className="text-sm text-center max-w-sm" style={{ color: '#475569' }}>
           Nenhum objetivo fundamental classificado ainda. Complete o WITI Test para identificar os fundamentais.
         </p>
       </div>
@@ -246,7 +240,7 @@ export function ObjectivesHierarchy({ projectId }: ObjectivesHierarchyProps) {
   }
 
   return (
-    <div id="objectives-hierarchy" ref={containerRef} className="h-full w-full" style={{ minHeight: 500 }}>
+    <div id="objectives-hierarchy" ref={containerRef} className="h-full w-full" style={{ minHeight: 500, background: '#0e0e13' }}>
       <ReactFlow
         nodes={syncedNodes}
         edges={syncedEdges}
@@ -256,8 +250,9 @@ export function ObjectivesHierarchy({ projectId }: ObjectivesHierarchyProps) {
         fitViewOptions={{ padding: 0.2 }}
         nodesConnectable={false}
         elementsSelectable={true}
+        colorScheme="dark"
       >
-        <Background variant={'dots' as Parameters<typeof Background>[0]['variant']} />
+        <Background variant={'dots' as any} color="rgba(255,255,255,0.08)" />
         <Controls position="bottom-left" />
 
         {/* Export button */}
@@ -265,7 +260,7 @@ export function ObjectivesHierarchy({ projectId }: ObjectivesHierarchyProps) {
           <button
             type="button"
             onClick={handleExportPng}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm font-medium shadow-sm hover:bg-gray-50 transition-colors"
+            style={{ background: 'rgba(232,121,249,0.12)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.25)', borderRadius: '8px', padding: '4px 12px', fontSize: '13px', cursor: 'pointer' }}
           >
             Exportar PNG
           </button>
