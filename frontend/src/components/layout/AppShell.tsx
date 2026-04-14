@@ -3,13 +3,14 @@ import { Sidebar } from './Sidebar'
 import { ChatPanel } from './ChatPanel'
 import { useUiStore } from '../../stores/uiStore'
 import { useProjectStore } from '../../stores/projectStore'
+import { useChatStore } from '../../stores/chatStore'
 import { usePhaseProgressStore } from '../../stores/phaseProgressStore'
 import { DiagramExport } from '../phase/DiagramExport'
 import { PipelineButton } from '../pipeline/PipelineButton'
 import { PipelinePanel } from '../pipeline/PipelinePanel'
 import { PipelineHistory } from '../pipeline/PipelineHistory'
 import { PhaseProgress } from '../phase/PhaseProgress'
-import { MessageSquare } from 'lucide-react'
+import { MessageSquare, BotMessageSquare } from 'lucide-react'
 import { useResize } from '../../hooks/useResize'
 import { usePhasePoller } from '../../hooks/usePhasePoller'
 
@@ -57,6 +58,16 @@ export function AppShell({ children }: AppShellProps) {
                   projectId={activeProject.id}
                   projectDescription={activeProject.description ?? ''}
                 />
+                <button
+                  onClick={() => {
+                    useChatStore.getState().setActiveAgent('ARIA', 'facilitator')
+                    setChatPanelOpen(true)
+                  }}
+                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-emerald-300 text-emerald-700 hover:bg-emerald-50 transition-colors font-medium"
+                >
+                  <BotMessageSquare size={13} />
+                  VFT Guiado
+                </button>
                 <button
                   onClick={() => setChatPanelOpen(!chatPanelOpen)}
                   className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border transition-colors ${

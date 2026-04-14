@@ -13,6 +13,7 @@ import { useChatStore } from './stores/chatStore'
 import { phasesApi } from './api/phases'
 import { apiClient } from './api/client'
 import { DocumentPanel } from './components/documents/DocumentPanel'
+import { GuideView } from './components/guide/GuideView'
 
 function ProjectDetailView() {
   const { activeProjectId } = useProjectStore()
@@ -89,6 +90,7 @@ function App() {
           {currentView === 'project-list' && <ProjectList />}
           {currentView === 'project-detail' && <ProjectDetailView />}
           {currentView === 'settings' && <SettingsView />}
+          {currentView === 'guide' && <GuideView />}
           {currentView === 'documents' && (
             <DocumentPanel
               onAnalyze={() => {

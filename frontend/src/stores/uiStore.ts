@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-type View = 'project-list' | 'project-detail' | 'settings' | 'documents'
+type View = 'project-list' | 'project-detail' | 'settings' | 'documents' | 'guide'
 
 interface UiState {
   currentView: View

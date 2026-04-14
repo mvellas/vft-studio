@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Plus } from 'lucide-react'
+import { Plus, AlertTriangle, X } from 'lucide-react'
 import { projectsApi } from '../../api/projects'
 import { useProjectStore } from '../../stores/projectStore'
 import { useUiStore } from '../../stores/uiStore'
@@ -8,12 +8,19 @@ import { usePipelineStore } from '../../stores/pipelineStore'
 import { ProjectCard } from './ProjectCard'
 import { NewProjectWizard } from './NewProjectWizard'
 
+interface DeleteConfirmState {
+  id: string
+  name: string
+}
+
 export function ProjectList() {
-  const { projects, setProjects, setActiveProject, loading, setLoading, error, setError } =
+  const { projects, setProjects, setActiveProject, removeProject, loading, setLoading, error, setError } =
     useProjectStore()
   const { setView, setPipelineView } = useUiStore()
   const { setFromExisting, reset: resetPipeline } = usePipelineStore()
   const [wizardOpen, setWizardOpen] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState<DeleteConfirmState | null>(null)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -47,6 +54,24 @@ export function ProjectList() {
         setPipelineView('report')
       }
     })
+  }
+
+  function handleDeleteRequest(id: string, name: string) {
+    setDeleteConfirm({ id, name })
+  }
+
+  async function handleDeleteConfirm() {
+    if (!deleteConfirm) return
+    setDeleting(true)
+    try {
+      await projectsApi.archive(deleteConfirm.id)
+      removeProject(deleteConfirm.id)
+      setDeleteConfirm(null)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Erro ao excluir projeto')
+    } finally {
+      setDeleting(false)
+    }
   }
 
   return (
@@ -102,13 +127,59 @@ export function ProjectList() {
       {!loading && projects.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} onOpen={handleOpen} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onOpen={handleOpen}
+              onDelete={handleDeleteRequest}
+            />
           ))}
         </div>
       )}
 
       {/* New project wizard */}
       {wizardOpen && <NewProjectWizard onClose={() => setWizardOpen(false)} />}
+
+      {/* Delete confirmation modal */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-xl p-6 max-w-sm w-full mx-4 space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                <AlertTriangle size={20} className="text-red-600" />
+              </div>
+              <div className="flex-1">
+                <h2 className="font-semibold text-gray-900 text-base">Excluir projeto</h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  Tem certeza que deseja excluir <strong className="text-gray-700">"{deleteConfirm.name}"</strong>? Esta ação não pode ser desfeita.
+                </p>
+              </div>
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                className="text-gray-400 hover:text-gray-600 shrink-0"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="flex justify-end gap-2 pt-1">
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                disabled={deleting}
+                className="text-sm px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                disabled={deleting}
+                className="text-sm px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+              >
+                {deleting ? 'Excluindo...' : 'Excluir'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

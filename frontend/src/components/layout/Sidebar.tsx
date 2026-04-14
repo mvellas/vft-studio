@@ -1,6 +1,6 @@
 import { useUiStore } from '../../stores/uiStore'
 import { useProjectStore } from '../../stores/projectStore'
-import { FolderOpen, Settings, ChevronLeft, ChevronRight, FileText } from 'lucide-react'
+import { FolderOpen, Settings, ChevronLeft, ChevronRight, FileText, BookOpen } from 'lucide-react'
 
 interface SidebarProps {
   collapsed: boolean
@@ -62,6 +62,18 @@ export function Sidebar({ collapsed, width }: SidebarProps) {
             {!collapsed && <span className="truncate">Documentos</span>}
           </button>
         )}
+
+        <button
+          onClick={() => setView('guide')}
+          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+            currentView === 'guide'
+              ? 'bg-indigo-600 text-white'
+              : 'text-gray-400 hover:text-white hover:bg-gray-800'
+          }`}
+        >
+          <BookOpen size={18} className="shrink-0" />
+          {!collapsed && <span className="truncate">Guia de Uso</span>}
+        </button>
 
         <button
           onClick={() => setView('settings')}

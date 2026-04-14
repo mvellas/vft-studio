@@ -73,7 +73,7 @@ export function PipelineButton({ projectId, projectDescription }: Props) {
         className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-indigo-300 text-indigo-700 hover:bg-indigo-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
       >
         <Play size={13} />
-        VFT Completo com IA
+        VFT com IA
       </button>
 
       {showModal && (
