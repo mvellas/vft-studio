@@ -1,0 +1,6 @@
+{"type":"server-started","port":55443,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:55443","screen_dir":"/Users/mvellasquez/Claude Projects/vft-studio/.superpowers/brainstorm/3698-1776184408/content","state_dir":"/Users/mvellasquez/Claude Projects/vft-studio/.superpowers/brainstorm/3698-1776184408/state"}
+{"type":"screen-added","file":"/Users/mvellasquez/Claude Projects/vft-studio/.superpowers/brainstorm/3698-1776184408/content/design-direction.html"}
+{"type":"screen-added","file":"/Users/mvellasquez/Claude Projects/vft-studio/.superpowers/brainstorm/3698-1776184408/content/direction-c-variants.html"}
+{"type":"screen-added","file":"/Users/mvellasquez/Claude Projects/vft-studio/.superpowers/brainstorm/3698-1776184408/content/c4-screens.html"}
+{"type":"screen-added","file":"/Users/mvellasquez/Claude Projects/vft-studio/.superpowers/brainstorm/3698-1776184408/content/waiting.html"}
+{"type":"server-stopped","reason":"idle timeout"}

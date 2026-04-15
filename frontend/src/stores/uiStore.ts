@@ -10,8 +10,6 @@ interface UiState {
   sidebarCollapsed: boolean
   pipelineView: 'idle' | 'running' | 'report'
   warRoomFloatOpen: boolean
-  // computed compat getter
-  chatPanelOpen: boolean
   setView: (view: View) => void
   toggleSidebar: () => void
   setRightPanel: (panel: RightPanel) => void
@@ -28,10 +26,6 @@ export const useUiStore = create<UiState>()(
     sidebarCollapsed: false,
     pipelineView: 'idle' as const,
     warRoomFloatOpen: false,
-
-    get chatPanelOpen() {
-      return (this as UiState).rightPanel === 'chat'
-    },
 
     setView: (view) => set((state) => { state.currentView = view }),
     toggleSidebar: () => set((state) => { state.sidebarCollapsed = !state.sidebarCollapsed }),

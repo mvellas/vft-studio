@@ -1,0 +1,124 @@
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Home.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/📦 Memoria do Projeto FDA-Jam-Sim.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/Simulador — fda_engine.py.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/MOC - Simulador.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/Simulador — plotting.py.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/Simulador — pso_optimizer.py.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/Simulador — app.py.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA Linear — S-Curve.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA Jamming Focal — Teoria.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA Logarítmico.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA PSO — Otimização por Enxame.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA Taylor.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/Condição Quasi-Estática.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/MOC - FDA.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/Comparação de Offsets FDA.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA Binomial.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/Tese/Tese.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/Tese/Simulador-Spec-v4.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Antenas/Espaçamento de Elemento d=λ2.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Antenas/Array Factor (AF).md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Antenas/ULA — Uniform Linear Array.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Antenas/Beamforming.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Antenas/MOC - Antenas.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Guerra Eletrônica/MOC - Guerra Eletrônica.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/Campo Próximo e Campo Distante.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/Zona de Fraunhofer.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/MOC - Eletromagnetismo.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/Ondas Planas e Polarização.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/Propagação no Espaço Livre.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/Equações de Maxwell.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/Vieira et al 2024 - VFT Processo Integrado de Apoio a Decisão.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/REQUIREMENTS.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/UI-SPEC.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/PROJECT.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/SYSTEM-DESIGN.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/TASKS.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/ROADMAP.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/DATA-MODEL.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/SPEC.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/AGENTS-SPEC.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Templates/Template - Artigo.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Templates/Template - Aula.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/Resolução de Range.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/MOC - Radar.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/Resolução Angular.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/Equação de Radar.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/CFAR — Detecção Adaptativa.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/Radar Pulsado.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/_brain/simulador-reference.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/_brain/fisica-gotchas.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/_brain/session-protocol.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/_brain/pesquisa-estado.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Transmit Beamspace Multi-Carrier.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/MOC - Artigos FDA.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Decoupled Transmit Beampattern Nonlinear.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 Sammartino 2013 — FDA Overview New Opportunities.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 Overview FDA Radar Technology.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Navigation Applications Overview.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Low-Cost Mirrored Two-Wave Mixing.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA OFDM Partial Overlap.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Binomial Series Expansion.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Design for Jamming Suppression PSO.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 Overview FDA ECCM Applications.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA DFT Closed-Form Algorithm.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 Frequency Diverse Array Radars.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Taylor Window Beampattern.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Time-Dependent Frequency Offset.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 Wang 2012 — Range-Angle Beampattern Pulsed FDA.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/📖 ET-297 Lecture 4.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/📖 ET-297 Lecture 12.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/📖 ET-297 Lecture 1-2.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/📖 ET-297 Lecture 5.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/📖 ET-297 Lecture 6.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/📖 ET-297 Lecture 10.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/📖 ET-297 Lecture 7.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/📖 ET-297 Lecture 11.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/📖 ET-297 Lecture 3.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/MOC - ET-297.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/📖 ET-297 Lecture 8.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/ET-297/📖 ET-297 Lecture 9.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA Time-Invariant Beampattern.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_5_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_10_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_9_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_3_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_tutorial_9.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_tutorial_10.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_tutorial_1_2.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_tutorial_8.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_1_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/E297_lecture_6_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_tutorial_3.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_11_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_8_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_tutorial_7.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_4_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_tutorial_5.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_tutorial_4.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_7_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_12_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_2_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/tutorial_6.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Discrete_Fourier_Transform_Based_Closed-Form_Algorithm_to_Design_Desired_Beampattern_for_Frequency_Diverse_Array_Radar.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency_Diverse_Array_Radar_With_Time-Dependent_Frequency_Offset.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Overview of frequency diverse array in radar and navigation applications.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Range-Angle-Dependent_Beamforming_of_Pulsed_Frequency_Diverse_Array.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Binomial_Series_Expansion_of_Frequency_Offset_for_Synthesis_of_Frequency_Diverse_Array_Beampattern.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Decoupled_Transmit_Beampattern_Synthesis_for_Frequency_Diverse_Array_Radar_with_Nonlinear_Frequency_Offsets.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Overview_of_frequency_diverse_array_in_radar_ECCM_applications.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Transmit_Beamspace_Design_for_Multi-Carrier_Frequency_Diverse_Array_Sensor.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency_Diverse_Array_OFDM_Transmit_System_with_Partial_Overlap_in_Frequency.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/An Overview of Frequency Diverse Array Radar Technology.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency Diverse Array Antenna New Opportunities.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency_Diverse_Array_Beampattern_Synthesis_With_Taylor_Windowed_Frequency_Offsets.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency_Diverse_Array_Design_for_Deceptive_Jamming_Suppression_Using_Particle_Swarm_Optimization.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/A_Novel_Low-Cost_Frequency_Diverse_Array_With_Mirrored_Two-Wave_Mixing.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency_diverse_array_radars.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Frequency_Diverse_Array_Radar_With_Time-Dependent_Frequency_Offset.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Overview of frequency diverse array in radar and navigation applications.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Binomial_Series_Expansion_of_Frequency_Offset_for_Synthesis_of_Frequency_Diverse_Array_Beampattern.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Decoupled_Transmit_Beampattern_Synthesis_for_Frequency_Diverse_Array_Radar_with_Nonlinear_Frequency_Offsets.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Overview_of_frequency_diverse_array_in_radar_ECCM_applications.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Frequency_Diverse_Array_Beampattern_Synthesis_With_Taylor_Windowed_Frequency_Offsets.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Frequency_Diverse_Array_Design_for_Deceptive_Jamming_Suppression_Using_Particle_Swarm_Optimization.pdf

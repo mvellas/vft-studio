@@ -1,0 +1,4 @@
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Decoupled_Transmit_Beampattern_Synthesis_for_Frequency_Diverse_Array_Radar_with_Nonlinear_Frequency_Offsets.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Overview_of_frequency_diverse_array_in_radar_ECCM_applications.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Frequency_Diverse_Array_Beampattern_Synthesis_With_Taylor_Windowed_Frequency_Offsets.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Frequency_Diverse_Array_Design_for_Deceptive_Jamming_Suppression_Using_Particle_Swarm_Optimization.pdf

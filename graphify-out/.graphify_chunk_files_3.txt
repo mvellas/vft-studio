@@ -1,0 +1,20 @@
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Templates/Template - Artigo.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Templates/Template - Aula.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/Resolução de Range.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/MOC - Radar.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/Resolução Angular.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/Equação de Radar.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/CFAR — Detecção Adaptativa.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Radar/Radar Pulsado.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/_brain/simulador-reference.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/_brain/fisica-gotchas.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/_brain/session-protocol.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/_brain/pesquisa-estado.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Transmit Beamspace Multi-Carrier.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/MOC - Artigos FDA.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Decoupled Transmit Beampattern Nonlinear.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 Sammartino 2013 — FDA Overview New Opportunities.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 Overview FDA Radar Technology.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Navigation Applications Overview.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA Low-Cost Mirrored Two-Wave Mixing.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Leituras/Artigos FDA/📄 FDA OFDM Partial Overlap.md

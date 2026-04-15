@@ -1,0 +1,20 @@
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/ET297_lecture_2_handout.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/ET-297/tutorial_6.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Discrete_Fourier_Transform_Based_Closed-Form_Algorithm_to_Design_Desired_Beampattern_for_Frequency_Diverse_Array_Radar.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency_Diverse_Array_Radar_With_Time-Dependent_Frequency_Offset.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Overview of frequency diverse array in radar and navigation applications.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Range-Angle-Dependent_Beamforming_of_Pulsed_Frequency_Diverse_Array.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Binomial_Series_Expansion_of_Frequency_Offset_for_Synthesis_of_Frequency_Diverse_Array_Beampattern.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Decoupled_Transmit_Beampattern_Synthesis_for_Frequency_Diverse_Array_Radar_with_Nonlinear_Frequency_Offsets.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Overview_of_frequency_diverse_array_in_radar_ECCM_applications.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Transmit_Beamspace_Design_for_Multi-Carrier_Frequency_Diverse_Array_Sensor.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency_Diverse_Array_OFDM_Transmit_System_with_Partial_Overlap_in_Frequency.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/An Overview of Frequency Diverse Array Radar Technology.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency Diverse Array Antenna New Opportunities.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency_Diverse_Array_Beampattern_Synthesis_With_Taylor_Windowed_Frequency_Offsets.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency_Diverse_Array_Design_for_Deceptive_Jamming_Suppression_Using_Particle_Swarm_Optimization.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/A_Novel_Low-Cost_Frequency_Diverse_Array_With_Mirrored_Two-Wave_Mixing.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Frequency_diverse_array_radars.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Frequency_Diverse_Array_Radar_With_Time-Dependent_Frequency_Offset.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Overview of frequency diverse array in radar and navigation applications.pdf
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Leituras/FDA Articles/Select/Binomial_Series_Expansion_of_Frequency_Offset_for_Synthesis_of_Frequency_Diverse_Array_Beampattern.pdf

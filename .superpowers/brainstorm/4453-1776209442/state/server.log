@@ -1,0 +1,3 @@
+{"type":"server-started","port":50496,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:50496","screen_dir":"/Users/mvellasquez/Claude Projects/vft-studio/.superpowers/brainstorm/4453-1776209442/content","state_dir":"/Users/mvellasquez/Claude Projects/vft-studio/.superpowers/brainstorm/4453-1776209442/state"}
+{"type":"screen-added","file":"/Users/mvellasquez/Claude Projects/vft-studio/.superpowers/brainstorm/4453-1776209442/content/panel-options.html"}
+{"type":"server-stopped","reason":"idle timeout"}
