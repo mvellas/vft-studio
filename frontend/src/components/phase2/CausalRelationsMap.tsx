@@ -127,11 +127,6 @@ export function CausalRelationsMap({ projectId }: CausalRelationsMapProps) {
     return { initialNodes: nodes, initialEdges: edges }
   }, [objectives, causalLinks])
 
-  const [nodes, , onNodesChange] = useNodesState<Node<ObjectiveNodeData>>(initialNodes)
-  const [edges] = useEdgesState<Edge>(initialEdges)
-
-  // Sync layouted nodes/edges when store data changes
-  // useNodesState init only fires once; we need to reset on dependency change
   const [syncedNodes, setSyncedNodes, onSyncedNodesChange] =
     useNodesState<Node<ObjectiveNodeData>>(initialNodes)
   const [syncedEdges, setSyncedEdges] = useEdgesState<Edge>(initialEdges)
@@ -140,11 +135,6 @@ export function CausalRelationsMap({ projectId }: CausalRelationsMapProps) {
     setSyncedNodes(initialNodes)
     setSyncedEdges(initialEdges)
   }, [initialNodes, initialEdges, setSyncedNodes, setSyncedEdges])
-
-  // Suppress unused vars from the non-synced state
-  void nodes
-  void onNodesChange
-  void edges
 
   if (loading) {
     return (
@@ -160,7 +150,7 @@ export function CausalRelationsMap({ projectId }: CausalRelationsMapProps) {
   if (objectives.length === 0 || causalLinks.length === 0) {
     return (
       <div className="h-full w-full flex items-center justify-center" style={{ minHeight: 400 }}>
-        <p className="text-sm text-center max-w-sm" style={{ color: '#334155' }}>
+        <p className="text-sm text-center max-w-sm" style={{ color: '#64748b' }}>
           Nenhuma relacao causal definida. Aplique o WITI Test nos objetivos para criar vinculos.
         </p>
       </div>
