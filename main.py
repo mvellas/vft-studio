@@ -147,7 +147,7 @@ def start_app() -> None:
 
     window.events.closed += _on_closed
 
-    webview.start(debug=True)
+    webview.start(debug=False)
 
 
 if __name__ == "__main__":
