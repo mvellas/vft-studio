@@ -31,12 +31,12 @@ export function AppShell({ children }: AppShellProps) {
   const { currentStep, completedSteps, totalSteps, progressPercent } = usePhaseProgressStore()
   usePhasePoller(activeProjectId)
 
-  const warRoomTurns = usePipelineStore(s => s.turns.filter(t => t.isWarRoom))
+  const warRoomTurnCount = usePipelineStore(s => s.turns.filter(t => t.isWarRoom).length)
   useEffect(() => {
-    if (warRoomTurns.length > 0 && !warRoomFloatOpen) {
+    if (warRoomTurnCount > 0 && !warRoomFloatOpen) {
       setWarRoomFloatOpen(true)
     }
-  }, [warRoomTurns.length, warRoomFloatOpen, setWarRoomFloatOpen])
+  }, [warRoomTurnCount, warRoomFloatOpen, setWarRoomFloatOpen])
 
   const sidebar = useResize({ initialSize: 256, min: 48, max: 400, direction: 'horizontal-right' })
   const chat = useResize({ initialSize: 384, min: 240, max: 600, direction: 'horizontal-left' })
