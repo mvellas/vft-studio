@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { WarRoomWindow } from './pages/WarRoomWindow'
 import { AnimatePresence, motion } from 'framer-motion'
 import { BookOpen, X } from 'lucide-react'
 import { AppShell } from './components/layout/AppShell'
@@ -164,6 +165,11 @@ function App() {
       .catch(() => {})
       .finally(() => setOnboardingChecked(true))
   }, [])
+
+  // Detect popout window — after hooks
+  if (window.location.pathname === '/warroom') {
+    return <WarRoomWindow />
+  }
 
   if (!onboardingChecked) return null
 
