@@ -44,17 +44,20 @@ export function WarRoomFloat() {
     })
   }, [])
 
-  const onPointerUp = useCallback(() => {
+  const onPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     dragRef.current.dragging = false
+    e.currentTarget.releasePointerCapture(e.pointerId)
   }, [])
 
   const handlePopout = useCallback(() => {
-    window.open(
+    const win = window.open(
       '/warroom',
       'vft-warroom',
       'width=860,height=560,resizable=yes,scrollbars=no'
     )
-    setWarRoomFloatOpen(false)
+    if (win) {
+      setWarRoomFloatOpen(false)
+    }
   }, [setWarRoomFloatOpen])
 
   // Clamp position when window resizes
