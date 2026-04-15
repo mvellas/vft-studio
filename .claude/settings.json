@@ -59,7 +59,16 @@
       "Bash(.venv/bin/python main.py)",
       "Bash(kill %1)",
       "Bash(.venv/bin/python -c \"from backend.app import app\")",
-      "Bash(.venv/bin/python -c ' *)"
+      "Bash(.venv/bin/python -c ' *)",
+      "Bash(.venv/bin/python main.py --debug)",
+      "Bash(kill 1808)",
+      "Bash(kill 2240)",
+      "Bash(.venv/bin/uvicorn backend.app:app --host 127.0.0.1 --port 8765 --log-level warning)",
+      "Bash(curl -s http://127.0.0.1:8765/api/settings/onboarding-completed)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8765/)",
+      "Bash(node_modules/.bin/vite)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
+      "Bash(open http://localhost:5174/)"
     ],
     "additionalDirectories": [
       "/Users/mvellasquez/Claude Projects/ratioxtrade/src/pages",
