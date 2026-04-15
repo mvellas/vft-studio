@@ -1,0 +1,317 @@
+<style>
+* { box-sizing: border-box; }
+
+.grid-2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.variant-card {
+  border: 2px solid transparent;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.variant-card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.18); }
+.variant-card.selected { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.25); }
+
+.label-row {
+  padding: 10px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.label-name { font-size: 11px; font-weight: 700; }
+.label-desc { font-size: 9px; opacity: 0.7; margin-top: 1px; }
+
+/* ─── C1: Slate Editorial ─── */
+.c1 .mock {
+  background: #1c1c24;
+  padding: 14px;
+  min-height: 190px;
+}
+.c1 .topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.c1 .logo { color: #f1f5f9; font-size: 12px; font-weight: 800; letter-spacing: -0.5px; }
+.c1 .logo span { color: #f97316; }
+.c1 .nav { display: flex; gap: 6px; }
+.c1 .nav-item { font-size: 8px; color: #64748b; padding: 2px 7px; border-radius: 4px; }
+.c1 .nav-item.active { color: #e2e8f0; background: rgba(255,255,255,0.06); }
+.c1 .glass { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 11px; margin-bottom: 7px; }
+.c1 .section-label { font-size: 7px; letter-spacing: 1px; text-transform: uppercase; color: #f97316; margin-bottom: 4px; }
+.c1 .title { color: #f1f5f9; font-size: 11px; font-weight: 600; }
+.c1 .sub { color: #94a3b8; font-size: 8px; margin-top: 2px; }
+.c1 .pills { display: flex; gap: 4px; margin-top: 7px; }
+.c1 .pill { font-size: 7px; padding: 2px 7px; border-radius: 10px; background: rgba(249,115,22,0.15); color: #fdba74; border: 1px solid rgba(249,115,22,0.2); }
+.c1 .pill.dim { background: rgba(255,255,255,0.05); color: #64748b; border-color: rgba(255,255,255,0.06); }
+.c1 .label-row { background: #1c1c24; }
+.c1 .label-name { color: #f1f5f9; }
+.c1 .label-desc { color: #64748b; }
+
+/* ─── C2: Forest / Organic ─── */
+.c2 .mock {
+  background: #0f1a14;
+  padding: 14px;
+  min-height: 190px;
+}
+.c2 .topbar {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+}
+.c2 .logo { color: #ecfdf5; font-size: 12px; font-weight: 700; letter-spacing: -0.3px; }
+.c2 .logo span { color: #34d399; }
+.c2 .dot-row { display: flex; gap: 5px; align-items: center; }
+.c2 .dot { width: 6px; height: 6px; border-radius: 50%; background: #1f2d25; }
+.c2 .dot.on { background: #34d399; }
+.c2 .glass { background: rgba(255,255,255,0.035); border: 1px solid rgba(52,211,153,0.12); border-radius: 10px; padding: 11px; margin-bottom: 7px; }
+.c2 .section-label { font-size: 7px; letter-spacing: 1px; text-transform: uppercase; color: #34d399; margin-bottom: 4px; }
+.c2 .title { color: #ecfdf5; font-size: 11px; font-weight: 600; }
+.c2 .sub { color: #6ee7b7; font-size: 8px; opacity: 0.6; margin-top: 2px; }
+.c2 .bar-row { display: flex; gap: 3px; align-items: flex-end; margin-top: 8px; height: 22px; }
+.c2 .bar { border-radius: 2px 2px 0 0; background: rgba(52,211,153,0.35); width: 8px; }
+.c2 .agents { display: flex; gap: 4px; margin-top: 8px; }
+.c2 .agent { font-size: 7px; padding: 2px 6px; border-radius: 4px; background: rgba(52,211,153,0.08); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.15); }
+.c2 .agent.hi { background: rgba(52,211,153,0.2); color: #34d399; }
+.c2 .label-row { background: #0f1a14; }
+.c2 .label-name { color: #ecfdf5; }
+.c2 .label-desc { color: #4b7a5e; }
+
+/* ─── C3: Warm Stone ─── */
+.c3 .mock {
+  background: #1a1610;
+  padding: 14px;
+  min-height: 190px;
+}
+.c3 .topbar {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+}
+.c3 .logo { color: #faf7f2; font-size: 12px; font-weight: 700; }
+.c3 .logo span { color: #e8c97a; }
+.c3 .status { font-size: 8px; color: #a89060; background: rgba(232,201,122,0.1); border: 1px solid rgba(232,201,122,0.2); padding: 2px 7px; border-radius: 10px; }
+.c3 .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(232,201,122,0.1); border-radius: 10px; padding: 11px; margin-bottom: 7px; }
+.c3 .section-label { font-size: 7px; letter-spacing: 1px; text-transform: uppercase; color: #e8c97a; margin-bottom: 4px; }
+.c3 .title { color: #faf7f2; font-size: 11px; font-weight: 600; }
+.c3 .sub { color: #a89060; font-size: 8px; margin-top: 2px; }
+.c3 .divider { height: 1px; background: rgba(232,201,122,0.08); margin: 7px 0; }
+.c3 .meta-row { display: flex; justify-content: space-between; }
+.c3 .meta { font-size: 8px; color: #6b5a30; }
+.c3 .meta span { color: #d4a94a; font-weight: 600; }
+.c3 .mini-tree { display: flex; flex-direction: column; gap: 3px; margin-top: 4px; }
+.c3 .tree-row { display: flex; gap: 4px; align-items: center; }
+.c3 .tree-node { width: 10px; height: 10px; border-radius: 3px; background: rgba(232,201,122,0.15); border: 1px solid rgba(232,201,122,0.25); }
+.c3 .tree-line { width: 14px; height: 1px; background: rgba(232,201,122,0.2); }
+.c3 .tree-label { font-size: 7px; color: #a89060; }
+.c3 .label-row { background: #1a1610; }
+.c3 .label-name { color: #faf7f2; }
+.c3 .label-desc { color: #6b5a30; }
+
+/* ─── C4: Chalk / Midnight Ink ─── */
+.c4 .mock {
+  background: #0e0e13;
+  padding: 14px;
+  min-height: 190px;
+}
+.c4 .topbar {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+}
+.c4 .logo { color: #f8fafc; font-size: 12px; font-weight: 800; letter-spacing: -0.8px; }
+.c4 .logo span { color: #e879f9; }
+.c4 .badge { font-size: 7px; background: rgba(232,121,249,0.1); color: #e879f9; border: 1px solid rgba(232,121,249,0.2); padding: 2px 6px; border-radius: 8px; }
+.c4 .glass { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.065); border-radius: 10px; padding: 11px; margin-bottom: 7px; }
+.c4 .section-label { font-size: 7px; letter-spacing: 1px; text-transform: uppercase; color: #94a3b8; margin-bottom: 4px; }
+.c4 .title { color: #f8fafc; font-size: 11px; font-weight: 600; }
+.c4 .sub { color: #475569; font-size: 8px; margin-top: 2px; }
+.c4 .tag-row { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 6px; }
+.c4 .tag { font-size: 7px; padding: 1px 6px; border-radius: 3px; }
+.c4 .tag-pink { background: rgba(232,121,249,0.12); color: #d946ef; }
+.c4 .tag-gray { background: rgba(255,255,255,0.05); color: #64748b; }
+.c4 .progress-row { display: flex; gap: 2px; margin-top: 8px; align-items: center; }
+.c4 .prog-seg { height: 3px; border-radius: 2px; flex: 1; }
+.c4 .prog-fill { background: #e879f9; }
+.c4 .prog-empty { background: rgba(255,255,255,0.06); }
+.c4 .prog-label { font-size: 7px; color: #475569; margin-left: 4px; white-space: nowrap; }
+.c4 .label-row { background: #0e0e13; }
+.c4 .label-name { color: #f8fafc; }
+.c4 .label-desc { color: #334155; }
+</style>
+
+<h2>Direção C — Variações de Identidade</h2>
+<p class="subtitle">Glassmorphism dark, mas cada uma com personalidade própria — sem cara de IA genérica</p>
+
+<div class="grid-2x2">
+
+  <!-- C1: Slate + Laranja -->
+  <div class="variant-card c1" data-choice="c1" onclick="toggleSelect(this)">
+    <div class="letter" style="position:absolute;top:8px;left:8px;z-index:10;background:rgba(0,0,0,0.5);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px">1</div>
+    <div class="mock">
+      <div class="topbar">
+        <div class="logo">VFT<span>·</span>Studio</div>
+        <div class="nav">
+          <div class="nav-item active">Projetos</div>
+          <div class="nav-item">Análise</div>
+          <div class="nav-item">Guia</div>
+        </div>
+      </div>
+      <div class="glass">
+        <div class="section-label">Fase 2 · Objetivos</div>
+        <div class="title">Hierarquia de Valores</div>
+        <div class="sub">12 objetivos mapeados · WITI aplicado</div>
+        <div class="pills">
+          <div class="pill">Estratégico</div>
+          <div class="pill">Fundamental</div>
+          <div class="pill dim">Meio</div>
+          <div class="pill dim">+4</div>
+        </div>
+      </div>
+      <div class="glass" style="opacity:0.6">
+        <div class="section-label">War Room</div>
+        <div class="title">Ato 2 em andamento</div>
+        <div class="sub">FRAME × AXIOM em debate</div>
+      </div>
+    </div>
+    <div class="label-row">
+      <div>
+        <div class="label-name">Slate + Âmbar</div>
+        <div class="label-desc">Sóbrio, editorial, consultoria premium</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C2: Forest Green -->
+  <div class="variant-card c2" data-choice="c2" onclick="toggleSelect(this)">
+    <div class="letter" style="position:absolute;top:8px;left:8px;z-index:10;background:rgba(0,0,0,0.5);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px">2</div>
+    <div class="mock">
+      <div class="topbar">
+        <div class="logo">VFT<span>Studio</span></div>
+        <div class="dot-row">
+          <div class="dot on"></div>
+          <div class="dot on"></div>
+          <div class="dot"></div>
+          <div class="dot on"></div>
+        </div>
+      </div>
+      <div class="glass">
+        <div class="section-label">War Room Ativo</div>
+        <div class="title">Debate entre Agentes</div>
+        <div class="sub">Ato 2 · Rodada 1 de 2</div>
+        <div class="bar-row">
+          <div class="bar" style="height:10px"></div>
+          <div class="bar" style="height:16px"></div>
+          <div class="bar" style="height:8px"></div>
+          <div class="bar" style="height:20px"></div>
+          <div class="bar" style="height:12px"></div>
+          <div class="bar" style="height:18px"></div>
+          <div class="bar" style="height:7px"></div>
+        </div>
+        <div class="agents">
+          <div class="agent hi">ARIA</div>
+          <div class="agent hi">FRAME</div>
+          <div class="agent">AXIOM</div>
+          <div class="agent">NOVA</div>
+        </div>
+      </div>
+      <div class="glass" style="opacity:0.6">
+        <div class="section-label">Fase 3 · Alternativas</div>
+        <div class="title">5 alternativas identificadas</div>
+      </div>
+    </div>
+    <div class="label-row">
+      <div>
+        <div class="label-name">Forest / Orgânico</div>
+        <div class="label-desc">Estratégico, natural, menos tech</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C3: Warm Stone / Gold -->
+  <div class="variant-card c3" data-choice="c3" onclick="toggleSelect(this)">
+    <div class="letter" style="position:absolute;top:8px;left:8px;z-index:10;background:rgba(0,0,0,0.5);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px">3</div>
+    <div class="mock">
+      <div class="topbar">
+        <div class="logo">VFT <span>Studio</span></div>
+        <div class="status">● Live</div>
+      </div>
+      <div class="glass">
+        <div class="section-label">Diagrama IDF</div>
+        <div class="title">Quadro Decisório Inicial</div>
+        <div class="divider"></div>
+        <div class="meta-row">
+          <div class="meta">Stakeholders <span>4</span></div>
+          <div class="meta">Perspectivas <span>3</span></div>
+          <div class="meta">Escopo <span>Regional</span></div>
+        </div>
+        <div class="mini-tree">
+          <div class="tree-row">
+            <div class="tree-node"></div>
+            <div class="tree-line"></div>
+            <div class="tree-label">Decisor Principal</div>
+          </div>
+          <div class="tree-row" style="padding-left:16px">
+            <div class="tree-node" style="width:8px;height:8px"></div>
+            <div class="tree-line" style="width:10px"></div>
+            <div class="tree-label">Stakeholder A</div>
+          </div>
+          <div class="tree-row" style="padding-left:16px">
+            <div class="tree-node" style="width:8px;height:8px"></div>
+            <div class="tree-line" style="width:10px"></div>
+            <div class="tree-label">Stakeholder B</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="label-row">
+      <div>
+        <div class="label-name">Warm Stone / Âmbar</div>
+        <div class="label-desc">Atemporal, sofisticado, acadêmico-premium</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C4: Midnight Ink -->
+  <div class="variant-card c4" data-choice="c4" onclick="toggleSelect(this)">
+    <div class="letter" style="position:absolute;top:8px;left:8px;z-index:10;background:rgba(0,0,0,0.5);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px">4</div>
+    <div class="mock">
+      <div class="topbar">
+        <div class="logo">VFT<span>Studio</span></div>
+        <div class="badge">beta</div>
+      </div>
+      <div class="glass">
+        <div class="section-label">Relatório Final</div>
+        <div class="title">Síntese da Análise VFT</div>
+        <div class="sub">Gerado · 14 abr 2026 · 3 fases concluídas</div>
+        <div class="tag-row">
+          <div class="tag tag-pink">6 objetivos fundamentais</div>
+          <div class="tag tag-gray">3 alternativas</div>
+          <div class="tag tag-gray">4 atributos</div>
+        </div>
+        <div class="progress-row">
+          <div class="prog-seg prog-fill"></div>
+          <div class="prog-seg prog-fill"></div>
+          <div class="prog-seg prog-fill"></div>
+          <div class="prog-seg prog-fill" style="background:rgba(232,121,249,0.4)"></div>
+          <div class="prog-seg prog-empty"></div>
+          <div class="prog-label">4/5 etapas</div>
+        </div>
+      </div>
+      <div class="glass" style="opacity:0.55">
+        <div class="section-label">Exportar</div>
+        <div class="title">PDF · Markdown · PNG</div>
+      </div>
+    </div>
+    <div class="label-row">
+      <div>
+        <div class="label-name">Midnight Ink + Rosa</div>
+        <div class="label-desc">Arrojado, criativo, diferenciado</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:16px; padding:12px 14px; background:rgba(0,0,0,0.03); border-radius:10px; border:1px solid #e2e8f0;">
+  <p style="font-size:10px; color:#64748b; margin:0">
+    <strong>Dica:</strong> Podemos também misturar — ex: paleta do <strong>3 (Stone/Âmbar)</strong> com estrutura do <strong>1 (Slate)</strong>. Ou usar uma das paletas como base e criar um sistema de cor único.
+  </p>
+</div>

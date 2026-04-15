@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useEffect } from 'react'
 import { Sidebar } from './Sidebar'
 import { ChatPanel } from './ChatPanel'
 import { useUiStore } from '../../stores/uiStore'
@@ -10,21 +11,32 @@ import { PipelineButton } from '../pipeline/PipelineButton'
 import { PipelinePanel } from '../pipeline/PipelinePanel'
 import { PipelineHistory } from '../pipeline/PipelineHistory'
 import { PhaseProgress } from '../phase/PhaseProgress'
-import { MessageSquare, BotMessageSquare } from 'lucide-react'
+import { MessageSquare, BotMessageSquare, Radio, BarChart2 } from 'lucide-react'
 import { useResize } from '../../hooks/useResize'
 import { usePhasePoller } from '../../hooks/usePhasePoller'
+import { WarRoomFloat } from '../pipeline/WarRoomFloat'
+import { DiagramsPanel } from '../diagrams/DiagramsPanel'
+import { usePipelineStore } from '../../stores/pipelineStore'
 
 interface AppShellProps {
   children: ReactNode
 }
 
 export function AppShell({ children }: AppShellProps) {
-  const { chatPanelOpen, currentView, setChatPanelOpen, pipelineView } = useUiStore()
+  const { rightPanel, setRightPanel, currentView, pipelineView, warRoomFloatOpen, setWarRoomFloatOpen } = useUiStore()
+  const chatPanelOpen = rightPanel === 'chat'
   const { activeProjectId, projects } = useProjectStore()
   const activeProject = projects.find(p => p.id === activeProjectId)
 
   const { currentStep, completedSteps, totalSteps, progressPercent } = usePhaseProgressStore()
   usePhasePoller(activeProjectId)
+
+  const warRoomTurnCount = usePipelineStore(s => s.turns.filter(t => t.isWarRoom).length)
+  useEffect(() => {
+    if (warRoomTurnCount > 0 && !warRoomFloatOpen) {
+      setWarRoomFloatOpen(true)
+    }
+  }, [warRoomTurnCount, warRoomFloatOpen, setWarRoomFloatOpen])
 
   const sidebar = useResize({ initialSize: 256, min: 48, max: 400, direction: 'horizontal-right' })
   const chat = useResize({ initialSize: 384, min: 240, max: 600, direction: 'horizontal-left' })
@@ -62,10 +74,36 @@ export function AppShell({ children }: AppShellProps) {
                   projectId={activeProject.id}
                   projectDescription={activeProject.description ?? ''}
                 />
+                {currentView === 'project-detail' && activeProjectId && (
+                  <button
+                    onClick={() => setRightPanel(rightPanel === 'diagrams' ? 'none' : 'diagrams')}
+                    className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium transition-colors"
+                    style={rightPanel === 'diagrams'
+                      ? { background: 'rgba(96,165,250,0.15)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.3)' }
+                      : { background: 'rgba(255,255,255,0.04)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }
+                    }
+                  >
+                    <BarChart2 size={13} />
+                    Diagramas
+                  </button>
+                )}
+                {pipelineView !== 'idle' && (
+                  <button
+                    onClick={() => setWarRoomFloatOpen(!warRoomFloatOpen)}
+                    className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium transition-colors"
+                    style={warRoomFloatOpen
+                      ? { background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }
+                      : { background: 'rgba(255,255,255,0.04)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }
+                    }
+                  >
+                    <Radio size={13} />
+                    War Room
+                  </button>
+                )}
                 <button
                   onClick={() => {
                     useChatStore.getState().setActiveAgent('ARIA', 'facilitator')
-                    setChatPanelOpen(true)
+                    setRightPanel('chat')
                   }}
                   className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium transition-colors"
                   style={{
@@ -78,7 +116,7 @@ export function AppShell({ children }: AppShellProps) {
                   VFT Guiado
                 </button>
                 <button
-                  onClick={() => setChatPanelOpen(!chatPanelOpen)}
+                  onClick={() => setRightPanel(rightPanel === 'chat' ? 'none' : 'chat')}
                   className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium transition-colors"
                   style={
                     chatPanelOpen
@@ -116,8 +154,8 @@ export function AppShell({ children }: AppShellProps) {
         </main>
       </div>
 
-      {/* Chat panel */}
-      {chatPanelOpen && (
+      {/* Right panel */}
+      {rightPanel !== 'none' && (
         <div className="relative h-screen shrink-0 flex" style={{ width: chat.size }}>
           <div
             onMouseDown={chat.onMouseDown}
@@ -125,9 +163,14 @@ export function AppShell({ children }: AppShellProps) {
           >
             <div className="h-full w-px bg-transparent group-hover:bg-fuchsia-500/30 transition-colors mx-auto" />
           </div>
-          <ChatPanel width={chat.size} />
+          {rightPanel === 'chat' && <ChatPanel width={chat.size} />}
+          {rightPanel === 'diagrams' && activeProjectId && (
+            <DiagramsPanel projectId={activeProjectId} width={chat.size} />
+          )}
         </div>
       )}
+
+      {warRoomFloatOpen && <WarRoomFloat />}
     </div>
   )
 }

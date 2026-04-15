@@ -2,7 +2,6 @@ import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import type { AgentTurn } from '../../stores/pipelineStore'
-import { WarRoomGraph } from './WarRoomGraph'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 
 const AGENT_COLOR: Record<string, string> = {
@@ -44,9 +43,6 @@ export function WarRoomTimeline({ turns, activeAgent }: Props) {
           {turns.length} turnos · {acts.length} ato{acts.length !== 1 ? 's' : ''}
         </span>
       </div>
-
-      {/* Interaction graph */}
-      <WarRoomGraph turns={turns} activeAgent={activeAgent} />
 
       {/* Timeline toggle */}
       <button

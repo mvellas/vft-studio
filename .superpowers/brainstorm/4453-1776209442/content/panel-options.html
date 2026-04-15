@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Opções de Painel — VFT Studio</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #07070c; color: #f1f5f9; font-family: 'Inter', system-ui, sans-serif; font-size: 13px; padding: 20px; }
+  h1 { font-size: 15px; font-weight: 600; color: #f8fafc; margin-bottom: 4px; }
+  .subtitle { color: #475569; font-size: 12px; margin-bottom: 20px; }
+
+  .options-row { display: flex; gap: 16px; }
+  .option-card {
+    flex: 1; border: 2px solid rgba(255,255,255,0.07); border-radius: 12px;
+    overflow: hidden; cursor: pointer; transition: border-color 0.15s;
+    background: #0a0a0f;
+  }
+  .option-card:hover { border-color: rgba(232,121,249,0.4); }
+  .option-card.selected { border-color: #e879f9; }
+  .option-label {
+    padding: 10px 14px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap-6px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+  }
+  .badge { display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 6px; font-size: 11px; font-weight: 700;
+    background: rgba(232,121,249,0.15); color: #e879f9; margin-right: 8px; }
+  .option-desc { padding: 6px 14px 10px; font-size: 11px; color: #64748b; line-height: 1.5; }
+
+  /* Shell mockup */
+  .shell { display: flex; height: 260px; border-radius: 8px; overflow: hidden; background: #07070c; }
+  .s-sidebar { width: 48px; background: #0a0a0f; border-right: 1px solid rgba(255,255,255,0.06);
+    display: flex; flex-direction: column; align-items: center; padding-top: 12px; gap: 10px; }
+  .s-nav-dot { width: 28px; height: 28px; border-radius: 8px; background: rgba(255,255,255,0.06); }
+  .s-nav-dot.active { background: rgba(232,121,249,0.2); }
+  .s-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .s-header { height: 38px; background: #0a0a0f; border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; padding: 0 10px; gap: 6px; flex-shrink: 0; }
+  .s-btn { height: 22px; border-radius: 6px; font-size: 10px; padding: 0 8px; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .btn-ghost { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #64748b; }
+  .btn-green { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.25); color: #34d399; }
+  .btn-fuchsia { background: rgba(232,121,249,0.12); border: 1px solid rgba(232,121,249,0.3); color: #e879f9; }
+  .btn-active { background: rgba(232,121,249,0.15); border: 1px solid rgba(232,121,249,0.35); color: #e879f9; }
+  .btn-blue { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.25); color: #60a5fa; }
+  .s-content-row { flex: 1; display: flex; overflow: hidden; }
+  .s-content { flex: 1; padding: 10px; overflow: hidden; }
+  .s-tool-card { background: #0e0e13; border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; height: 100%; padding: 8px; }
+  .s-panel { width: 220px; border-left: 1px solid rgba(255,255,255,0.06); background: #0a0a0f; display: flex; flex-direction: column; }
+  .s-panel-tab-bar { height: 30px; display: flex; border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0; }
+  .s-tab { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #475569; cursor: pointer; }
+  .s-tab.active { color: #e879f9; border-bottom: 2px solid #e879f9; }
+  .s-panel-body { flex: 1; padding: 8px; overflow: hidden; }
+  .s-diagram-placeholder { width: 100%; height: 100%; background: rgba(255,255,255,0.03); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; font-size: 10px; color: #334155; }
+  .s-warroom-svg { width: 100%; height: 100%; }
+  .s-chat-msg { background: rgba(232,121,249,0.08); border-radius: 6px; padding: 5px 7px; margin-bottom: 4px; font-size: 10px; color: #94a3b8; line-height: 1.4; }
+  .label-tag { font-size: 9px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #475569; padding: 3px 6px; background: rgba(255,255,255,0.04); border-radius: 4px; }
+  .spacer { flex: 1; }
+  .tag-warroom { background: rgba(232,121,249,0.08); color: #e879f9; border: 1px solid rgba(232,121,249,0.2); }
+  .tag-diagrams { background: rgba(96,165,250,0.08); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+</style>
+</head>
+<body>
+<h1>Organização dos Painéis Laterais</h1>
+<p class="subtitle">Onde ficam o gráfico War Room e os Diagramas VFT. Clique para selecionar.</p>
+
+<div class="options-row">
+
+  <!-- OPÇÃO A -->
+  <div class="option-card" onclick="select(this,'A')">
+    <div class="option-label"><span class="badge">A</span> Painel Unificado — modo por aba</div>
+    <div class="shell">
+      <div class="s-sidebar">
+        <div class="s-nav-dot active"></div>
+        <div class="s-nav-dot"></div>
+        <div class="s-nav-dot"></div>
+      </div>
+      <div class="s-main">
+        <div class="s-header">
+          <span style="color:#475569;font-size:10px;">Projeto Alpha</span>
+          <div class="spacer"></div>
+          <div class="s-btn btn-ghost" style="font-size:9px;">📄 .md</div>
+          <div class="s-btn btn-green" style="font-size:9px;">⚡ Análise</div>
+          <div class="s-btn btn-blue" style="font-size:9px;">📊 Diagramas</div>
+          <div class="s-btn btn-active" style="font-size:9px;">💬 Chat IA</div>
+        </div>
+        <div class="s-content-row">
+          <div class="s-content">
+            <div class="s-tool-card">
+              <div style="font-size:10px;color:#64748b;margin-bottom:6px;">Ferramenta do Passo</div>
+              <div style="height:12px;background:rgba(255,255,255,0.06);border-radius:4px;width:80%;margin-bottom:5px;"></div>
+              <div style="height:12px;background:rgba(255,255,255,0.04);border-radius:4px;width:60%;margin-bottom:5px;"></div>
+              <div style="height:12px;background:rgba(255,255,255,0.04);border-radius:4px;width:70%;"></div>
+            </div>
+          </div>
+          <div class="s-panel">
+            <div class="s-panel-tab-bar">
+              <div class="s-tab active" style="font-size:9px;">💬 Chat</div>
+              <div class="s-tab" style="font-size:9px;">📊 Diagramas</div>
+              <div class="s-tab" style="font-size:9px;">🔴 War Room</div>
+            </div>
+            <div class="s-panel-body">
+              <div class="s-chat-msg">Olá! Estou no passo 1.1…</div>
+              <div class="s-chat-msg" style="background:rgba(255,255,255,0.04);color:#64748b;">Mapeie os stakeholders…</div>
+              <div class="s-chat-msg">Adicionei 3 stakeholders.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="option-desc">
+      <strong style="color:#f1f5f9;">Chat, Diagramas e War Room</strong> — 3 abas num único painel direito.
+      Trocar de aba fecha o anterior. War Room abre automaticamente durante a análise.
+      <br><br>
+      <span style="color:#34d399;">✓ Layout limpo</span> &nbsp;
+      <span style="color:#34d399;">✓ Sem sobrecarga visual</span> &nbsp;
+      <span style="color:#f87171;">✗ Não dá para ver Chat + Diagrama ao mesmo tempo</span>
+    </div>
+  </div>
+
+  <!-- OPÇÃO B -->
+  <div class="option-card" onclick="select(this,'B')">
+    <div class="option-label"><span class="badge">B</span> Dois Painéis Independentes</div>
+    <div class="shell">
+      <div class="s-sidebar">
+        <div class="s-nav-dot active"></div>
+        <div class="s-nav-dot"></div>
+        <div class="s-nav-dot"></div>
+      </div>
+      <div class="s-main">
+        <div class="s-header">
+          <span style="color:#475569;font-size:10px;">Projeto Alpha</span>
+          <div class="spacer"></div>
+          <div class="s-btn btn-ghost" style="font-size:9px;">📄 .md</div>
+          <div class="s-btn btn-green" style="font-size:9px;">⚡ Análise</div>
+          <div class="s-btn btn-blue btn-active" style="font-size:9px;">📊 Diagramas</div>
+          <div class="s-btn btn-fuchsia" style="font-size:9px;">💬 Chat IA</div>
+        </div>
+        <div class="s-content-row">
+          <div class="s-content">
+            <div class="s-tool-card">
+              <div style="font-size:10px;color:#64748b;margin-bottom:6px;">Ferramenta do Passo</div>
+              <div style="height:12px;background:rgba(255,255,255,0.06);border-radius:4px;width:80%;margin-bottom:5px;"></div>
+              <div style="height:12px;background:rgba(255,255,255,0.04);border-radius:4px;width:60%;"></div>
+            </div>
+          </div>
+          <!-- Diagrams panel -->
+          <div class="s-panel" style="width:180px;border-color:rgba(96,165,250,0.2);">
+            <div style="padding:7px 8px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:10px;color:#60a5fa;font-weight:600;">📊 Diagramas</div>
+            <div style="padding:5px 6px;display:flex;flex-direction:column;gap:3px;flex:1;">
+              <div style="font-size:9px;padding:4px 6px;border-radius:5px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.2);color:#60a5fa;">Hierarquia de Objetivos</div>
+              <div style="font-size:9px;padding:4px 6px;border-radius:5px;background:rgba(255,255,255,0.04);color:#475569;">Rede Meios-Fins</div>
+              <div style="font-size:9px;padding:4px 6px;border-radius:5px;background:rgba(255,255,255,0.04);color:#475569;">Mapa Causal</div>
+            </div>
+          </div>
+          <!-- Chat panel -->
+          <div class="s-panel" style="width:160px;">
+            <div style="padding:7px 8px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:10px;color:#e879f9;font-weight:600;">💬 Chat IA</div>
+            <div style="padding:5px 6px;flex:1;">
+              <div class="s-chat-msg">Olá! Estou aqui…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="option-desc">
+      <strong style="color:#f1f5f9;">Diagramas e Chat</strong> em painéis separados e simultâneos. War Room vai num terceiro painel (ou substitui Diagramas durante a análise).
+      <br><br>
+      <span style="color:#34d399;">✓ Chat + Diagrama visíveis juntos</span> &nbsp;
+      <span style="color:#f87171;">✗ Área de conteúdo muito apertada com 2+ painéis abertos</span>
+    </div>
+  </div>
+
+  <!-- OPÇÃO C -->
+  <div class="option-card" onclick="select(this,'C')">
+    <div class="option-label"><span class="badge">C</span> War Room Flutuante + Painel de Diagramas</div>
+    <div class="shell">
+      <div class="s-sidebar">
+        <div class="s-nav-dot active"></div>
+        <div class="s-nav-dot"></div>
+        <div class="s-nav-dot"></div>
+      </div>
+      <div class="s-main" style="position:relative;">
+        <div class="s-header">
+          <span style="color:#475569;font-size:10px;">Projeto Alpha</span>
+          <div class="spacer"></div>
+          <div class="s-btn btn-ghost" style="font-size:9px;">📄 .md</div>
+          <div class="s-btn btn-green" style="font-size:9px;">⚡ Análise</div>
+          <div class="s-btn btn-blue" style="font-size:9px;">📊 Diagramas</div>
+          <div class="s-btn btn-fuchsia" style="font-size:9px;">💬 Chat IA</div>
+        </div>
+        <div class="s-content-row" style="position:relative;">
+          <div class="s-content">
+            <div class="s-tool-card">
+              <div style="font-size:10px;color:#64748b;margin-bottom:6px;">Ferramenta do Passo</div>
+              <div style="height:12px;background:rgba(255,255,255,0.06);border-radius:4px;width:80%;margin-bottom:5px;"></div>
+              <div style="height:12px;background:rgba(255,255,255,0.04);border-radius:4px;width:60%;"></div>
+            </div>
+          </div>
+          <div class="s-panel">
+            <div class="s-panel-tab-bar">
+              <div class="s-tab active" style="font-size:9px;">💬 Chat IA</div>
+              <div class="s-tab" style="font-size:9px;">📊 Diagramas</div>
+            </div>
+            <div class="s-panel-body">
+              <div class="s-chat-msg">Olá! Estou aqui para…</div>
+              <div class="s-chat-msg" style="background:rgba(255,255,255,0.04);color:#64748b;">Complete o step 1.1…</div>
+            </div>
+          </div>
+          <!-- Floating War Room card -->
+          <div style="position:absolute;bottom:10px;right:230px;width:140px;
+               background:#0e0e13;border:1px solid rgba(232,121,249,0.35);border-radius:10px;
+               box-shadow:0 8px 32px rgba(0,0,0,0.5);overflow:hidden;z-index:10;">
+            <div style="padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.06);
+                 font-size:9px;color:#e879f9;font-weight:600;display:flex;align-items:center;justify-content:space-between;">
+              <span>🔴 War Room</span>
+              <span style="color:#334155;cursor:pointer;">✕</span>
+            </div>
+            <!-- Mini pentagon SVG -->
+            <svg viewBox="0 0 120 90" width="100%" style="display:block;">
+              <circle cx="60" cy="36" r="4" fill="#e879f9"/>
+              <circle cx="92" cy="58" r="4" fill="#60a5fa"/>
+              <circle cx="80" cy="84" r="4" fill="#fbbf24"/>
+              <circle cx="40" cy="84" r="4" fill="#34d399"/>
+              <circle cx="28" cy="58" r="4" fill="#a78bfa"/>
+              <line x1="60" y1="36" x2="92" y2="58" stroke="#e879f9" stroke-width="1" stroke-opacity="0.5"/>
+              <line x1="92" y1="58" x2="80" y2="84" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5"/>
+              <line x1="80" y1="84" x2="40" y2="84" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.4"/>
+              <line x1="40" y1="84" x2="28" y2="58" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="option-desc">
+      <strong style="color:#f1f5f9;">War Room</strong> como card flutuante sobre o conteúdo (aparece/desaparece). <strong style="color:#f1f5f9;">Chat + Diagramas</strong> em abas no painel lateral direito.
+      <br><br>
+      <span style="color:#34d399;">✓ War Room não rouba espaço lateral</span> &nbsp;
+      <span style="color:#34d399;">✓ Chat + Diagramas no mesmo painel</span> &nbsp;
+      <span style="color:#f87171;">✗ Flutuante pode sobrepor conteúdo</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let selected = null;
+  function select(el, choice) {
+    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selected = choice;
+    if (window.recordChoice) window.recordChoice(choice, 'Opção ' + choice);
+  }
+</script>
+</body>
+</html>

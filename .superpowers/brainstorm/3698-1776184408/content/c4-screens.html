@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VFT Studio — Midnight Ink Preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #07070c;
+    color: #f1f5f9;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    padding: 24px;
+  }
+
+  h1 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  h1 span { color: #e879f9; }
+  .header-sub { font-size: 12px; color: #475569; margin-bottom: 24px; }
+
+  .screens-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+  }
+
+  .screen {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #0e0e13;
+  }
+  .screen:hover { border-color: rgba(232,121,249,0.3); box-shadow: 0 0 24px rgba(232,121,249,0.08); }
+  .screen.wide { grid-column: 1 / -1; }
+
+  .screen-titlebar {
+    background: #0a0a0f;
+    padding: 8px 14px;
+    display: flex; align-items: center; gap: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .dot-r { width: 8px; height: 8px; border-radius: 50%; background: #ff5f57; }
+  .dot-y { width: 8px; height: 8px; border-radius: 50%; background: #ffbd2e; }
+  .dot-g { width: 8px; height: 8px; border-radius: 50%; background: #28c840; }
+  .screen-name { font-size: 10px; color: #475569; margin-left: 6px; }
+  .screen-badge { margin-left: auto; font-size: 8px; background: rgba(232,121,249,0.12); color: #e879f9; border: 1px solid rgba(232,121,249,0.2); padding: 2px 7px; border-radius: 8px; }
+
+  /* ─── SCREEN 1: Main Layout ─── */
+  .main-layout {
+    display: flex;
+    height: 220px;
+  }
+  .sidebar-ink {
+    width: 48px;
+    background: #09090e;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 12px 0; gap: 10px;
+  }
+  .s-logo {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, #e879f9, #a21caf);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800; color: white; margin-bottom: 6px;
+  }
+  .s-icon {
+    width: 28px; height: 28px; border-radius: 7px;
+    background: rgba(255,255,255,0.04);
+    display: flex; align-items: center; justify-content: center;
+    color: #475569; font-size: 11px;
+  }
+  .s-icon.active { background: rgba(232,121,249,0.12); color: #e879f9; }
+  .main-content {
+    flex: 1; padding: 14px; overflow: hidden;
+  }
+  .project-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+  }
+  .project-title { font-size: 13px; font-weight: 700; color: #f8fafc; }
+  .btn-row { display: flex; gap: 6px; }
+  .btn-ai {
+    font-size: 8px; padding: 4px 10px; border-radius: 6px;
+    background: rgba(232,121,249,0.12); color: #e879f9;
+    border: 1px solid rgba(232,121,249,0.25);
+  }
+  .btn-guide {
+    font-size: 8px; padding: 4px 10px; border-radius: 6px;
+    background: rgba(255,255,255,0.04); color: #94a3b8;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .progress-track {
+    height: 2px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-bottom: 12px;
+  }
+  .progress-fill { height: 100%; width: 42%; background: linear-gradient(90deg, #a21caf, #e879f9); border-radius: 2px; }
+  .cards-mini { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .card-ink {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px; padding: 8px;
+  }
+  .card-ink.active { border-color: rgba(232,121,249,0.2); background: rgba(232,121,249,0.05); }
+  .ci-label { font-size: 7px; text-transform: uppercase; letter-spacing: 0.8px; color: #475569; margin-bottom: 3px; }
+  .ci-label.accent { color: #e879f9; }
+  .ci-val { font-size: 11px; font-weight: 700; color: #f1f5f9; }
+  .ci-sub { font-size: 7px; color: #334155; margin-top: 1px; }
+  .step-list { margin-top: 10px; }
+  .step-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .step-num { width: 16px; height: 16px; border-radius: 4px; font-size: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step-done { background: rgba(232,121,249,0.15); color: #e879f9; }
+  .step-current { background: rgba(232,121,249,0.3); color: #f0abfc; }
+  .step-pending { background: rgba(255,255,255,0.04); color: #334155; }
+  .step-text { font-size: 8px; color: #94a3b8; }
+  .step-text.dim { color: #334155; }
+
+  /* ─── SCREEN 2: War Room Graph ─── */
+  .war-room-layout {
+    display: flex; height: 260px;
+  }
+  .graph-area {
+    flex: 1;
+    background: #07070c;
+    position: relative;
+    overflow: hidden;
+  }
+  .graph-bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(232,121,249,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,121,249,0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .graph-title {
+    position: absolute; top: 10px; left: 12px;
+    font-size: 9px; color: #475569; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .graph-act {
+    position: absolute; top: 10px; right: 12px;
+    font-size: 8px; background: rgba(232,121,249,0.1); color: #e879f9;
+    border: 1px solid rgba(232,121,249,0.2); padding: 2px 8px; border-radius: 8px;
+  }
+
+  /* SVG nodes */
+  .graph-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .node-label {
+    position: absolute;
+    font-size: 8px; font-weight: 700;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    transform: translate(-50%, -50%);
+  }
+  .node-circle {
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 800; color: white;
+  }
+  .node-text { font-size: 7px; color: #64748b; white-space: nowrap; }
+
+  .chat-panel {
+    width: 200px;
+    background: #0a0a0f;
+    border-left: 1px solid rgba(255,255,255,0.05);
+    display: flex; flex-direction: column;
+  }
+  .chat-header {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 9px; color: #64748b;
+    text-transform: uppercase; letter-spacing: 0.8px;
+  }
+  .chat-messages { flex: 1; padding: 8px; overflow: hidden; display: flex; flex-direction: column; gap: 6px; }
+  .msg { padding: 6px 8px; border-radius: 8px; font-size: 8px; line-height: 1.4; }
+  .msg-aria { background: rgba(232,121,249,0.08); border: 1px solid rgba(232,121,249,0.15); }
+  .msg-frame { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.15); }
+  .msg-axiom { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.15); }
+  .msg-sender { font-size: 7px; font-weight: 700; margin-bottom: 2px; }
+  .msg-sender.aria { color: #e879f9; }
+  .msg-sender.frame { color: #60a5fa; }
+  .msg-sender.axiom { color: #fbbf24; }
+  .msg-text { color: #94a3b8; }
+  .typing-dots { display: flex; gap: 2px; padding: 4px 0; }
+  .typing-dot { width: 4px; height: 4px; border-radius: 50%; background: #e879f9; opacity: 0.5; }
+
+  /* ─── SCREEN 3: VFT Diagram ─── */
+  .diagram-layout {
+    padding: 16px; min-height: 240px;
+  }
+  .diagram-toolbar {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+  }
+  .diagram-title { font-size: 12px; font-weight: 700; color: #f8fafc; }
+  .diagram-tabs { display: flex; gap: 2px; }
+  .d-tab {
+    font-size: 8px; padding: 3px 8px; border-radius: 5px; cursor: pointer;
+    color: #475569; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+  }
+  .d-tab.active { background: rgba(232,121,249,0.12); color: #e879f9; border-color: rgba(232,121,249,0.25); }
+  .export-btn {
+    font-size: 8px; padding: 3px 9px; border-radius: 5px;
+    background: rgba(255,255,255,0.04); color: #64748b;
+    border: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .diagram-canvas {
+    background: rgba(255,255,255,0.015);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 14px;
+    min-height: 160px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Hierarchy tree mockup */
+  .tree-root {
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .tree-node-box {
+    padding: 5px 10px; border-radius: 6px; font-size: 8px; font-weight: 600;
+    text-align: center; position: relative; white-space: nowrap;
+  }
+  .tn-root { background: rgba(232,121,249,0.2); color: #f0abfc; border: 1px solid rgba(232,121,249,0.35); }
+  .tn-strategic { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); }
+  .tn-fund { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.22); }
+  .tn-means { background: rgba(255,255,255,0.04); color: #64748b; border: 1px solid rgba(255,255,255,0.07); }
+  .tree-level { display: flex; gap: 10px; margin-top: 8px; align-items: flex-start; }
+  .tree-branch { display: flex; flex-direction: column; align-items: center; }
+  .tree-connector-v { width: 1px; height: 8px; background: rgba(255,255,255,0.1); }
+  .tree-connector-h { height: 1px; background: rgba(255,255,255,0.08); }
+  .tree-sublevel { display: flex; gap: 6px; margin-top: 8px; }
+  .tree-sub-branch { display: flex; flex-direction: column; align-items: center; }
+
+  /* Labels */
+  .legend {
+    display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;
+  }
+  .leg-item { display: flex; align-items: center; gap: 4px; font-size: 8px; color: #64748b; }
+  .leg-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* ─── Screen labels ─── */
+  .screen-footer {
+    padding: 10px 14px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .sf-label { font-size: 10px; font-weight: 600; color: #e2e8f0; }
+  .sf-sub { font-size: 9px; color: #334155; }
+  .sf-tag { font-size: 8px; padding: 2px 7px; border-radius: 8px; background: rgba(232,121,249,0.1); color: #e879f9; }
+</style>
+
+<h1>VFT Studio — <span>Midnight Ink</span></h1>
+<p class="header-sub" style="font-family:-apple-system,sans-serif;padding-top:2px">Preview das 3 telas principais com a identidade escolhida</p>
+
+<div class="screens-grid">
+
+  <!-- Screen 1: Main Layout -->
+  <div class="screen">
+    <div class="screen-titlebar">
+      <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+      <span class="screen-name">Dashboard do Projeto</span>
+      <span class="screen-badge">Novo</span>
+    </div>
+    <div class="main-layout">
+      <div class="sidebar-ink">
+        <div class="s-logo">V</div>
+        <div class="s-icon active">⊞</div>
+        <div class="s-icon">📄</div>
+        <div class="s-icon">📖</div>
+        <div class="s-icon">⚙</div>
+      </div>
+      <div class="main-content">
+        <div class="project-header">
+          <div class="project-title">Projeto Alpha</div>
+          <div class="btn-row">
+            <div class="btn-ai">✦ VFT com IA</div>
+            <div class="btn-guide">◈ VFT Guiado</div>
+          </div>
+        </div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <div class="cards-mini">
+          <div class="card-ink active">
+            <div class="ci-label accent">Fase atual</div>
+            <div class="ci-val">2</div>
+            <div class="ci-sub">Objetivos</div>
+          </div>
+          <div class="card-ink">
+            <div class="ci-label">Objetivos</div>
+            <div class="ci-val">12</div>
+            <div class="ci-sub">mapeados</div>
+          </div>
+          <div class="card-ink">
+            <div class="ci-label">Progresso</div>
+            <div class="ci-val">42%</div>
+            <div class="ci-sub">concluído</div>
+          </div>
+        </div>
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num step-done">✓</div>
+            <div class="step-text">1.7 Declaração de Decisão</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num step-current">→</div>
+            <div class="step-text">2.14 Teste WITI</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num step-pending">○</div>
+            <div class="step-text dim">2.15 Controle de Consequências</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-footer">
+      <div><div class="sf-label">Layout Principal</div><div class="sf-sub">Sidebar + header + step tracker</div></div>
+      <div class="sf-tag">framer-motion</div>
+    </div>
+  </div>
+
+  <!-- Screen 2: War Room Graph -->
+  <div class="screen">
+    <div class="screen-titlebar">
+      <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+      <span class="screen-name">War Room</span>
+      <span class="screen-badge" style="background:rgba(239,68,68,0.15);color:#f87171;border-color:rgba(239,68,68,0.25)">● Ao vivo</span>
+    </div>
+    <div class="war-room-layout">
+      <div class="graph-area">
+        <div class="graph-bg-grid"></div>
+        <div class="graph-title">Agent Graph</div>
+        <div class="graph-act">Ato 2 · Rodada 1</div>
+
+        <svg class="graph-svg" viewBox="0 0 280 200">
+          <!-- Edges with animation -->
+          <defs>
+            <marker id="arrow-pink" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="rgba(232,121,249,0.6)"/>
+            </marker>
+            <marker id="arrow-blue" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="rgba(96,165,250,0.6)"/>
+            </marker>
+            <marker id="arrow-amber" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="rgba(251,191,36,0.6)"/>
+            </marker>
+          </defs>
+
+          <!-- Edge: ARIA → FRAME -->
+          <line x1="140" y1="70" x2="75" y2="130" stroke="rgba(232,121,249,0.35)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-pink)">
+            <animate attributeName="stroke-dashoffset" from="0" to="-14" dur="1.2s" repeatCount="indefinite"/>
+          </line>
+          <!-- Edge: ARIA → AXIOM -->
+          <line x1="140" y1="70" x2="205" y2="130" stroke="rgba(232,121,249,0.35)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-pink)">
+            <animate attributeName="stroke-dashoffset" from="0" to="-14" dur="1.4s" repeatCount="indefinite"/>
+          </line>
+          <!-- Edge: FRAME → NOVA -->
+          <line x1="75" y1="150" x2="140" y2="175" stroke="rgba(96,165,250,0.3)" stroke-width="1.2" stroke-dasharray="3,4" marker-end="url(#arrow-blue)">
+            <animate attributeName="stroke-dashoffset" from="0" to="-14" dur="1.8s" repeatCount="indefinite"/>
+          </line>
+          <!-- Edge: AXIOM → NOVA -->
+          <line x1="205" y1="150" x2="150" y2="175" stroke="rgba(245,158,11,0.3)" stroke-width="1.2" stroke-dasharray="3,4" marker-end="url(#arrow-amber)">
+            <animate attributeName="stroke-dashoffset" from="0" to="-14" dur="1.6s" repeatCount="indefinite"/>
+          </line>
+
+          <!-- Pulse rings -->
+          <circle cx="140" cy="60" r="18" fill="none" stroke="rgba(232,121,249,0.15)" stroke-width="1">
+            <animate attributeName="r" values="18;26;18" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.5;0;0.5" dur="2s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Nodes -->
+          <!-- ARIA (center top) -->
+          <circle cx="140" cy="60" r="20" fill="rgba(232,121,249,0.2)" stroke="rgba(232,121,249,0.6)" stroke-width="1.5"/>
+          <text x="140" y="63" text-anchor="middle" font-size="9" font-weight="700" fill="#f0abfc">ARIA</text>
+
+          <!-- FRAME (left) -->
+          <circle cx="75" cy="140" r="16" fill="rgba(59,130,246,0.15)" stroke="rgba(96,165,250,0.5)" stroke-width="1.2"/>
+          <text x="75" y="143" text-anchor="middle" font-size="8" font-weight="700" fill="#93c5fd">FRAME</text>
+
+          <!-- AXIOM (right) -->
+          <circle cx="205" cy="140" r="16" fill="rgba(245,158,11,0.12)" stroke="rgba(251,191,36,0.45)" stroke-width="1.2"/>
+          <text x="205" y="143" text-anchor="middle" font-size="8" font-weight="700" fill="#fcd34d">AXIOM</text>
+
+          <!-- NOVA (bottom center) -->
+          <circle cx="140" cy="178" r="13" fill="rgba(16,185,129,0.1)" stroke="rgba(52,211,153,0.4)" stroke-width="1"/>
+          <text x="140" y="181" text-anchor="middle" font-size="7" font-weight="700" fill="#6ee7b7">NOVA</text>
+
+          <!-- Active indicator dot -->
+          <circle cx="75" cy="140" r="4" fill="#60a5fa">
+            <animate attributeName="opacity" values="1;0.3;1" dur="0.8s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+
+      <div class="chat-panel">
+        <div class="chat-header">Debate · Ato 2</div>
+        <div class="chat-messages">
+          <div class="msg msg-aria">
+            <div class="msg-sender aria">ARIA</div>
+            <div class="msg-text">Qual é o conflito central entre os objetivos estratégicos?</div>
+          </div>
+          <div class="msg msg-frame">
+            <div class="msg-sender frame">FRAME</div>
+            <div class="msg-text">O stakeholder B prioriza custo sobre impacto social...</div>
+          </div>
+          <div class="msg msg-axiom">
+            <div class="msg-sender axiom">AXIOM</div>
+            <div class="msg-text">Discordo — o WITI indica que sustentabilidade é fundamental</div>
+          </div>
+          <div class="msg msg-aria" style="opacity:0.5">
+            <div class="msg-sender aria">ARIA</div>
+            <div class="typing-dots">
+              <div class="typing-dot"></div>
+              <div class="typing-dot" style="opacity:0.7"></div>
+              <div class="typing-dot" style="opacity:0.4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-footer">
+      <div><div class="sf-label">War Room + Graph View</div><div class="sf-sub">vis-network animado + chat lateral</div></div>
+      <div class="sf-tag">vis-network</div>
+    </div>
+  </div>
+
+  <!-- Screen 3: VFT Diagram (wide) -->
+  <div class="screen wide">
+    <div class="screen-titlebar">
+      <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+      <span class="screen-name">Diagramas VFT — Hierarquia de Objetivos</span>
+      <span class="screen-badge" style="background:rgba(245,158,11,0.1);color:#fbbf24;border-color:rgba(245,158,11,0.2)">Interativo</span>
+    </div>
+    <div class="diagram-layout">
+      <div class="diagram-toolbar">
+        <div class="diagram-title">Hierarquia de Objetivos Fundamentais</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="diagram-tabs">
+            <div class="d-tab active">IDF</div>
+            <div class="d-tab">Objetivos</div>
+            <div class="d-tab">Meios-Fins</div>
+            <div class="d-tab">Atributos</div>
+          </div>
+          <div class="export-btn">⬇ PNG</div>
+        </div>
+      </div>
+
+      <div class="diagram-canvas">
+        <!-- Tree diagram -->
+        <div class="tree-root" style="width:100%">
+          <div style="display:flex;justify-content:center">
+            <div class="tree-node-box tn-root">Objetivo Estratégico — Sustentabilidade Operacional</div>
+          </div>
+          <div style="width:1px;height:10px;background:rgba(232,121,249,0.3);margin:0 auto"></div>
+
+          <!-- H-connector -->
+          <div style="display:flex;align-items:flex-start;gap:0;justify-content:center">
+            <div style="width:180px;height:1px;background:rgba(255,255,255,0.07);margin-top:0"></div>
+          </div>
+
+          <div class="tree-level" style="justify-content:center">
+            <div class="tree-branch">
+              <div style="width:1px;height:8px;background:rgba(99,102,241,0.3);margin:0 auto"></div>
+              <div class="tree-node-box tn-strategic">Eficiência de Custos</div>
+              <div style="width:1px;height:8px;background:rgba(245,158,11,0.25);margin:0 auto"></div>
+              <div class="tree-sublevel">
+                <div class="tree-sub-branch">
+                  <div class="tree-node-box tn-fund" style="font-size:7px;padding:3px 7px">Minimizar desperdício</div>
+                </div>
+                <div class="tree-sub-branch">
+                  <div class="tree-node-box tn-fund" style="font-size:7px;padding:3px 7px">Otimizar processos</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="width:40px"></div>
+
+            <div class="tree-branch">
+              <div style="width:1px;height:8px;background:rgba(99,102,241,0.3);margin:0 auto"></div>
+              <div class="tree-node-box tn-strategic">Impacto Social</div>
+              <div style="width:1px;height:8px;background:rgba(245,158,11,0.25);margin:0 auto"></div>
+              <div class="tree-sublevel">
+                <div class="tree-sub-branch">
+                  <div class="tree-node-box tn-fund" style="font-size:7px;padding:3px 7px">Bem-estar comunidade</div>
+                </div>
+                <div class="tree-sub-branch">
+                  <div class="tree-node-box tn-fund" style="font-size:7px;padding:3px 7px">Inclusão stakeholders</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="width:40px"></div>
+
+            <div class="tree-branch">
+              <div style="width:1px;height:8px;background:rgba(99,102,241,0.3);margin:0 auto"></div>
+              <div class="tree-node-box tn-strategic">Governança</div>
+              <div style="width:1px;height:8px;background:rgba(245,158,11,0.25);margin:0 auto"></div>
+              <div class="tree-sublevel">
+                <div class="tree-sub-branch">
+                  <div class="tree-node-box tn-means" style="font-size:7px;padding:3px 7px">Transparência</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="legend" style="margin-top:14px;justify-content:center">
+            <div class="leg-item"><div class="leg-dot" style="background:rgba(232,121,249,0.5)"></div>Estratégico</div>
+            <div class="leg-item"><div class="leg-dot" style="background:rgba(99,102,241,0.5)"></div>Estratégico Nível 2</div>
+            <div class="leg-item"><div class="leg-dot" style="background:rgba(245,158,11,0.5)"></div>Fundamental</div>
+            <div class="leg-item"><div class="leg-dot" style="background:rgba(255,255,255,0.15)"></div>Meios</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-footer">
+      <div><div class="sf-label">Diagramas VFT Interativos</div><div class="sf-sub">IDF · Objetivos · Meios-Fins · Atributos · Matriz de Consequências</div></div>
+      <div style="display:flex;gap:6px">
+        <div class="sf-tag" style="background:rgba(245,158,11,0.1);color:#fbbf24">ReactFlow</div>
+        <div class="sf-tag" style="background:rgba(16,185,129,0.1);color:#34d399">html-to-image</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:20px;padding:14px 16px;background:rgba(232,121,249,0.05);border:1px solid rgba(232,121,249,0.12);border-radius:12px">
+  <p style="font-size:11px;color:#94a3b8;margin:0;line-height:1.6">
+    <strong style="color:#e879f9">Stack final proposta:</strong>
+    Framer Motion (animações/transições) · vis-network (War Room graph animado) · ReactFlow (diagramas VFT) · html-to-image (export PNG) · Identidade: <strong>Midnight Ink #0e0e13 + Rosa #e879f9</strong>
+  </p>
+</div>
+
+<script>
+  document.querySelectorAll('.screen').forEach(s => {
+    s.addEventListener('click', () => {
+      document.querySelectorAll('.screen').forEach(x => x.classList.remove('selected'));
+      s.classList.add('selected');
+    });
+  });
+</script>
+</html>

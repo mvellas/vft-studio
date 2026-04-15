@@ -1,0 +1,25 @@
+{
+  "nodes": [
+    {"id": "pdf_tdfo_select", "label": "PDF (Select): FDA TDFO (Khan 2014)", "file_type": "paper", "source_file": "Mestrado/Leituras/FDA Articles/Select/Frequency_Diverse_Array_Radar_With_Time-Dependent_Frequency_Offset.pdf", "source_location": null, "source_url": null, "captured_at": null, "author": "Khan, Qureshi", "contributor": null},
+    {"id": "pdf_navigation_select", "label": "PDF (Select): FDA Navigation Overview (Wang 2016)", "file_type": "paper", "source_file": "Mestrado/Leituras/FDA Articles/Select/Overview of frequency diverse array in radar and navigation applications.pdf", "source_location": null, "source_url": null, "captured_at": null, "author": "Wang 2016", "contributor": null},
+    {"id": "pdf_binomial_select", "label": "PDF (Select): Binomial FDA (Mahmood 2019)", "file_type": "paper", "source_file": "Mestrado/Leituras/FDA Articles/Select/Binomial_Series_Expansion_of_Frequency_Offset_for_Synthesis_of_Frequency_Diverse_Array_Beampattern.pdf", "source_location": null, "source_url": null, "captured_at": null, "author": "Mahmood, Mir", "contributor": null},
+    {"id": "pdf_decoupled_select", "label": "PDF (Select): Decoupled FDA µ-law (Chen 2024)", "file_type": "paper", "source_file": "Mestrado/Leituras/FDA Articles/Select/Decoupled_Transmit_Beampattern_Synthesis_for_Frequency_Diverse_Array_Radar_with_Nonlinear_Frequency_Offsets.pdf", "source_location": null, "source_url": null, "captured_at": null, "author": "Chen et al.", "contributor": null},
+    {"id": "pdf_eccm_select", "label": "PDF (Select): FDA ECCM Applications (Abdalla 2017)", "file_type": "paper", "source_file": "Mestrado/Leituras/FDA Articles/Select/Overview_of_frequency_diverse_array_in_radar_ECCM_applications.pdf", "source_location": null, "source_url": null, "captured_at": null, "author": "Abdalla et al.", "contributor": null},
+    {"id": "pdf_taylor_select", "label": "PDF (Select): Taylor Window FDA (Liao 2020)", "file_type": "paper", "source_file": "Mestrado/Leituras/FDA Articles/Select/Frequency_Diverse_Array_Beampattern_Synthesis_With_Taylor_Windowed_Frequency_Offsets.pdf", "source_location": null, "source_url": null, "captured_at": null, "author": "Liao et al.", "contributor": null},
+    {"id": "pdf_pso_select", "label": "PDF (Select): PSO Jamming Suppression (Liao 2021)", "file_type": "paper", "source_file": "Mestrado/Leituras/FDA Articles/Select/Frequency_Diverse_Array_Design_for_Deceptive_Jamming_Suppression_Using_Particle_Swarm_Optimization.pdf", "source_location": null, "source_url": null, "captured_at": null, "author": "Liao et al.", "contributor": null}
+  ],
+  "edges": [
+    {"source": "pdf_tdfo_select", "target": "fda_tdfo_khan2014", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 1.0, "source_file": "Mestrado/Leituras/FDA Articles/Select", "source_location": null, "weight": 1.0},
+    {"source": "pdf_navigation_select", "target": "fda_navigation_wang2016", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 1.0, "source_file": "Mestrado/Leituras/FDA Articles/Select", "source_location": null, "weight": 1.0},
+    {"source": "pdf_binomial_select", "target": "fda_binomial_mahmood2019", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 1.0, "source_file": "Mestrado/Leituras/FDA Articles/Select", "source_location": null, "weight": 1.0},
+    {"source": "pdf_decoupled_select", "target": "fda_decoupled_chen2024", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 1.0, "source_file": "Mestrado/Leituras/FDA Articles/Select", "source_location": null, "weight": 1.0},
+    {"source": "pdf_eccm_select", "target": "fda_eccm_abdalla2017", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 1.0, "source_file": "Mestrado/Leituras/FDA Articles/Select", "source_location": null, "weight": 1.0},
+    {"source": "pdf_taylor_select", "target": "fda_taylor_liao2020", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 1.0, "source_file": "Mestrado/Leituras/FDA Articles/Select", "source_location": null, "weight": 1.0},
+    {"source": "pdf_pso_select", "target": "fda_pso_liao2021", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 1.0, "source_file": "Mestrado/Leituras/FDA Articles/Select", "source_location": null, "weight": 1.0}
+  ],
+  "hyperedges": [
+    {"id": "selected_core_papers", "label": "Core FDA Papers (Selected for Dissertation)", "nodes": ["pdf_decoupled_select", "pdf_pso_select", "pdf_eccm_select", "pdf_taylor_select"], "relation": "form", "confidence": "INFERRED", "confidence_score": 0.88, "source_file": "Mestrado/Leituras/FDA Articles/Select"}
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

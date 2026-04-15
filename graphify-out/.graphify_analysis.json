@@ -1,0 +1,313 @@
+{
+  "node_count": 124,
+  "edge_count": 171,
+  "num_communities": 15,
+  "communities": {
+    "0": [
+      "comparacao_offsets",
+      "concept_autoscanning",
+      "concept_jamming_focal_contrib",
+      "concept_pso_cost",
+      "fda_binomial",
+      "fda_linear_scurve",
+      "fda_logaritmico",
+      "fda_pso",
+      "fda_taylor",
+      "moc_fda",
+      "pdf_antonik_raw",
+      "pdf_xu_overview_raw",
+      "ref_antonik_2006",
+      "ref_antonik_2006_full",
+      "ref_liao_2020",
+      "ref_wang_2012",
+      "ref_xu_2018"
+    ],
+    "1": [
+      "concept_drfm_jamming",
+      "concept_eccm",
+      "concept_focal_jamming_ew",
+      "concept_jsr",
+      "fda_eccm_abdalla2017",
+      "fda_pso_liao2021",
+      "moc_guerra_eletronica",
+      "pdf_eccm_select",
+      "pdf_fda_eccm_raw",
+      "pdf_pso_raw",
+      "pdf_pso_select",
+      "ref_adamy_ew101"
+    ],
+    "2": [
+      "array_factor_af",
+      "concept_dft_af_equivalence",
+      "concept_mu_law_function",
+      "concept_scurve",
+      "concept_symmetric_offset_mapping",
+      "espaco_lambda2",
+      "fda_decoupled_chen2024",
+      "fda_dft_zubair2020",
+      "pdf_decoupled_select",
+      "pdf_fda_decoupled_raw",
+      "pdf_fda_dft_raw"
+    ],
+    "3": [
+      "concept_cw_jamming",
+      "concept_dot_shaped",
+      "concept_mu_law",
+      "concept_time_invariant",
+      "concept_time_invariant_fda",
+      "fda_jamming_focal",
+      "fda_tdfo_khan2014",
+      "fda_time_invariant_note",
+      "pdf_fda_tdfo_raw",
+      "pdf_tdfo_select",
+      "ref_liao_2021"
+    ],
+    "4": [
+      "app_py",
+      "concept_focal_ratio",
+      "fda_engine_py",
+      "home_mestrado",
+      "memoria_fda_jam_sim",
+      "moc_simulador",
+      "pdf_sammartino_raw",
+      "plotting_py",
+      "pso_optimizer_py",
+      "simulador_spec_v4"
+    ],
+    "5": [
+      "agent_aria",
+      "concept_means_ends_network",
+      "concept_psm",
+      "concept_vft_process",
+      "concept_witi_test",
+      "vft_studio_agents",
+      "vft_studio_requirements",
+      "vft_studio_spec",
+      "vft_studio_system_design",
+      "vieira_2024_vft"
+    ],
+    "6": [
+      "concept_fda_steering",
+      "concept_grating_lobes",
+      "concept_narrowband_approx",
+      "condicao_quasi_estatica",
+      "fisica_gotchas",
+      "pdf_fda_pulsed_raw",
+      "pulso_comprimido_lfm",
+      "ref_wang2012_pulsed",
+      "resolucao_range",
+      "session_protocol"
+    ],
+    "7": [
+      "concept_mimo_radar",
+      "concept_music_esprit",
+      "concept_mvdr_capon",
+      "concept_steering_vector",
+      "et297_lecture_12",
+      "et297_lecture_12_pdf",
+      "et297_lecture_1_2",
+      "et297_lecture_7",
+      "moc_et297"
+    ],
+    "8": [
+      "beamforming",
+      "concept_convex_optimization",
+      "concept_range_angle_coupling",
+      "fda_multicarrier_gao2016",
+      "moc_antenas",
+      "pdf_fda_multicarrier_raw",
+      "resolucao_angular",
+      "ula_uniform_linear_array"
+    ],
+    "9": [
+      "concept_cognitive_radar_fda",
+      "concept_fda_lpi",
+      "concept_fda_symmetric",
+      "fda_navigation_wang2016",
+      "pdf_fda_navigation_raw",
+      "pdf_navigation_select"
+    ],
+    "10": [
+      "campo_proximo_distante",
+      "equacoes_maxwell",
+      "moc_eletromagnetismo",
+      "ondas_planas_polarizacao",
+      "propagacao_espaco_livre",
+      "zona_fraunhofer"
+    ],
+    "11": [
+      "concept_taylor_offsets",
+      "fda_taylor_liao2020",
+      "pdf_taylor_raw",
+      "pdf_taylor_select"
+    ],
+    "12": [
+      "concept_log_power_offset",
+      "fda_binomial_mahmood2019",
+      "pdf_binomial_select",
+      "pdf_fda_binomial_raw"
+    ],
+    "13": [
+      "concept_two_wave_mixing",
+      "fda_mtwm_liu2023",
+      "pdf_mtwm_raw"
+    ],
+    "14": [
+      "concept_isac",
+      "fda_ofdm_wachowiak2026",
+      "pdf_fda_ofdm_raw"
+    ]
+  },
+  "god_nodes": [
+    {
+      "id": "fda_linear_scurve",
+      "label": "FDA Linear \u2014 S-Curve",
+      "edges": 10
+    },
+    {
+      "id": "moc_fda",
+      "label": "MOC FDA - Frequency Diverse Array",
+      "edges": 9
+    },
+    {
+      "id": "fda_pso",
+      "label": "FDA PSO \u2014 Particle Swarm Optimization",
+      "edges": 9
+    },
+    {
+      "id": "moc_simulador",
+      "label": "MOC Simulador FDA-Jam-Sim",
+      "edges": 8
+    },
+    {
+      "id": "fda_engine_py",
+      "label": "FDAEngine (fda_engine.py)",
+      "edges": 8
+    },
+    {
+      "id": "fda_taylor",
+      "label": "FDA Taylor \u2014 Windowed Frequency Offsets",
+      "edges": 7
+    },
+    {
+      "id": "fda_binomial",
+      "label": "FDA Binomial \u2014 Series Expansion",
+      "edges": 7
+    },
+    {
+      "id": "fisica_gotchas",
+      "label": "Gotchas F\u00edsicos e Te\u00f3ricos",
+      "edges": 7
+    },
+    {
+      "id": "fda_decoupled_chen2024",
+      "label": "FDA Decoupled Beampattern \u00b5-law (Chen 2024)",
+      "edges": 7
+    },
+    {
+      "id": "fda_jamming_focal",
+      "label": "FDA Jamming Focal \u2014 Teoria",
+      "edges": 6
+    },
+    {
+      "id": "concept_mu_law",
+      "label": "\u00b5-law Symmetric Offsets",
+      "edges": 6
+    },
+    {
+      "id": "vieira_2024_vft",
+      "label": "Vieira et al. 2024 \u2014 VFT Integrated Decision Process",
+      "edges": 6
+    }
+  ],
+  "surprising_connections": [
+    {
+      "source": "PDF: FDA Overview New Opportunities (Sammartino 2013)",
+      "target": "MOC Simulador FDA-Jam-Sim",
+      "source_files": [
+        "Mestrado/Leituras/FDA Articles/Frequency Diverse Array Antenna New Opportunities.pdf",
+        "Mestrado/Simulador/MOC - Simulador.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 paper); peripheral node `PDF: FDA Overview New Opportunities (Sammartino 2013)` unexpectedly reaches hub `MOC Simulador FDA-Jam-Sim`"
+    },
+    {
+      "source": "Otimiza\u00e7\u00e3o Convexa (CVX)",
+      "target": "FDA PSO \u2014 Particle Swarm Optimization",
+      "source_files": [
+        "Mestrado/Leituras/Artigos FDA/\ud83d\udcc4 FDA Transmit Beamspace Multi-Carrier.md",
+        "Mestrado/FDA/FDA PSO \u2014 Otimiza\u00e7\u00e3o por Enxame.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "semantically_similar_to",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities; semantically similar concepts with no structural link; peripheral node `Otimiza\u00e7\u00e3o Convexa (CVX)` unexpectedly reaches hub `FDA PSO \u2014 Particle Swarm Optimization`"
+    },
+    {
+      "source": "PDF: FDA Decoupled \u00b5-law (Chen 2024)",
+      "target": "FDA Decoupled Beampattern \u00b5-law (Chen 2024)",
+      "source_files": [
+        "Mestrado/Leituras/FDA Articles/Decoupled_Transmit_Beampattern_Synthesis_for_Frequency_Diverse_Array_Radar_with_Nonlinear_Frequency_Offsets.pdf",
+        "Mestrado/Leituras/Artigos FDA/\ud83d\udcc4 FDA Decoupled Transmit Beampattern Nonlinear.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 paper); peripheral node `PDF: FDA Decoupled \u00b5-law (Chen 2024)` unexpectedly reaches hub `FDA Decoupled Beampattern \u00b5-law (Chen 2024)`"
+    },
+    {
+      "source": "PDF (Select): Decoupled FDA \u00b5-law (Chen 2024)",
+      "target": "FDA Decoupled Beampattern \u00b5-law (Chen 2024)",
+      "source_files": [
+        "Mestrado/Leituras/FDA Articles/Select/Decoupled_Transmit_Beampattern_Synthesis_for_Frequency_Diverse_Array_Radar_with_Nonlinear_Frequency_Offsets.pdf",
+        "Mestrado/Leituras/Artigos FDA/\ud83d\udcc4 FDA Decoupled Transmit Beampattern Nonlinear.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 paper); peripheral node `PDF (Select): Decoupled FDA \u00b5-law (Chen 2024)` unexpectedly reaches hub `FDA Decoupled Beampattern \u00b5-law (Chen 2024)`"
+    },
+    {
+      "source": "PDF: FDA Navigation Applications (Wang 2016)",
+      "target": "FDA Navigation Applications Overview (Wang 2016)",
+      "source_files": [
+        "Mestrado/Leituras/FDA Articles/Overview of frequency diverse array in radar and navigation applications.pdf",
+        "Mestrado/Leituras/Artigos FDA/\ud83d\udcc4 FDA Navigation Applications Overview.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 paper); peripheral node `PDF: FDA Navigation Applications (Wang 2016)` unexpectedly reaches hub `FDA Navigation Applications Overview (Wang 2016)`"
+    },
+    {
+      "source": "PDF (Select): FDA Navigation Overview (Wang 2016)",
+      "target": "FDA Navigation Applications Overview (Wang 2016)",
+      "source_files": [
+        "Mestrado/Leituras/FDA Articles/Select/Overview of frequency diverse array in radar and navigation applications.pdf",
+        "Mestrado/Leituras/Artigos FDA/\ud83d\udcc4 FDA Navigation Applications Overview.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 paper); peripheral node `PDF (Select): FDA Navigation Overview (Wang 2016)` unexpectedly reaches hub `FDA Navigation Applications Overview (Wang 2016)`"
+    },
+    {
+      "source": "PDF: FDA PSO Jamming Suppression (Liao 2021)",
+      "target": "FDA PSO Jamming Suppression (Liao 2021)",
+      "source_files": [
+        "Mestrado/Leituras/FDA Articles/Frequency_Diverse_Array_Design_for_Deceptive_Jamming_Suppression_Using_Particle_Swarm_Optimization.pdf",
+        "Mestrado/Leituras/Artigos FDA/\ud83d\udcc4 FDA Design for Jamming Suppression PSO.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 paper); peripheral node `PDF: FDA PSO Jamming Suppression (Liao 2021)` unexpectedly reaches hub `FDA PSO Jamming Suppression (Liao 2021)`"
+    },
+    {
+      "source": "PDF (Select): PSO Jamming Suppression (Liao 2021)",
+      "target": "FDA PSO Jamming Suppression (Liao 2021)",
+      "source_files": [
+        "Mestrado/Leituras/FDA Articles/Select/Frequency_Diverse_Array_Design_for_Deceptive_Jamming_Suppression_Using_Particle_Swarm_Optimization.pdf",
+        "Mestrado/Leituras/Artigos FDA/\ud83d\udcc4 FDA Design for Jamming Suppression PSO.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 paper); peripheral node `PDF (Select): PSO Jamming Suppression (Liao 2021)` unexpectedly reaches hub `FDA PSO Jamming Suppression (Liao 2021)`"
+    }
+  ]
+}

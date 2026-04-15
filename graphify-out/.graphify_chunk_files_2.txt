@@ -1,0 +1,20 @@
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Antenas/ULA — Uniform Linear Array.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Antenas/Beamforming.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Antenas/MOC - Antenas.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Guerra Eletrônica/MOC - Guerra Eletrônica.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/Campo Próximo e Campo Distante.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/Zona de Fraunhofer.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/MOC - Eletromagnetismo.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/Ondas Planas e Polarização.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/Propagação no Espaço Livre.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Eletromagnetismo/Equações de Maxwell.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/Vieira et al 2024 - VFT Processo Integrado de Apoio a Decisão.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/REQUIREMENTS.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/UI-SPEC.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/PROJECT.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/SYSTEM-DESIGN.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/TASKS.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/ROADMAP.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/DATA-MODEL.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/SPEC.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/PSM - Problem Structuring Methods/VFT Software/AGENTS-SPEC.md

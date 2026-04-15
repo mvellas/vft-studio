@@ -1,0 +1,20 @@
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Home.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/📦 Memoria do Projeto FDA-Jam-Sim.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/Simulador — fda_engine.py.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/MOC - Simulador.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/Simulador — plotting.py.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/Simulador — pso_optimizer.py.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Simulador/Simulador — app.py.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA Linear — S-Curve.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA Jamming Focal — Teoria.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA Logarítmico.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA PSO — Otimização por Enxame.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA Taylor.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/Condição Quasi-Estática.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/MOC - FDA.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/Comparação de Offsets FDA.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/FDA Binomial.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/Tese/Tese.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/FDA/Tese/Simulador-Spec-v4.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Antenas/Espaçamento de Elemento d=λ2.md
+/Users/mvellasquez/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mestrado/Mestrado/Antenas/Array Factor (AF).md
