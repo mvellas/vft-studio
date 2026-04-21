@@ -18,6 +18,52 @@ export interface PipelineRunInfo {
   completed_at: string | null
 }
 
+export interface SocialSimulationParticipant {
+  name: string
+  kind: string
+  role: string
+  latest_position: string
+  stance_score: number
+  coalition_tag: string
+  concerns: string[]
+  alliances: string[]
+  conflicts: string[]
+  vote: {
+    choice?: string
+    rationale?: string
+    round?: number
+  }
+  trajectory: Array<{
+    round: number
+    position: string
+    stance_score: number
+    vote: string
+  }>
+}
+
+export interface SocialSimulationSummary {
+  participants: SocialSimulationParticipant[]
+  coalitions: Array<{ tag: string; members: string[] }>
+  votes: Record<string, number>
+  top_conflicts: string[]
+  events: Array<{
+    round: number
+    participants_count: number
+    coalitions: Array<{ tag: string; members: string[] }>
+    votes: Record<string, number>
+    top_conflicts: string[]
+  }>
+}
+
+export interface SocialSimulationInfo {
+  id: string
+  project_id: string
+  pipeline_run_id: string | null
+  rounds_count: number
+  created_at: string
+  summary: SocialSimulationSummary
+}
+
 export function streamPipeline(
   projectId: string,
   problemDescription: string | undefined,
@@ -82,6 +128,16 @@ export async function listRuns(projectId: string): Promise<PipelineRunInfo[]> {
 export async function getLatestRun(projectId: string): Promise<PipelineRunInfo | null> {
   try {
     const resp = await fetch(`/api/pipeline/${projectId}`)
+    if (!resp.ok) return null
+    return await resp.json()
+  } catch {
+    return null
+  }
+}
+
+export async function getLatestSocialSimulation(projectId: string): Promise<SocialSimulationInfo | null> {
+  try {
+    const resp = await fetch(`/api/pipeline/${projectId}/social-simulation`)
     if (!resp.ok) return null
     return await resp.json()
   } catch {

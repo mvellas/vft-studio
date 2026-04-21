@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Sparkles } from 'lucide-react'
 import { usePipelineStore } from '../../stores/pipelineStore'
 import { useUiStore } from '../../stores/uiStore'
-import { AgentTurnCard } from './AgentTurnCard'
-import { WarRoomTimeline } from './WarRoomTimeline'
 import { ReportView } from './ReportView'
+import { PipelineStageScene } from './PipelineStageScene'
 
 const STATUS_MESSAGES = ['Pesquisando...', 'Analisando...', 'Considerando...', 'Formulando...']
 
@@ -24,22 +23,21 @@ function RotatingStatus() {
 }
 
 interface Props {
+  projectId: string
   projectName: string
 }
 
-export function PipelinePanel({ projectName }: Props) {
-  const { status, turns, reportMd, errorMessage, reset, runId } = usePipelineStore()
+export function PipelinePanel({ projectId, projectName }: Props) {
+  const { status, turns, statusFeed, reportMd, errorMessage, reset, runId } = usePipelineStore()
   const { pipelineView, setPipelineView, setChatPanelOpen } = useUiStore()
   const bottomRef = useRef<HTMLDivElement>(null)
 
-  const phaseTurns = turns.filter((t) => !t.isWarRoom && t.event !== 'report_delta')
+  const phaseTurns = turns.filter((t) => !t.isWarRoom)
   const warRoomTurns = turns.filter((t) => t.isWarRoom)
-  const activeTurn = turns[turns.length - 1]
-  const activeAgent = status === 'running' ? (activeTurn?.agentName ?? null) : null
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [turns])
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+  }, [statusFeed, status])
 
   const handleDiscussInChat = () => {
     setPipelineView('idle')
@@ -56,37 +54,38 @@ export function PipelinePanel({ projectName }: Props) {
   return (
     <div className="space-y-6">
       {status === 'running' && (
-        <div
-          className="flex items-center gap-3 px-4 py-3"
-          style={{ background: 'rgba(232,121,249,0.08)', border: '1px solid rgba(232,121,249,0.2)', borderRadius: '12px' }}
-        >
-          <Loader2 size={16} className="animate-spin shrink-0" style={{ color: '#e879f9' }} />
-          <span className="text-sm font-medium" style={{ color: '#e879f9' }}>
-            {activeAgent ? `${activeAgent} — ` : ''}
-            <RotatingStatus />
-          </span>
-        </div>
-      )}
+        <div className="space-y-4">
+          <div
+            className="rounded-2xl p-5"
+            style={{ background: 'linear-gradient(135deg, rgba(232,121,249,0.13), rgba(96,165,250,0.06))', border: '1px solid rgba(232,121,249,0.2)' }}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(232,121,249,0.14)', color: '#e879f9' }}
+              >
+                <Sparkles size={18} />
+              </div>
+              <div>
+                <p className="text-sm font-semibold" style={{ color: '#f8fafc' }}>VFT Completo com IA em execução</p>
+                <p className="text-sm" style={{ color: '#cbd5e1' }}>
+                  O relatório está sendo montado em background e será exibido somente quando a análise terminar.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 text-sm" style={{ color: '#e879f9' }}>
+              <Loader2 size={16} className="animate-spin shrink-0" />
+              <span><RotatingStatus /></span>
+            </div>
+          </div>
 
-      {phaseTurns.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold" style={{ color: '#94a3b8' }}>Análise sequencial</h3>
-          {phaseTurns.map((turn, idx) => (
-            <AgentTurnCard
-              key={turn.id}
-              turn={turn}
-              isActive={status === 'running' && idx === phaseTurns.length - 1}
-            />
-          ))}
+          <PipelineStageScene statusFeed={statusFeed} />
         </div>
-      )}
-
-      {warRoomTurns.length > 0 && (
-        <WarRoomTimeline turns={warRoomTurns} activeAgent={activeAgent} />
       )}
 
       {status === 'done' && reportMd && (
         <ReportView
+          projectId={projectId}
           reportMd={reportMd}
           projectName={projectName}
           runId={runId}

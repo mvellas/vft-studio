@@ -1,44 +1,38 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-// Module-level BroadcastChannel — safe to create here (no-op if API unavailable)
-let _channel: BroadcastChannel | null = null
-function getChannel(): BroadcastChannel | null {
-  if (_channel) return _channel
-  try {
-    _channel = new BroadcastChannel('vft-warroom')
-  } catch {
-    _channel = null
-  }
-  return _channel
-}
-
-function broadcastTurns(turns: AgentTurn[]): void {
-  getChannel()?.postMessage({ turns })
-}
-
 export interface AgentTurn {
   id: string
-  event: 'agent_start' | 'agent_delta' | 'agent_done' | 'war_room_turn' | 'report_delta'
+  event: 'agent_done' | 'war_room_turn_complete'
   agent: string
   agentName: string
   phaseLabel: string
   text: string
   act?: number
-  isDelta?: boolean
   isWarRoom?: boolean
+}
+
+export interface PipelineStatusItem {
+  id: string
+  title: string
+  detail: string
+  actor: string
+  stage: string
+  state: 'running' | 'done'
+  meta?: Record<string, unknown>
 }
 
 interface PipelineState {
   runId: string | null
   status: 'idle' | 'running' | 'done' | 'error'
   turns: AgentTurn[]
+  statusFeed: PipelineStatusItem[]
   reportMd: string
   errorMessage: string | null
   startRun: (runId: string) => void
-  appendDelta: (agent: string, agentName: string, phaseLabel: string, text: string) => void
-  addWarRoomTurn: (speaker: string, agentName: string, text: string, isDelta: boolean, act: number) => void
-  appendReportDelta: (text: string) => void
+  addPhaseTurn: (agentName: string, phaseLabel: string, text: string) => void
+  addWarRoomTurn: (speaker: string, agentName: string, text: string, act: number) => void
+  addStatus: (item: PipelineStatusItem) => void
   finishRun: (reportMd: string) => void
   setError: (msg: string) => void
   reset: () => void
@@ -50,6 +44,7 @@ export const usePipelineStore = create<PipelineState>()(
     runId: null,
     status: 'idle',
     turns: [],
+    statusFeed: [],
     reportMd: '',
     errorMessage: null,
 
@@ -57,59 +52,63 @@ export const usePipelineStore = create<PipelineState>()(
       s.runId = runId
       s.status = 'running'
       s.turns = []
+      s.statusFeed = []
       s.reportMd = ''
       s.errorMessage = null
     }),
 
-    appendDelta: (agent, agentName, phaseLabel, text) => {
+    addPhaseTurn: (agentName, phaseLabel, text) => {
       set((s) => {
-        const last = s.turns[s.turns.length - 1]
-        if (last && last.agent === agent && last.event === 'agent_delta') {
-          last.text += text
-        } else {
-          s.turns.push({
-            id: `${agent}-${Date.now()}`,
-            event: 'agent_delta',
-            agent,
-            agentName,
-            phaseLabel,
-            text,
-            isWarRoom: false,
-          })
-        }
+        s.turns.push({
+          id: `${agentName}-${Date.now()}`,
+          event: 'agent_done',
+          agent: agentName,
+          agentName,
+          phaseLabel,
+          text,
+          isWarRoom: false,
+        })
       })
-      broadcastTurns(usePipelineStore.getState().turns)
     },
 
-    addWarRoomTurn: (speaker, agentName, text, isDelta, act) => {
+    addWarRoomTurn: (speaker, agentName, text, act) => {
       set((s) => {
-        const last = s.turns[s.turns.length - 1]
-        if (isDelta && last && last.agent === speaker && last.isWarRoom) {
-          last.text += text
-        } else {
-          s.turns.push({
-            id: `wr-${speaker}-${Date.now()}`,
-            event: 'war_room_turn',
-            agent: speaker,
-            agentName,
-            phaseLabel: `War Room — Ato ${act}`,
-            text,
-            act,
-            isDelta,
-            isWarRoom: true,
-          })
-        }
+        s.turns.push({
+          id: `wr-${speaker}-${Date.now()}`,
+          event: 'war_room_turn_complete',
+          agent: speaker,
+          agentName,
+          phaseLabel: `War Room — Ato ${act}`,
+          text,
+          act,
+          isWarRoom: true,
+        })
       })
-      broadcastTurns(usePipelineStore.getState().turns)
     },
 
-    appendReportDelta: (text) => set((s) => { s.reportMd += text }),
+    addStatus: (item) => set((s) => {
+      const existing = s.statusFeed.find((entry) => entry.id === item.id)
+      if (!existing) {
+        s.statusFeed.push(item)
+      }
+    }),
     finishRun: (reportMd) => set((s) => { s.status = 'done'; s.reportMd = reportMd }),
     setError: (msg) => set((s) => { s.status = 'error'; s.errorMessage = msg }),
     reset: () => {
-      set((s) => { s.status = 'idle'; s.turns = []; s.reportMd = ''; s.runId = null; s.errorMessage = null })
-      broadcastTurns([])
+      set((s) => {
+        s.status = 'idle'
+        s.turns = []
+        s.statusFeed = []
+        s.reportMd = ''
+        s.runId = null
+        s.errorMessage = null
+      })
     },
-    setFromExisting: (reportMd, runId) => set((s) => { s.reportMd = reportMd; s.runId = runId; s.status = 'done' }),
+    setFromExisting: (reportMd, runId) => set((s) => {
+      s.reportMd = reportMd
+      s.runId = runId
+      s.status = 'done'
+      s.statusFeed = []
+    }),
   }))
 )

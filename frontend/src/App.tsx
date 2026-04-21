@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { WarRoomWindow } from './pages/WarRoomWindow'
 import { AnimatePresence, motion } from 'framer-motion'
 import { BookOpen, X } from 'lucide-react'
 import { AppShell } from './components/layout/AppShell'
+import { AppIntroSplash } from './components/layout/AppIntroSplash'
 import { ProjectList } from './components/project/ProjectList'
 import { SettingsView } from './components/project/SettingsView'
 import { OnboardingFlow } from './components/project/OnboardingFlow'
@@ -153,8 +153,22 @@ function ProjectDetailView() {
 
 function App() {
   const { currentView } = useUiStore()
+  const { projects, activeProjectId } = useProjectStore()
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [onboardingChecked, setOnboardingChecked] = useState(false)
+  const [showIntro, setShowIntro] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return sessionStorage.getItem('vftstudio-intro-seen') !== '1'
+  })
+
+  const activeProject = projects.find((project) => project.id === activeProjectId) ?? null
+  const introMode = showOnboarding
+    ? 'welcome'
+    : currentView === 'project-detail' && activeProject
+      ? 'project'
+      : projects.length > 0
+        ? 'workspace'
+        : 'welcome'
 
   useEffect(() => {
     apiClient
@@ -166,15 +180,23 @@ function App() {
       .finally(() => setOnboardingChecked(true))
   }, [])
 
-  // Detect popout window — after hooks
-  if (window.location.pathname === '/warroom') {
-    return <WarRoomWindow />
-  }
-
   if (!onboardingChecked) return null
 
   return (
     <>
+      <AnimatePresence>
+        {showIntro && (
+          <AppIntroSplash
+            mode={introMode}
+            projectCount={projects.length}
+            projectName={activeProject?.name ?? null}
+            onFinish={() => {
+              sessionStorage.setItem('vftstudio-intro-seen', '1')
+              setShowIntro(false)
+            }}
+          />
+        )}
+      </AnimatePresence>
       {showOnboarding && (
         <OnboardingFlow onComplete={() => setShowOnboarding(false)} />
       )}

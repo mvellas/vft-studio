@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type { AgentTurn } from '../../stores/pipelineStore'
 
-const AGENT_COLOR: Record<string, string> = {
+const BASE_AGENT_COLOR: Record<string, string> = {
   ARIA:    '#e879f9',
   FRAME:   '#60a5fa',
   AXIOM:   '#fbbf24',
@@ -9,25 +9,18 @@ const AGENT_COLOR: Record<string, string> = {
   ANALYST: '#a78bfa',
 }
 
-const AGENTS = ['ARIA', 'FRAME', 'AXIOM', 'NOVA', 'ANALYST']
-
-// Pentagon layout — top-centered, clockwise
 const W = 400
 const H = 270
 const CX = 200
 const CY = 122
-const R = 88
-
-const POSITIONS: Record<string, { x: number; y: number }> = {}
-AGENTS.forEach((name, i) => {
-  const angle = (i * 2 * Math.PI) / 5 - Math.PI / 2
-  POSITIONS[name] = {
-    x: CX + R * Math.cos(angle),
-    y: CY + R * Math.sin(angle),
-  }
-})
-
 const NODE_R = 20
+
+function colorForParticipant(name: string): string {
+  if (BASE_AGENT_COLOR[name]) return BASE_AGENT_COLOR[name]
+  const palette = ['#fb7185', '#22c55e', '#f59e0b', '#38bdf8', '#c084fc', '#f97316']
+  const hash = Array.from(name).reduce((acc, char) => acc + char.charCodeAt(0), 0)
+  return palette[hash % palette.length]
+}
 
 interface Props {
   turns: AgentTurn[]
@@ -44,6 +37,25 @@ interface EdgeDatum {
 
 export function WarRoomGraph({ turns, activeAgent }: Props) {
   const warTurns = turns.filter(t => t.isWarRoom)
+  const participants = useMemo(() => {
+    const ordered = warTurns.map(t => t.agentName)
+    return Array.from(new Set(ordered))
+  }, [warTurns])
+
+  const positions = useMemo(() => {
+    const radius = participants.length <= 5 ? 88 : 100
+    const entries = participants.map((name, i) => {
+      const angle = (i * 2 * Math.PI) / Math.max(participants.length, 1) - Math.PI / 2
+      return [
+        name,
+        {
+          x: CX + radius * Math.cos(angle),
+          y: CY + radius * Math.sin(angle),
+        },
+      ] as const
+    })
+    return Object.fromEntries(entries)
+  }, [participants])
 
   const speakCount = useMemo(() => {
     const c: Record<string, number> = {}
@@ -58,7 +70,7 @@ export function WarRoomGraph({ turns, activeAgent }: Props) {
         id: `${prev.agentName}->${turn.agentName}-${i}`,
         from: prev.agentName,
         to: turn.agentName,
-        color: AGENT_COLOR[prev.agentName] ?? '#94a3b8',
+        color: colorForParticipant(prev.agentName),
         isNew: i >= warTurns.length - 3,
       }
     })
@@ -95,9 +107,9 @@ export function WarRoomGraph({ turns, activeAgent }: Props) {
           <span
             style={{
               fontSize: 10,
-              color: AGENT_COLOR[activeAgent] ?? '#94a3b8',
-              background: `${AGENT_COLOR[activeAgent] ?? '#94a3b8'}18`,
-              border: `1px solid ${AGENT_COLOR[activeAgent] ?? '#94a3b8'}40`,
+              color: colorForParticipant(activeAgent),
+              background: `${colorForParticipant(activeAgent)}18`,
+              border: `1px solid ${colorForParticipant(activeAgent)}40`,
               borderRadius: 99,
               padding: '1px 8px',
               fontWeight: 600,
@@ -118,7 +130,7 @@ export function WarRoomGraph({ turns, activeAgent }: Props) {
       >
         <defs>
           {/* Arrow markers per agent color */}
-          {AGENTS.map(name => (
+          {participants.map(name => (
             <marker
               key={name}
               id={`arrow-${name}`}
@@ -128,7 +140,7 @@ export function WarRoomGraph({ turns, activeAgent }: Props) {
               refY="3"
               orient="auto"
             >
-              <path d="M0,0.5 L0,5.5 L6,3 z" fill={AGENT_COLOR[name] ?? '#94a3b8'} fillOpacity={0.8} />
+              <path d="M0,0.5 L0,5.5 L6,3 z" fill={colorForParticipant(name)} fillOpacity={0.8} />
             </marker>
           ))}
 
@@ -165,18 +177,20 @@ export function WarRoomGraph({ turns, activeAgent }: Props) {
         </defs>
 
         {/* Subtle pentagon guide */}
-        <polygon
-          points={AGENTS.map(n => `${POSITIONS[n].x},${POSITIONS[n].y}`).join(' ')}
-          fill="none"
-          stroke="rgba(255,255,255,0.04)"
-          strokeWidth={1}
-        />
+        {participants.length >= 3 && (
+          <polygon
+            points={participants.map(n => `${positions[n].x},${positions[n].y}`).join(' ')}
+            fill="none"
+            stroke="rgba(255,255,255,0.04)"
+            strokeWidth={1}
+          />
+        )}
 
         {/* Edges */}
         {edges.map(edge => {
           if (edge.from === edge.to) {
             // Self-loop: small arc above the node
-            const p = POSITIONS[edge.from]
+            const p = positions[edge.from]
             if (!p) return null
             const rx = 14
             const ry = 10
@@ -198,8 +212,8 @@ export function WarRoomGraph({ turns, activeAgent }: Props) {
             )
           }
 
-          const from = POSITIONS[edge.from]
-          const to = POSITIONS[edge.to]
+          const from = positions[edge.from]
+          const to = positions[edge.to]
           if (!from || !to) return null
 
           // Direction vector
@@ -238,12 +252,13 @@ export function WarRoomGraph({ turns, activeAgent }: Props) {
         })}
 
         {/* Agent nodes */}
-        {AGENTS.map(name => {
-          const pos = POSITIONS[name]
-          const color = AGENT_COLOR[name] ?? '#94a3b8'
+        {participants.map(name => {
+          const pos = positions[name]
+          const color = colorForParticipant(name)
           const count = speakCount[name] ?? 0
           const hasSeen = count > 0
           const isActive = activeAgent === name || lastSpeaker === name
+          if (!pos) return null
 
           return (
             <g key={name} transform={`translate(${pos.x},${pos.y})`}>

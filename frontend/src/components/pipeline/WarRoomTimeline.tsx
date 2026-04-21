@@ -12,6 +12,13 @@ const AGENT_COLOR: Record<string, string> = {
   ANALYST: '#a78bfa',
 }
 
+function colorForParticipant(name: string): string {
+  if (AGENT_COLOR[name]) return AGENT_COLOR[name]
+  const palette = ['#fb7185', '#22c55e', '#f59e0b', '#38bdf8', '#c084fc', '#f97316']
+  const hash = Array.from(name).reduce((acc, char) => acc + char.charCodeAt(0), 0)
+  return palette[hash % palette.length]
+}
+
 interface Props {
   turns: AgentTurn[]
   activeAgent: string | null
@@ -76,7 +83,7 @@ export function WarRoomTimeline({ turns, activeAgent }: Props) {
                 />
                 <div className="space-y-4">
                   {actGroups[act].map((turn, idx) => {
-                    const color = AGENT_COLOR[turn.agentName] ?? '#94a3b8'
+                    const color = colorForParticipant(turn.agentName)
                     const isActive =
                       activeAgent === turn.agentName &&
                       idx === actGroups[act].length - 1 &&

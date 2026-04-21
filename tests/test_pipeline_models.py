@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from backend.db.base import Base
-from backend.db.models import PipelineRun, PipelineTurn
+from backend.db.models import PipelineRun, PipelineTurn, SocialParticipantMemory, SocialSimulationRun
 
 @pytest.fixture
 def db():
@@ -44,3 +44,38 @@ def test_pipeline_turn_create(db):
     fetched = db.get(PipelineTurn, "turn-1")
     assert fetched.agent_name == "FRAME"
     assert fetched.sequence == 0
+
+def test_social_simulation_models_create(db):
+    run = SocialSimulationRun(
+        id="sim-1",
+        project_id="proj-1",
+        pipeline_run_id=None,
+        rounds_count=2,
+        summary_json='{"votes":{"approve":1}}',
+        created_at="2026-01-01T00:00:00Z",
+    )
+    db.add(run)
+    memory = SocialParticipantMemory(
+        id="mem-1",
+        project_id="proj-1",
+        stakeholder_id=None,
+        participant_name="Financeiro",
+        participant_kind="stakeholder",
+        latest_position="Precisa reduzir risco",
+        stance_score=2,
+        coalition_tag="Financeiro+Operacoes",
+        concerns_json='["custo"]',
+        alliances_json='["Operacoes"]',
+        conflicts_json='["Marketing"]',
+        vote_json='{"choice":"approve_with_conditions"}',
+        trajectory_json='[{"round":1}]',
+        updated_at="2026-01-01T00:00:00Z",
+    )
+    db.add(memory)
+    db.commit()
+
+    fetched_run = db.get(SocialSimulationRun, "sim-1")
+    fetched_memory = db.get(SocialParticipantMemory, "mem-1")
+    assert fetched_run.rounds_count == 2
+    assert fetched_memory.participant_name == "Financeiro"
+    assert fetched_memory.stance_score == 2

@@ -1,5 +1,7 @@
 from __future__ import annotations
-from pydantic import BaseModel
+from typing import Any
+
+from pydantic import BaseModel, Field
 
 
 class PipelineRunRequest(BaseModel):
@@ -28,3 +30,12 @@ class PipelineTurnResponse(BaseModel):
     sequence: int
 
     model_config = {"from_attributes": True}
+
+
+class SocialSimulationResponse(BaseModel):
+    id: str
+    project_id: str
+    pipeline_run_id: str | None
+    rounds_count: int
+    created_at: str
+    summary: dict[str, Any] = Field(default_factory=dict)

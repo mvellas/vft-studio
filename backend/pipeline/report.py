@@ -30,6 +30,9 @@ _REPORT_PROMPT_TEMPLATE = """Gere o relatório final da análise VFT para o proj
 
 {analyst_section}
 
+## Mapa Social Consolidado
+{social_summary}
+
 ## Transcrição da War Room
 {war_room}
 
@@ -44,9 +47,11 @@ Gere o relatório completo com esta estrutura exata:
 ## 3. Hierarquia de Valores e Objetivos
 ## 4. Alternativas Avaliadas
 ## 5. Evidências Documentais
-## 6. Síntese da War Room
-## 7. Recomendação Final
-## 8. Próximos Passos VFT
+## 6. Dinâmica Social e Coalizões
+Inclua síntese de coalizões, tendências de voto, mudanças de posição e conflitos/convergências.
+## 7. Síntese da War Room
+## 8. Recomendação Final
+## 9. Próximos Passos VFT
 """
 
 
@@ -57,12 +62,14 @@ class ReportGenerator:
         project_name: str,
         phase_outputs: dict[str, str],
         war_room_transcript: str,
+        social_summary: str,
         session: AsyncSession,
     ) -> None:
         self.project_id = project_id
         self.project_name = project_name
         self.phase_outputs = phase_outputs
         self.war_room_transcript = war_room_transcript
+        self.social_summary = social_summary
         self.session = session
 
     async def run(self) -> AsyncIterator[dict]:
@@ -78,6 +85,7 @@ class ReportGenerator:
             axiom=self.phase_outputs.get("AXIOM", "N/A")[:2000],
             nova=self.phase_outputs.get("NOVA", "N/A")[:2000],
             analyst_section=analyst_section,
+            social_summary=self.social_summary[:2000],
             war_room=self.war_room_transcript[:3000],
         )
 

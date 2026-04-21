@@ -9,14 +9,12 @@ interface UiState {
   rightPanel: RightPanel
   sidebarCollapsed: boolean
   pipelineView: 'idle' | 'running' | 'report'
-  warRoomFloatOpen: boolean
   setView: (view: View) => void
   toggleSidebar: () => void
   setRightPanel: (panel: RightPanel) => void
   // compat shim — callers that do setChatPanelOpen(true) open chat; false closes panel
   setChatPanelOpen: (open: boolean) => void
   setPipelineView: (v: 'idle' | 'running' | 'report') => void
-  setWarRoomFloatOpen: (open: boolean) => void
 }
 
 export const useUiStore = create<UiState>()(
@@ -25,7 +23,6 @@ export const useUiStore = create<UiState>()(
     rightPanel: 'none' as RightPanel,
     sidebarCollapsed: false,
     pipelineView: 'idle' as const,
-    warRoomFloatOpen: false,
 
     setView: (view) => set((state) => { state.currentView = view }),
     toggleSidebar: () => set((state) => { state.sidebarCollapsed = !state.sidebarCollapsed }),
@@ -34,6 +31,5 @@ export const useUiStore = create<UiState>()(
       state.rightPanel = open ? 'chat' : 'none'
     }),
     setPipelineView: (v) => set((state) => { state.pipelineView = v }),
-    setWarRoomFloatOpen: (open) => set((state) => { state.warRoomFloatOpen = open }),
   }))
 )

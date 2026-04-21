@@ -1,7 +1,12 @@
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { Download, FileText, MessageSquare, RotateCcw } from 'lucide-react'
+import { Download, FileText, Globe, MessageSquare, RotateCcw } from 'lucide-react'
+import { objectivesApi } from '../../api/objectives'
+import { getLatestSocialSimulation } from '../../api/pipeline'
 import type { AgentTurn } from '../../stores/pipelineStore'
+import { InteractiveArtifacts } from './InteractiveArtifacts'
+import { buildInteractiveReportHtml, buildPrintableReportHtml } from './reportExport'
+import { SocialExecutiveSummary } from './SocialExecutiveSummary'
 
 const AGENT_LABELS: Record<string, string> = {
   FRAME:   'Fase 1 — Stakeholders',
@@ -19,6 +24,7 @@ const AGENT_COLORS: Record<string, { badge: string; border: string; bg: string }
 }
 
 interface Props {
+  projectId: string
   reportMd: string
   projectName: string
   runId: string | null
@@ -29,6 +35,7 @@ interface Props {
 }
 
 export function ReportView({
+  projectId,
   reportMd,
   projectName,
   runId,
@@ -97,45 +104,28 @@ export function ReportView({
     URL.revokeObjectURL(url)
   }
 
-  const handleExportPdf = () => {
+  const handleExportPdf = async () => {
     const printWindow = window.open('', '_blank', 'width=900,height=700')
     if (!printWindow) return
 
-    // Use the already-rendered HTML from the full document div
-    const el = document.getElementById('full-document-content')
-    const html = el?.innerHTML ?? ''
+    const fullDocumentHtml = document.getElementById('full-document-content')?.innerHTML ?? ''
+    const reportHtml = document.getElementById('final-report-markdown')?.innerHTML ?? ''
+    const [socialSimulation, objectives, objectiveNetwork] = await Promise.all([
+      getLatestSocialSimulation(projectId),
+      objectivesApi.list(projectId).catch(() => []),
+      objectivesApi.getNetwork(projectId).catch(() => null),
+    ])
 
-    printWindow.document.write(`<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Análise VFT — ${projectName}</title>
-  <style>
-    body { font-family: Georgia, serif; max-width: 800px; margin: 40px auto; padding: 0 24px; color: #111; line-height: 1.7; }
-    h1 { font-size: 1.6rem; border-bottom: 2px solid #333; padding-bottom: 8px; margin-top: 2.5rem; }
-    h2 { font-size: 1.2rem; margin-top: 2rem; color: #222; border-bottom: 1px solid #eee; padding-bottom: 4px; }
-    h3 { font-size: 1rem; color: #444; margin-top: 1.5rem; }
-    p { margin: 0.75rem 0; }
-    ul, ol { padding-left: 1.5rem; }
-    li { margin: 0.25rem 0; }
-    strong { font-weight: 600; }
-    em { font-style: italic; }
-    hr { border: none; border-top: 2px solid #ddd; margin: 2rem 0; }
-    table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.9em; }
-    th, td { border: 1px solid #ddd; padding: 7px 11px; text-align: left; }
-    th { background: #f0f0f0; font-weight: 600; }
-    blockquote { border-left: 4px solid #ddd; margin: 0.5rem 0; padding: 4px 16px; color: #555; background: #fafafa; }
-    code { background: #f5f5f5; padding: 2px 5px; border-radius: 3px; font-size: 0.85em; font-family: monospace; }
-    pre { background: #f5f5f5; padding: 12px; border-radius: 6px; overflow-x: auto; font-size: 0.85em; }
-    .section-badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 99px; margin-right: 8px; }
-    @media print { body { margin: 20px; } h1, h2 { page-break-after: avoid; } }
-  </style>
-</head>
-<body>
-<h1>Análise VFT Completa — ${projectName}</h1>
-${html}
-</body>
-</html>`)
+    const printableHtml = buildPrintableReportHtml({
+      projectName,
+      reportHtml,
+      fullDocumentHtml,
+      socialSimulation,
+      objectives,
+      objectiveNetwork,
+    })
+
+    printWindow.document.write(printableHtml)
     printWindow.document.close()
     printWindow.focus()
     setTimeout(() => {
@@ -144,12 +134,42 @@ ${html}
     }, 600)
   }
 
+  const handleExportInteractiveHtml = async () => {
+    const fullDocumentHtml = document.getElementById('full-document-content')?.innerHTML ?? ''
+    const reportHtml = document.getElementById('final-report-markdown')?.innerHTML ?? ''
+
+    const [socialSimulation, objectives, objectiveNetwork] = await Promise.all([
+      getLatestSocialSimulation(projectId),
+      objectivesApi.list(projectId).catch(() => []),
+      objectivesApi.getNetwork(projectId).catch(() => null),
+    ])
+
+    const content = buildInteractiveReportHtml({
+      projectName,
+      reportHtml,
+      fullDocumentHtml,
+      socialSimulation,
+      objectives,
+      objectiveNetwork,
+    })
+
+    const blob = new Blob([content], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `vft-apresentacao-${projectName.replace(/\s+/g, '-').toLowerCase()}.html`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="space-y-4">
       {/* Action bar */}
       <div className="flex items-center gap-2 flex-wrap">
         <button
-          onClick={handleExportPdf}
+          onClick={() => { void handleExportPdf() }}
           className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-indigo-300 hover:text-indigo-700 transition-colors"
         >
           <FileText size={13} />
@@ -161,6 +181,13 @@ ${html}
         >
           <Download size={13} />
           Exportar Markdown
+        </button>
+        <button
+          onClick={() => { void handleExportInteractiveHtml() }}
+          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-cyan-300 hover:text-cyan-700 transition-colors"
+        >
+          <Globe size={13} />
+          Exportar HTML Interativo
         </button>
         <button
           onClick={onDiscussInChat}
@@ -183,6 +210,14 @@ ${html}
         id="full-document-content"
         className="space-y-0 select-text cursor-text"
       >
+        <div className="mb-5">
+          <SocialExecutiveSummary projectId={projectId} />
+        </div>
+
+        <div className="mb-5">
+          <InteractiveArtifacts projectId={projectId} />
+        </div>
+
         {/* Phase analyses */}
         {!reportOnly && ['FRAME', 'AXIOM', 'NOVA', 'ANALYST'].map((agent) => {
           const text = phaseByAgent[agent]
@@ -240,7 +275,10 @@ ${html}
         {/* Final VFT report */}
         {reportMd.trim() && (
           <div className="bg-white border border-gray-200 rounded-xl p-6">
-            <div className="prose prose-sm max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-li:text-gray-700 prose-strong:text-gray-900">
+            <div
+              id="final-report-markdown"
+              className="prose prose-sm max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-li:text-gray-700 prose-strong:text-gray-900"
+            >
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{reportMd}</ReactMarkdown>
             </div>
           </div>

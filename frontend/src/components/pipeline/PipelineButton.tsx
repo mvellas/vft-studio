@@ -15,7 +15,7 @@ export function PipelineButton({ projectId, projectDescription }: Props) {
   const [mainButtonHovered, setMainButtonHovered] = useState(false)
   const [closeButtonHovered, setCloseButtonHovered] = useState(false)
   const [textareaFocused, setTextareaFocused] = useState(false)
-  const { status, startRun, appendDelta, addWarRoomTurn, appendReportDelta, finishRun, setError } =
+  const { status, startRun, addPhaseTurn, addWarRoomTurn, addStatus, finishRun, setError } =
     usePipelineStore()
   const { setPipelineView } = useUiStore()
 
@@ -45,19 +45,27 @@ export function PipelineButton({ projectId, projectDescription }: Props) {
         const d = data as Record<string, string>
         if (eventName === 'pipeline_start') {
           startRun(d.run_id)
-        } else if (eventName === 'agent_delta') {
-          appendDelta(d.agent, d.agent_name ?? d.agent, d.phase_label ?? '', d.text ?? '')
-        } else if (eventName === 'war_room_turn') {
+        } else if (eventName === 'pipeline_status') {
+          const payload = data as Record<string, unknown>
+          addStatus({
+            id: (payload.id as string | undefined) ?? `${Date.now()}`,
+            title: (payload.title as string | undefined) ?? 'Processando',
+            detail: (payload.detail as string | undefined) ?? '',
+            actor: (payload.actor as string | undefined) ?? 'ARIA',
+            stage: (payload.stage as string | undefined) ?? 'pipeline',
+            state: (payload.state as 'running' | 'done' | undefined) ?? 'running',
+            meta: (payload.meta as Record<string, unknown> | undefined) ?? {},
+          })
+        } else if (eventName === 'agent_done') {
+          addPhaseTurn(d.agent_name ?? d.agent ?? 'Agente', d.phase_label ?? '', d.content ?? '')
+        } else if (eventName === 'war_room_turn_complete') {
           const wd = data as {
             speaker: string
             agent_name: string
             text: string
-            is_delta: boolean
             act: number
           }
-          addWarRoomTurn(wd.speaker, wd.agent_name, wd.text, wd.is_delta, wd.act)
-        } else if (eventName === 'report_delta') {
-          appendReportDelta(d.text ?? '')
+          addWarRoomTurn(wd.speaker, wd.agent_name, wd.text, wd.act)
         } else if (eventName === 'report_done') {
           finishRun(d.report_md ?? '')
           setPipelineView('report')

@@ -307,3 +307,42 @@ class PipelineTurn(Base):
     __table_args__ = (
         Index("idx_pipeline_turns_run", "run_id"),
     )
+
+
+class SocialSimulationRun(Base):
+    __tablename__ = "social_simulation_runs"
+
+    id: Mapped[str] = mapped_column(Text, primary_key=True)
+    project_id: Mapped[str] = mapped_column(Text, ForeignKey("projects.id"), nullable=False)
+    pipeline_run_id: Mapped[str | None] = mapped_column(Text, ForeignKey("pipeline_runs.id"), nullable=True)
+    rounds_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    summary_json: Mapped[str] = mapped_column(Text, default="{}", server_default="{}")
+    created_at: Mapped[str] = mapped_column(Text, nullable=False)
+
+    __table_args__ = (
+        Index("idx_social_sim_runs_project", "project_id"),
+    )
+
+
+class SocialParticipantMemory(Base):
+    __tablename__ = "social_participant_memory"
+
+    id: Mapped[str] = mapped_column(Text, primary_key=True)
+    project_id: Mapped[str] = mapped_column(Text, ForeignKey("projects.id"), nullable=False)
+    stakeholder_id: Mapped[str | None] = mapped_column(Text, ForeignKey("stakeholders.id"), nullable=True)
+    participant_name: Mapped[str] = mapped_column(Text, nullable=False)
+    participant_kind: Mapped[str] = mapped_column(Text, nullable=False)
+    latest_position: Mapped[str] = mapped_column(Text, default="", server_default="")
+    stance_score: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    coalition_tag: Mapped[str] = mapped_column(Text, default="", server_default="")
+    concerns_json: Mapped[str] = mapped_column(Text, default="[]", server_default="[]")
+    alliances_json: Mapped[str] = mapped_column(Text, default="[]", server_default="[]")
+    conflicts_json: Mapped[str] = mapped_column(Text, default="[]", server_default="[]")
+    vote_json: Mapped[str] = mapped_column(Text, default="{}", server_default="{}")
+    trajectory_json: Mapped[str] = mapped_column(Text, default="[]", server_default="[]")
+    updated_at: Mapped[str] = mapped_column(Text, nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint("project_id", "participant_name", name="uq_social_memory_participant"),
+        Index("idx_social_memory_project", "project_id"),
+    )

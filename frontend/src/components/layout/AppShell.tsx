@@ -1,42 +1,31 @@
 import type { ReactNode } from 'react'
-import { useEffect } from 'react'
 import { Sidebar } from './Sidebar'
 import { ChatPanel } from './ChatPanel'
 import { useUiStore } from '../../stores/uiStore'
 import { useProjectStore } from '../../stores/projectStore'
 import { useChatStore } from '../../stores/chatStore'
 import { usePhaseProgressStore } from '../../stores/phaseProgressStore'
-import { DiagramExport } from '../phase/DiagramExport'
 import { PipelineButton } from '../pipeline/PipelineButton'
 import { PipelinePanel } from '../pipeline/PipelinePanel'
 import { PipelineHistory } from '../pipeline/PipelineHistory'
 import { PhaseProgress } from '../phase/PhaseProgress'
-import { MessageSquare, BotMessageSquare, Radio, BarChart2 } from 'lucide-react'
+import { MessageSquare, BotMessageSquare, BarChart2 } from 'lucide-react'
 import { useResize } from '../../hooks/useResize'
 import { usePhasePoller } from '../../hooks/usePhasePoller'
-import { WarRoomFloat } from '../pipeline/WarRoomFloat'
 import { DiagramsPanel } from '../diagrams/DiagramsPanel'
-import { usePipelineStore } from '../../stores/pipelineStore'
 
 interface AppShellProps {
   children: ReactNode
 }
 
 export function AppShell({ children }: AppShellProps) {
-  const { rightPanel, setRightPanel, currentView, pipelineView, warRoomFloatOpen, setWarRoomFloatOpen } = useUiStore()
+  const { rightPanel, setRightPanel, currentView, pipelineView } = useUiStore()
   const chatPanelOpen = rightPanel === 'chat'
   const { activeProjectId, projects } = useProjectStore()
   const activeProject = projects.find(p => p.id === activeProjectId)
 
   const { currentStep, completedSteps, totalSteps, progressPercent } = usePhaseProgressStore()
   usePhasePoller(activeProjectId)
-
-  const warRoomTurnCount = usePipelineStore(s => s.turns.filter(t => t.isWarRoom).length)
-  useEffect(() => {
-    if (warRoomTurnCount > 0 && !warRoomFloatOpen) {
-      setWarRoomFloatOpen(true)
-    }
-  }, [warRoomTurnCount, warRoomFloatOpen, setWarRoomFloatOpen])
 
   const sidebar = useResize({ initialSize: 256, min: 48, max: 400, direction: 'horizontal-right' })
   const chat = useResize({ initialSize: 384, min: 240, max: 600, direction: 'horizontal-left' })
@@ -69,7 +58,6 @@ export function AppShell({ children }: AppShellProps) {
                 {activeProject.name}
               </span>
               <div className="flex items-center gap-2">
-                <DiagramExport projectId={activeProject.id} projectName={activeProject.name} />
                 <PipelineButton
                   projectId={activeProject.id}
                   projectDescription={activeProject.description ?? ''}
@@ -85,19 +73,6 @@ export function AppShell({ children }: AppShellProps) {
                   >
                     <BarChart2 size={13} />
                     Diagramas
-                  </button>
-                )}
-                {pipelineView !== 'idle' && (
-                  <button
-                    onClick={() => setWarRoomFloatOpen(!warRoomFloatOpen)}
-                    className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium transition-colors"
-                    style={warRoomFloatOpen
-                      ? { background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }
-                      : { background: 'rgba(255,255,255,0.04)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }
-                    }
-                  >
-                    <Radio size={13} />
-                    War Room
                   </button>
                 )}
                 <button
@@ -144,7 +119,7 @@ export function AppShell({ children }: AppShellProps) {
         <main className="flex-1 overflow-y-auto p-6">
           {currentView === 'project-detail' && activeProject && pipelineView !== 'idle' && (
             <div className="max-w-4xl mx-auto mb-6">
-              <PipelinePanel projectName={activeProject.name} />
+              <PipelinePanel projectId={activeProject.id} projectName={activeProject.name} />
             </div>
           )}
           {currentView === 'project-detail' && activeProject && (
@@ -169,8 +144,6 @@ export function AppShell({ children }: AppShellProps) {
           )}
         </div>
       )}
-
-      {warRoomFloatOpen && <WarRoomFloat />}
     </div>
   )
 }

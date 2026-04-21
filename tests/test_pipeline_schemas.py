@@ -1,4 +1,9 @@
-from backend.schemas.pipeline import PipelineRunRequest, PipelineRunResponse, PipelineTurnResponse
+from backend.schemas.pipeline import (
+    PipelineRunRequest,
+    PipelineRunResponse,
+    PipelineTurnResponse,
+    SocialSimulationResponse,
+)
 
 
 def test_pipeline_run_request_defaults():
@@ -30,3 +35,19 @@ def test_pipeline_turn_response_validation():
         sequence=0,
     )
     assert turn.agent_name == "FRAME"
+
+
+def test_social_simulation_response_validation():
+    resp = SocialSimulationResponse(
+        id="sim-1",
+        project_id="proj-1",
+        pipeline_run_id="run-1",
+        rounds_count=2,
+        created_at="2026-04-21T12:00:00Z",
+        summary={
+            "participants": [{"name": "Financeiro", "trajectory": []}],
+            "votes": {"approve": 1},
+        },
+    )
+    assert resp.rounds_count == 2
+    assert resp.summary["votes"]["approve"] == 1
