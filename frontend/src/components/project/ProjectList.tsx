@@ -5,6 +5,7 @@ import { useProjectStore } from '../../stores/projectStore'
 import { useUiStore } from '../../stores/uiStore'
 import { getLatestRun } from '../../api/pipeline'
 import { usePipelineStore } from '../../stores/pipelineStore'
+import { BrandLogo } from '../layout/BrandLogo'
 import { ProjectCard } from './ProjectCard'
 import { NewProjectWizard } from './NewProjectWizard'
 
@@ -49,16 +50,56 @@ export function ProjectList() {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold" style={{ color: '#f8fafc' }}>Projetos</h1>
-        <button
-          onClick={() => setWizardOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-          style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
-        >
-          <Plus size={15} />
-          Novo Projeto
-        </button>
+      <div
+        className="rounded-[32px] p-6 md:p-8 mb-6"
+        style={{
+          background: 'radial-gradient(circle at top left, rgba(14,165,233,0.18), rgba(15,23,42,0.96) 42%, rgba(6,9,16,0.98))',
+          border: '1px solid rgba(148,163,184,0.14)',
+          boxShadow: '0 26px 80px rgba(2,6,23,0.28)',
+        }}
+      >
+        <div className="flex items-start justify-between gap-6 flex-wrap">
+          <div className="max-w-2xl">
+            <BrandLogo size={52} subtitle="Decision Intelligence Studio" />
+            <div className="mt-6">
+              <p className="text-[11px] uppercase tracking-[0.28em]" style={{ color: '#67e8f9' }}>
+                Workspace
+              </p>
+              <h1 className="text-3xl md:text-4xl font-semibold mt-2" style={{ color: '#f8fafc', letterSpacing: '-0.04em' }}>
+                Estruture decisões complexas com clareza visual e rigor VFT.
+              </h1>
+              <p className="text-sm md:text-base mt-4 leading-7" style={{ color: '#cbd5e1' }}>
+                Reúna contexto, stakeholders, objetivos, alternativas e análises conduzidas pela ARIA em um único estúdio.
+                Cada projeto vira uma sala de decisão persistente, pronta para retomar, revisar e apresentar.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 min-w-[260px]">
+            <div
+              className="rounded-[24px] p-4"
+              style={{ background: 'rgba(15,23,42,0.55)', border: '1px solid rgba(103,232,249,0.12)' }}
+            >
+              <p className="text-[11px] uppercase tracking-[0.22em]" style={{ color: '#67e8f9' }}>
+                Ambiente
+              </p>
+              <p className="text-3xl font-semibold mt-2" style={{ color: '#f8fafc' }}>
+                {projects.length}
+              </p>
+              <p className="text-sm mt-1" style={{ color: '#94a3b8' }}>
+                projeto{projects.length === 1 ? '' : 's'} no estúdio
+              </p>
+            </div>
+            <button
+              onClick={() => setWizardOpen(true)}
+              className="flex items-center justify-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-colors"
+              style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.18), rgba(16,185,129,0.16))', color: '#ecfeff', border: '1px solid rgba(103,232,249,0.28)' }}
+            >
+              <Plus size={15} />
+              Novo Projeto
+            </button>
+          </div>
+        </div>
       </div>
 
       {error && (
@@ -80,12 +121,18 @@ export function ProjectList() {
       )}
 
       {!loading && projects.length === 0 && !error && (
-        <div className="text-center py-16 rounded-xl" style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.07)' }}>
-          <p className="text-sm mb-4" style={{ color: '#475569' }}>Nenhum projeto. Crie seu primeiro projeto VFT.</p>
+        <div
+          className="text-center py-16 rounded-[28px]"
+          style={{
+            background: 'linear-gradient(180deg, rgba(15,23,42,0.9), rgba(10,14,22,0.96))',
+            border: '1px solid rgba(148,163,184,0.12)',
+          }}
+        >
+          <p className="text-sm mb-4" style={{ color: '#94a3b8' }}>Nenhum projeto ainda. Abra sua primeira sala de decisão VFT.</p>
           <button
             onClick={() => setWizardOpen(true)}
-            className="px-4 py-2 rounded-lg text-sm font-medium"
-            style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
+            className="px-4 py-2 rounded-2xl text-sm font-medium"
+            style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.16), rgba(16,185,129,0.12))', color: '#ecfeff', border: '1px solid rgba(103,232,249,0.22)' }}
           >
             Criar Projeto
           </button>

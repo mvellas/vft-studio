@@ -3,7 +3,7 @@ PIP    := .venv/bin/pip
 NPM    := npm
 FRONTEND := frontend
 
-.PHONY: start stop install install-py install-js build-frontend dev help
+.PHONY: start stop install install-py install-js install-hooks build-frontend dev help
 
 ## start: launch the desktop app (builds frontend if dist/ is missing)
 start:
@@ -20,6 +20,9 @@ build: build-frontend start
 ## install: set up all dependencies (Python venv + Node modules)
 install: install-py install-js
 
+install-hooks:
+	git config core.hooksPath .githooks
+
 install-py:
 	@if [ ! -f $(PYTHON) ]; then python3 -m venv .venv; fi
 	$(PIP) install -e ".[dev]" 2>/dev/null || $(PIP) install -e .
@@ -27,9 +30,9 @@ install-py:
 install-js:
 	cd $(FRONTEND) && $(NPM) install
 
-## build-frontend: compile React app into frontend/dist/ (skips type-check)
+## build-frontend: compile React app into frontend/dist/
 build-frontend:
-	cd $(FRONTEND) && npx vite build
+	cd $(FRONTEND) && $(NPM) run build
 
 ## dev: run backend + frontend dev server side by side (no webview)
 dev:

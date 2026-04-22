@@ -1,9 +1,10 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import {
   ReactFlow,
   Background,
   Controls,
   Handle,
+  Panel,
   Position,
   useNodesState,
   useEdgesState,
@@ -13,6 +14,7 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import dagre from '@dagrejs/dagre'
+import { toPng } from 'html-to-image'
 import { Loader2 } from 'lucide-react'
 import { useObjectivesStore } from '../../stores/objectivesStore'
 
@@ -97,6 +99,7 @@ interface CausalRelationsMapProps {
 }
 
 export function CausalRelationsMap({ projectId }: CausalRelationsMapProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
   const objectives = useObjectivesStore(s => s.objectives)
   const causalLinks = useObjectivesStore(s => s.causalLinks)
   const loading = useObjectivesStore(s => s.loading)
@@ -136,6 +139,19 @@ export function CausalRelationsMap({ projectId }: CausalRelationsMapProps) {
     setSyncedEdges(initialEdges)
   }, [initialNodes, initialEdges, setSyncedNodes, setSyncedEdges])
 
+  const handleExportPng = async () => {
+    if (!containerRef.current) return
+    try {
+      const dataUrl = await toPng(containerRef.current, { backgroundColor: '#0e0e13', pixelRatio: 2 })
+      const a = document.createElement('a')
+      a.href = dataUrl
+      a.download = 'causal-relations-map.png'
+      a.click()
+    } catch {
+      // Export failed silently
+    }
+  }
+
   if (loading) {
     return (
       <div className="h-full w-full flex items-center justify-center" style={{ minHeight: 400 }}>
@@ -158,7 +174,7 @@ export function CausalRelationsMap({ projectId }: CausalRelationsMapProps) {
   }
 
   return (
-    <div id="causal-relations-map" className="h-full w-full" style={{ minHeight: 400 }}>
+    <div id="causal-relations-map" ref={containerRef} className="h-full w-full" style={{ minHeight: 400, background: '#0e0e13' }}>
       <ReactFlow
         nodes={syncedNodes}
         edges={syncedEdges}
@@ -171,6 +187,15 @@ export function CausalRelationsMap({ projectId }: CausalRelationsMapProps) {
       >
         <Background variant={'dots' as Parameters<typeof Background>[0]['variant']} />
         <Controls position="bottom-left" />
+        <Panel position="top-right">
+          <button
+            type="button"
+            onClick={handleExportPng}
+            style={{ background: 'rgba(232,121,249,0.12)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.25)', borderRadius: '8px', padding: '4px 12px', fontSize: '13px', cursor: 'pointer' }}
+          >
+            Exportar PNG
+          </button>
+        </Panel>
       </ReactFlow>
     </div>
   )

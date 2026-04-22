@@ -27,10 +27,27 @@
   --color-agent-analyst: #a78bfa;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 html, body, #root {
-  background-color: #07070c;
+  background:
+    radial-gradient(circle at top left, rgba(14,165,233,0.1), transparent 24%),
+    radial-gradient(circle at 82% 8%, rgba(52,211,153,0.08), transparent 18%),
+    #05070d;
   color: #f8fafc;
   min-height: 100vh;
+}
+
+body {
+  letter-spacing: -0.01em;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(103, 232, 249, 0.22);
+  color: #f8fafc;
 }
 
 /* Dark scrollbars */

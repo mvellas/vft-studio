@@ -4,6 +4,8 @@ interface PhaseProgressProps {
   totalSteps: number
   progressPercent?: number
   compact?: boolean
+  livePhaseCounts?: Record<number, number> | null
+  liveCurrentPhase?: number | null
 }
 
 const PHASES = [
@@ -23,8 +25,10 @@ export function PhaseProgress({
   totalSteps,
   progressPercent,
   compact = false,
+  livePhaseCounts = null,
+  liveCurrentPhase = null,
 }: PhaseProgressProps) {
-  const currentPhase = getPhaseForStep(currentStep)
+  const currentPhase = liveCurrentPhase ?? getPhaseForStep(currentStep)
   const completedCount = completedSteps.length
   const pct = progressPercent ?? Math.round((completedCount / Math.max(totalSteps, 1)) * 100)
 
@@ -33,10 +37,11 @@ export function PhaseProgress({
       {/* Phase bars */}
       <div className="flex gap-3">
         {PHASES.map((phase) => {
-          const phaseSteps = completedSteps.filter(
+          const persistedSteps = completedSteps.filter(
             (s) => getPhaseForStep(s) === phase.id
           )
-          const isCompleted = phaseSteps.length >= phase.steps
+          const phaseCount = livePhaseCounts?.[phase.id] ?? persistedSteps.length
+          const isCompleted = phaseCount >= phase.steps
           const isCurrent = phase.id === currentPhase
 
           return (
@@ -52,7 +57,7 @@ export function PhaseProgress({
                   {phase.label}
                 </span>
                 <span style={{ color: '#475569', fontSize: '0.75rem' }}>
-                  {phaseSteps.length}/{phase.steps}
+                  {phaseCount}/{phase.steps}
                 </span>
               </div>
               {/* Bar */}
@@ -63,7 +68,7 @@ export function PhaseProgress({
                 <div
                   className="h-full rounded-full transition-all duration-700"
                   style={{
-                    width: `${Math.min((phaseSteps.length / phase.steps) * 100, 100)}%`,
+                    width: `${Math.min((phaseCount / phase.steps) * 100, 100)}%`,
                     background: isCompleted
                       ? 'linear-gradient(90deg, #34d399, #10b981)'
                       : isCurrent

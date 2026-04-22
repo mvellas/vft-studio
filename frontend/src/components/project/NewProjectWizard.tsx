@@ -4,6 +4,7 @@ import { projectsApi } from '../../api/projects'
 import { useProjectStore } from '../../stores/projectStore'
 import { useUiStore } from '../../stores/uiStore'
 import type { ProjectCreate } from '../../types'
+import { BrandLogo } from '../layout/BrandLogo'
 
 interface NewProjectWizardProps {
   onClose: () => void
@@ -94,11 +95,20 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ background: 'rgba(0,0,0,0.7)' }}>
-      <div className="rounded-xl shadow-2xl w-full max-w-lg" style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.08)' }}>
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ background: 'rgba(1,4,10,0.78)', backdropFilter: 'blur(12px)' }}>
+      <div
+        className="rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden"
+        style={{
+          background: 'linear-gradient(180deg, rgba(15,23,42,0.98), rgba(7,10,18,0.98))',
+          border: '1px solid rgba(148,163,184,0.16)',
+          boxShadow: '0 40px 100px rgba(2,6,23,0.45)',
+        }}
+      >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-          <h2 className="font-semibold text-lg" style={{ color: '#f8fafc' }}>Novo Projeto VFT</h2>
+        <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid rgba(148,163,184,0.1)' }}>
+          <div>
+            <BrandLogo size={40} subtitle="New Decision Room" />
+          </div>
           <button
             onClick={onClose}
             className="p-1 rounded transition-colors"
@@ -110,14 +120,14 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
         </div>
 
         {/* Step indicator */}
-        <div className="flex items-center gap-2 px-6 py-3" style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+        <div className="flex items-center gap-2 px-6 py-4" style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(148,163,184,0.1)' }}>
           {[1, 2, 3].map((s) => (
             <div key={s} className="flex items-center gap-2">
               <div
                 className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium"
                 style={
                   s <= step
-                    ? { background: 'rgba(232,121,249,0.2)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.4)' }
+                    ? { background: 'rgba(103,232,249,0.16)', color: '#67e8f9', border: '1px solid rgba(103,232,249,0.32)' }
                     : { background: 'rgba(255,255,255,0.06)', color: '#475569', border: '1px solid rgba(255,255,255,0.08)' }
                 }
               >
@@ -126,12 +136,12 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
               {s < 3 && (
                 <div
                   className="h-0.5 w-8"
-                  style={{ background: s < step ? 'rgba(232,121,249,0.4)' : 'rgba(255,255,255,0.07)' }}
+                  style={{ background: s < step ? 'rgba(103,232,249,0.34)' : 'rgba(255,255,255,0.07)' }}
                 />
               )}
             </div>
           ))}
-          <span className="ml-2 text-xs" style={{ color: '#475569' }}>Passo {step} de 3</span>
+          <span className="ml-2 text-xs" style={{ color: '#94a3b8' }}>Passo {step} de 3</span>
         </div>
 
         {/* Body */}
@@ -146,6 +156,9 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
           {step === 1 && (
             <div className="space-y-4">
               <h3 className="font-medium" style={{ color: '#f1f5f9' }}>Identificação do Projeto</h3>
+              <p className="text-sm leading-6" style={{ color: '#94a3b8' }}>
+                Dê nome e contexto à sua sala de decisão. Isso ajuda a ARIA e os especialistas a montarem uma análise mais precisa desde o início.
+              </p>
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: '#94a3b8' }}>
                   Nome do projeto <span style={{ color: '#f87171' }}>*</span>
@@ -196,7 +209,7 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
           {step === 2 && (
             <div className="space-y-4">
               <h3 className="font-medium" style={{ color: '#f1f5f9' }}>Configuração de Stakeholders</h3>
-              <p className="text-sm" style={{ color: '#64748b' }}>
+              <p className="text-sm leading-6" style={{ color: '#94a3b8' }}>
                 Selecione a variante que melhor descreve a estrutura de decisão do seu projeto.
               </p>
               <div className="space-y-3">
@@ -233,8 +246,8 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
           {step === 3 && (
             <div className="space-y-4">
               <h3 className="font-medium" style={{ color: '#f1f5f9' }}>Confirmação</h3>
-              <p className="text-sm" style={{ color: '#64748b' }}>Revise as configurações antes de criar o projeto.</p>
-              <div className="rounded-lg p-4 space-y-3 text-sm" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
+              <p className="text-sm leading-6" style={{ color: '#94a3b8' }}>Revise as configurações antes de criar o projeto.</p>
+              <div className="rounded-[24px] p-4 space-y-3 text-sm" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(148,163,184,0.1)' }}>
                 <div>
                   <span className="font-medium" style={{ color: '#94a3b8' }}>Nome:</span>{' '}
                   <span style={{ color: '#f1f5f9' }}>{name}</span>
@@ -257,19 +270,19 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+        <div className="flex items-center justify-between px-6 py-5" style={{ borderTop: '1px solid rgba(148,163,184,0.1)' }}>
           <button
             onClick={step === 1 ? onClose : handleBack}
             className="px-4 py-2 text-sm transition-colors"
-            style={{ color: '#64748b' }}
+            style={{ color: '#94a3b8' }}
           >
             {step === 1 ? 'Cancelar' : 'Voltar'}
           </button>
           {step < 3 ? (
             <button
               onClick={handleNext}
-              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
+              className="px-4 py-2 rounded-2xl text-sm font-medium transition-colors"
+              style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.18), rgba(16,185,129,0.14))', color: '#ecfeff', border: '1px solid rgba(103,232,249,0.26)' }}
             >
               Próximo
             </button>
@@ -277,8 +290,8 @@ export function NewProjectWizard({ onClose }: NewProjectWizardProps) {
             <button
               onClick={handleCreate}
               disabled={creating}
-              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
-              style={{ background: 'rgba(232,121,249,0.15)', color: '#e879f9', border: '1px solid rgba(232,121,249,0.3)' }}
+              className="px-4 py-2 rounded-2xl text-sm font-medium transition-colors disabled:opacity-50"
+              style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.18), rgba(16,185,129,0.14))', color: '#ecfeff', border: '1px solid rgba(103,232,249,0.26)' }}
             >
               {creating ? 'Criando...' : 'Criar Projeto'}
             </button>

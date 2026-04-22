@@ -20,6 +20,8 @@ Pattern source: fda-jam-sim/main.py (same developer, proven in production).
 from __future__ import annotations
 
 import asyncio
+import base64
+import json
 import socket
 import subprocess
 import sys
@@ -33,6 +35,99 @@ from dotenv import load_dotenv
 load_dotenv()
 
 FRONTEND_DIR = Path(__file__).parent / "frontend"
+
+
+def _pick_path(result: object) -> str | None:
+    if result is None:
+        return None
+    if isinstance(result, str):
+        return result
+    if isinstance(result, (list, tuple)) and result:
+        first = result[0]
+        return first if isinstance(first, str) else None
+    return None
+
+
+class DesktopBridge:
+    """Native desktop bridge exposed to pywebview windows."""
+
+    def __init__(self) -> None:
+        self.main_window: webview.Window | None = None
+
+    def bind_main_window(self, window: webview.Window) -> None:
+        self.main_window = window
+
+    def _window(self) -> webview.Window:
+        active_window_fn = getattr(webview, "active_window", None)
+        active = active_window_fn() if callable(active_window_fn) else None
+        if active is not None:
+            return active
+        if self.main_window is not None:
+            return self.main_window
+        if webview.windows:
+            return webview.windows[0]
+        raise RuntimeError("Nenhuma janela ativa disponível.")
+
+    def save_text_file(self, default_name: str, content: str) -> str | None:
+        path = _pick_path(
+            self._window().create_file_dialog(
+                webview.SAVE_DIALOG,
+                save_filename=default_name,
+            )
+        )
+        if not path:
+            return None
+        Path(path).write_text(content, encoding="utf-8")
+        return path
+
+    def save_base64_file(self, default_name: str, base64_data: str) -> str | None:
+        path = _pick_path(
+            self._window().create_file_dialog(
+                webview.SAVE_DIALOG,
+                save_filename=default_name,
+            )
+        )
+        if not path:
+            return None
+        Path(path).write_bytes(base64.b64decode(base64_data))
+        return path
+
+    def save_multiple_base64_files(self, files_json: str) -> list[str]:
+        folder = _pick_path(
+            self._window().create_file_dialog(webview.FOLDER_DIALOG)
+        )
+        if not folder:
+            return []
+        target_dir = Path(folder)
+        saved: list[str] = []
+        for item in json.loads(files_json):
+            name = str(item.get("name") or "").strip()
+            data = str(item.get("base64") or "").strip()
+            if not name or not data:
+                continue
+            path = target_dir / name
+            path.write_bytes(base64.b64decode(data))
+            saved.append(str(path))
+        return saved
+
+    def open_preview_window(
+        self,
+        title: str,
+        html: str,
+        width: int = 1280,
+        height: int = 900,
+    ) -> bool:
+        webview.create_window(
+            title,
+            html=html,
+            width=width,
+            height=height,
+            min_size=(960, 640),
+            resizable=True,
+            background_color="#0B1020",
+            js_api=self,
+        )
+        return True
 
 
 # ---------------------------------------------------------------------------
@@ -130,6 +225,8 @@ def start_app() -> None:
         sys.exit(1)
     print(f"Server ready on port {port}")
 
+    desktop_bridge = DesktopBridge()
+
     window = webview.create_window(
         "VFT Studio",
         f"http://127.0.0.1:{port}/",
@@ -138,7 +235,9 @@ def start_app() -> None:
         min_size=(1280, 800),
         resizable=True,
         background_color="#F8FAFC",
+        js_api=desktop_bridge,
     )
+    desktop_bridge.bind_main_window(window)
 
     def _on_closed() -> None:
         server = server_ref_box[0]

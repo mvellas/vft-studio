@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Loader2, Sparkles } from 'lucide-react'
+import { useChatStore } from '../../stores/chatStore'
 import { usePipelineStore } from '../../stores/pipelineStore'
 import { useUiStore } from '../../stores/uiStore'
 import { ReportView } from './ReportView'
@@ -30,6 +31,7 @@ interface Props {
 export function PipelinePanel({ projectId, projectName }: Props) {
   const { status, turns, statusFeed, reportMd, errorMessage, reset, runId } = usePipelineStore()
   const { pipelineView, setPipelineView, setChatPanelOpen } = useUiStore()
+  const { setActiveAgent, setAutoSendMessage } = useChatStore()
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const phaseTurns = turns.filter((t) => !t.isWarRoom)
@@ -39,7 +41,9 @@ export function PipelinePanel({ projectId, projectName }: Props) {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [statusFeed, status])
 
-  const handleDiscussInChat = () => {
+  const handleDiscussInChat = (message: string) => {
+    setActiveAgent('ARIA', 'facilitator')
+    setAutoSendMessage(message)
     setPipelineView('idle')
     setChatPanelOpen(true)
   }

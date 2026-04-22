@@ -45,11 +45,14 @@ function actorColor(actor: string): string {
   return palette[hash % palette.length]
 }
 
-function latestStageMeta(statusFeed: PipelineStatusItem[], stage: StageId): Record<string, unknown> {
-  for (let i = statusFeed.length - 1; i >= 0; i -= 1) {
-    if (statusFeed[i].stage === stage) return statusFeed[i].meta ?? {}
+function stageMeta(statusFeed: PipelineStatusItem[], stage: StageId): Record<string, unknown> {
+  const merged: Record<string, unknown> = {}
+  for (const item of statusFeed) {
+    if (item.stage === stage) {
+      Object.assign(merged, item.meta ?? {})
+    }
   }
-  return {}
+  return merged
 }
 
 function stageAccent(stage: StageId): string {
@@ -64,11 +67,11 @@ function stageAccent(stage: StageId): string {
 }
 
 function currentStageMetrics(stage: StageId, statusFeed: PipelineStatusItem[]): Array<{ label: string; value: string; tone: string }> {
-  const setupMeta = latestStageMeta(statusFeed, 'setup')
-  const stakeholdersMeta = latestStageMeta(statusFeed, 'stakeholders')
-  const phaseMeta = latestStageMeta(statusFeed, 'phase')
-  const warMeta = latestStageMeta(statusFeed, 'war-room')
-  const reportMeta = latestStageMeta(statusFeed, 'report')
+  const setupMeta = stageMeta(statusFeed, 'setup')
+  const stakeholdersMeta = stageMeta(statusFeed, 'stakeholders')
+  const phaseMeta = stageMeta(statusFeed, 'phase')
+  const warMeta = stageMeta(statusFeed, 'war-room')
+  const reportMeta = stageMeta(statusFeed, 'report')
 
   if (stage === 'setup') {
     return [
@@ -97,7 +100,7 @@ function currentStageMetrics(stage: StageId, statusFeed: PipelineStatusItem[]): 
 
   if (stage === 'war-room') {
     return [
-      { label: 'Participantes', value: String(Number(warMeta.participants_count ?? warMeta.stakeholders_count ?? 0)), tone: '#60a5fa' },
+      { label: 'Participantes', value: String(Math.max(1, Number(warMeta.participants_count ?? warMeta.stakeholders_count ?? 0))), tone: '#60a5fa' },
       { label: 'Rodada', value: String(Number(warMeta.round ?? warMeta.act ?? 1)), tone: '#f59e0b' },
       { label: 'Coalizões', value: String(Number(warMeta.coalitions_count ?? 0)), tone: '#34d399' },
       { label: 'Conflitos', value: String(Number(warMeta.conflicts_count ?? 0)), tone: '#f87171' },
@@ -108,6 +111,62 @@ function currentStageMetrics(stage: StageId, statusFeed: PipelineStatusItem[]): 
     { label: 'Artefato', value: `${Math.max(1, Math.round(Number(reportMeta.report_length ?? 0) / 1000))}k chars`, tone: '#c084fc' },
     { label: 'Fases usadas', value: String(Number(reportMeta.phase_outputs_count ?? 0)), tone: '#60a5fa' },
   ]
+}
+
+function stageSituation(stage: StageId, statusFeed: PipelineStatusItem[]): { label: string; detail: string; tone: string } {
+  const setupMeta = stageMeta(statusFeed, 'setup')
+  const stakeholdersMeta = stageMeta(statusFeed, 'stakeholders')
+  const phaseMeta = stageMeta(statusFeed, 'phase')
+  const warMeta = stageMeta(statusFeed, 'war-room')
+  const reportMeta = stageMeta(statusFeed, 'report')
+
+  if (stage === 'setup') {
+    return {
+      label: 'Leitura de contexto',
+      detail: `${Number(setupMeta.documents_count ?? 0)} documento(s) e descrição ${Boolean(setupMeta.has_description ?? false) ? 'disponível' : 'pendente'} sendo organizados pela ARIA.`,
+      tone: '#e879f9',
+    }
+  }
+
+  if (stage === 'stakeholders') {
+    return {
+      label: 'Mapeamento social',
+      detail: `${Number(stakeholdersMeta.stakeholders_count ?? 0)} stakeholder(s) em análise, com ${Number(stakeholdersMeta.decision_makers_count ?? 0)} decisor(es) priorizados.`,
+      tone: '#60a5fa',
+    }
+  }
+
+  if (stage === 'phase') {
+    const activeAgent = String(phaseMeta.active_agent ?? phaseMeta.completed_agent ?? 'ARIA')
+    return {
+      label: `${activeAgent} em foco`,
+      detail: 'Os especialistas estão produzindo enquadramento, objetivos, alternativas e evidências para a síntese final.',
+      tone: actorColor(activeAgent),
+    }
+  }
+
+  if (stage === 'war-room') {
+    const speaker = String(warMeta.speaker ?? 'ARIA')
+    const simulationPhase = String(warMeta.simulation_phase ?? '')
+    if (simulationPhase === 'starting' || simulationPhase === 'round_complete' || simulationPhase === 'done') {
+      return {
+        label: 'Simulação social',
+        detail: `${Math.max(1, Number(warMeta.participants_count ?? warMeta.stakeholders_count ?? 0))} participante(s), ${Number(warMeta.coalitions_count ?? 0)} coalizão(ões) e ${Number(warMeta.conflicts_count ?? 0)} tensão(ões) monitoradas.`,
+        tone: '#38bdf8',
+      }
+    }
+    return {
+      label: `${speaker} na rodada`,
+      detail: `Rodada ${Number(warMeta.round ?? warMeta.act ?? 1)} em andamento com ${Math.max(1, Number(warMeta.participants_count ?? warMeta.stakeholders_count ?? 0))} participante(s) e ${Number(warMeta.conflicts_count ?? 0)} conflito(s) em evidência.`,
+      tone: actorColor(speaker),
+    }
+  }
+
+  return {
+    label: 'Síntese final',
+    detail: `${Number(reportMeta.phase_outputs_count ?? 0)} bloco(s) de análise estão sendo consolidados em um artefato com ${Math.max(1, Math.round(Number(reportMeta.report_length ?? 0) / 1000))}k caracteres.`,
+    tone: '#c084fc',
+  }
 }
 
 function SetupScene({ documentsCount, hasDescription }: { documentsCount: number; hasDescription: boolean }) {
@@ -237,23 +296,51 @@ function SpecialistsScene({ completedCount, activeAgent }: { completedCount: num
         transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
         style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)' }}
       />
+      {activeAgent && (
+        <motion.div
+          className="absolute left-1/2 top-6 -translate-x-1/2 rounded-full px-4 py-2 text-xs font-semibold tracking-[0.18em]"
+          animate={{ opacity: [0.5, 1, 0.5], y: [0, -4, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+          style={{
+            color: actorColor(activeAgent),
+            background: `${actorColor(activeAgent)}14`,
+            border: `1px solid ${actorColor(activeAgent)}2a`,
+            boxShadow: `0 0 24px ${actorColor(activeAgent)}22`,
+          }}
+        >
+          {activeAgent} PROCESSANDO
+        </motion.div>
+      )}
     </div>
   )
 }
 
-function WarRoomScene({ participantsCount, act, turnLength }: { participantsCount: number; act: number; turnLength: number }) {
+function WarRoomScene({
+  participantsCount,
+  act,
+  turnLength,
+  conflictsCount,
+  speaker,
+}: {
+  participantsCount: number
+  act: number
+  turnLength: number
+  conflictsCount: number
+  speaker: string
+}) {
   const count = Math.max(4, Math.min(9, participantsCount || 5))
   const orbiters = Array.from({ length: count }, (_, index) => ({
     angle: (360 / count) * index,
     color: ['#60a5fa', '#fbbf24', '#34d399', '#a78bfa', '#fb7185', '#38bdf8', '#f97316'][index % 7],
   }))
-  const radius = 88 + Math.min(34, Math.floor((turnLength || 0) / 30))
+  const radius = 88 + Math.min(34, Math.floor((turnLength || 0) / 30)) + Math.min(20, conflictsCount * 2)
+  const speakerTone = actorColor(speaker || 'ARIA')
   return (
     <div className="relative mx-auto h-[280px] max-w-[520px]" style={{ transformStyle: 'preserve-3d' }}>
       <motion.div
         className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full"
-        animate={{ scale: [0.92, 1.08, 0.92] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+        animate={{ scale: [0.92, 1.08 + Math.min(0.12, conflictsCount * 0.03), 0.92] }}
+        transition={{ duration: Math.max(1.5, 2.4 - Math.min(0.8, conflictsCount * 0.12)), repeat: Infinity, ease: 'easeInOut' }}
         style={{
           background: act >= 3
             ? 'radial-gradient(circle, rgba(192,132,252,0.46), rgba(232,121,249,0.16))'
@@ -297,6 +384,20 @@ function WarRoomScene({ participantsCount, act, turnLength }: { participantsCoun
           />
         ))}
       </svg>
+
+      <motion.div
+        className="absolute left-1/2 top-5 -translate-x-1/2 rounded-full px-4 py-2 text-xs font-semibold tracking-[0.18em]"
+        animate={{ opacity: [0.45, 1, 0.45], y: [0, -5, 0] }}
+        transition={{ duration: 1.9, repeat: Infinity, ease: 'easeInOut' }}
+        style={{
+          color: speakerTone,
+          background: `${speakerTone}14`,
+          border: `1px solid ${speakerTone}28`,
+          boxShadow: `0 0 20px ${speakerTone}22`,
+        }}
+      >
+        {speaker ? `${speaker} NA MESA` : 'WAR ROOM ATIVO'}
+      </motion.div>
     </div>
   )
 }
@@ -335,11 +436,11 @@ function ReportScene({ reportLength, phaseOutputsCount }: { reportLength: number
 }
 
 function StageMicroScene({ stage, statusFeed }: { stage: StageId; statusFeed: PipelineStatusItem[] }) {
-  const setupMeta = latestStageMeta(statusFeed, 'setup')
-  const stakeholdersMeta = latestStageMeta(statusFeed, 'stakeholders')
-  const phaseMeta = latestStageMeta(statusFeed, 'phase')
-  const warMeta = latestStageMeta(statusFeed, 'war-room')
-  const reportMeta = latestStageMeta(statusFeed, 'report')
+  const setupMeta = stageMeta(statusFeed, 'setup')
+  const stakeholdersMeta = stageMeta(statusFeed, 'stakeholders')
+  const phaseMeta = stageMeta(statusFeed, 'phase')
+  const warMeta = stageMeta(statusFeed, 'war-room')
+  const reportMeta = stageMeta(statusFeed, 'report')
   switch (stage) {
     case 'stakeholders':
       return (
@@ -358,9 +459,11 @@ function StageMicroScene({ stage, statusFeed }: { stage: StageId; statusFeed: Pi
     case 'war-room':
       return (
         <WarRoomScene
-          participantsCount={Number(warMeta.participants_count ?? warMeta.stakeholders_count ?? 5)}
+          participantsCount={Math.max(1, Number(warMeta.participants_count ?? warMeta.stakeholders_count ?? 5))}
           act={Number(warMeta.act ?? 2)}
           turnLength={Number(warMeta.turn_length ?? 0)}
+          conflictsCount={Number(warMeta.conflicts_count ?? 0)}
+          speaker={String(warMeta.speaker ?? 'ARIA')}
         />
       )
     case 'report':
@@ -393,6 +496,10 @@ export function PipelineStageScene({ statusFeed }: Props) {
   const activeStage = STAGES.find((stage) => stage.id === effectiveStage) ?? STAGES[0]
   const stageMetrics = useMemo(
     () => currentStageMetrics(effectiveStage, statusFeed),
+    [effectiveStage, statusFeed],
+  )
+  const situation = useMemo(
+    () => stageSituation(effectiveStage, statusFeed),
     [effectiveStage, statusFeed],
   )
 
@@ -587,6 +694,18 @@ export function PipelineStageScene({ statusFeed }: Props) {
                   ))}
                 </div>
               )}
+
+              <div
+                className="mt-4 rounded-[18px] px-4 py-3"
+                style={{ background: `${situation.tone}12`, border: `1px solid ${situation.tone}22` }}
+              >
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: situation.tone }}>
+                  {situation.label}
+                </p>
+                <p className="mt-2 text-sm leading-6" style={{ color: '#cbd5e1' }}>
+                  {situation.detail}
+                </p>
+              </div>
             </div>
 
             <div className="space-y-3">

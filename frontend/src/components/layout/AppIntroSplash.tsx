@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { BrandLogo } from './BrandLogo'
 
 interface Props {
   onFinish: () => void
@@ -119,15 +120,17 @@ export function AppIntroSplash({ onFinish, mode, projectCount, projectName }: Pr
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
-            className="inline-flex items-center gap-3 rounded-full px-4 py-2"
+            className="inline-flex items-center gap-4 rounded-full px-4 py-3"
             style={{
               background: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.08)',
               color: '#67e8f9',
             }}
           >
-            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: '#38bdf8', boxShadow: '0 0 18px #38bdf8' }} />
-            <span className="text-xs font-semibold uppercase tracking-[0.24em]">{copy.kicker}</span>
+            <BrandLogo compact size={34} />
+            <div className="text-left">
+              <span className="text-xs font-semibold uppercase tracking-[0.24em]">{copy.kicker}</span>
+            </div>
           </motion.div>
 
           <motion.h1

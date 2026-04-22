@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Play, X } from 'lucide-react'
 import { streamPipeline } from '../../api/pipeline'
 import { usePipelineStore } from '../../stores/pipelineStore'
+import { usePhaseProgressStore } from '../../stores/phaseProgressStore'
 import { useUiStore } from '../../stores/uiStore'
 
 interface Props {
@@ -37,6 +38,7 @@ export function PipelineButton({ projectId, projectDescription }: Props) {
   const launchPipeline = (desc: string) => {
     setPipelineView('running')
     startRun('pending')
+    usePhaseProgressStore.getState().clearLiveProgress()
 
     streamPipeline(
       projectId,
@@ -47,6 +49,11 @@ export function PipelineButton({ projectId, projectDescription }: Props) {
           startRun(d.run_id)
         } else if (eventName === 'pipeline_status') {
           const payload = data as Record<string, unknown>
+          usePhaseProgressStore.getState().applyPipelineStatus({
+            stage: (payload.stage as string | undefined) ?? 'pipeline',
+            state: (payload.state as 'running' | 'done' | undefined) ?? 'running',
+            meta: (payload.meta as Record<string, unknown> | undefined) ?? {},
+          })
           addStatus({
             id: (payload.id as string | undefined) ?? `${Date.now()}`,
             title: (payload.title as string | undefined) ?? 'Processando',
@@ -67,12 +74,19 @@ export function PipelineButton({ projectId, projectDescription }: Props) {
           }
           addWarRoomTurn(wd.speaker, wd.agent_name, wd.text, wd.act)
         } else if (eventName === 'report_done') {
+          usePhaseProgressStore.getState().markPipelineComplete()
           finishRun(d.report_md ?? '')
           setPipelineView('report')
+          setTimeout(() => {
+            void usePhaseProgressStore.getState().refresh(projectId)
+          }, 250)
         }
       },
       () => {/* pipeline_done handled via report_done */},
-      (msg) => setError(msg),
+      (msg) => {
+        usePhaseProgressStore.getState().clearLiveProgress()
+        setError(msg)
+      },
     )
   }
 

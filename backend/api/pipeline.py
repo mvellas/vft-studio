@@ -30,6 +30,7 @@ from backend.schemas.pipeline import (
 )
 from backend.pipeline.orchestrator import PipelineOrchestrator
 from backend.pipeline.social_simulation import SocialSimulationEngine
+from backend.pipeline.materializer import PipelineMaterializer
 from backend.pipeline.war_room import WarRoomOrchestrator
 from backend.pipeline.report import ReportGenerator
 from backend.engine.process_manager import ProcessManager
@@ -233,6 +234,52 @@ async def run_full_pipeline(
                     "content_length": len(data.get("content", "")),
                 },
             )
+
+    yield _status_event(
+        "Materializando artefatos VFT",
+        "ARIA está convertendo a análise em stakeholders, objetivos e relações persistidas para os diagramas finais.",
+        stage="phase",
+        actor="ARIA",
+        meta={"active_agent": "ARIA", "materialization": "running"},
+    )
+    materializer = PipelineMaterializer(
+        project=project,
+        phase_outputs=orchestrator.phase_outputs,
+        war_room_transcript="",
+        session=session,
+    )
+    materialized = await materializer.run()
+    yield _status_event(
+        "Artefatos VFT preenchidos",
+        "Stakeholders, objetivos e conexões já estão prontos para alimentar nuvem, hierarquia e redes no relatório.",
+        stage="phase",
+        actor="ARIA",
+        state="done",
+        meta={
+            "completed_agent": "ARIA",
+            "materialized_stakeholders": materialized.get("stakeholders_count", 0),
+            "materialized_objectives": materialized.get("objectives_count", 0),
+            "materialized_links": materialized.get("links_count", 0),
+        },
+    )
+
+    stakeholders_result = await session.execute(
+        select(Stakeholder)
+        .where(Stakeholder.project_id == project.id)
+        .order_by(Stakeholder.order_index)
+    )
+    stakeholders = list(stakeholders_result.scalars().all())
+    stakeholder_context = [
+        {
+            "id": s.id,
+            "name": s.name,
+            "role": s.role,
+            "profile": s.profile or "(perfil não informado)",
+            "interests": s.interests or "(interesses não informados)",
+            "is_decision_maker": bool(s.is_decision_maker),
+        }
+        for s in stakeholders
+    ]
 
     # War Room
     yield _status_event(
