@@ -1,5 +1,22 @@
-import { BookOpen, Brain, MessageSquare, BotMessageSquare, Cpu, Users, Target, Lightbulb, FileText, ChevronDown, ChevronRight as ChevronRightIcon } from 'lucide-react'
 import { useState } from 'react'
+import {
+  BookOpen,
+  Brain,
+  BotMessageSquare,
+  Cpu,
+  FileImage,
+  FileText,
+  Globe,
+  Lightbulb,
+  MessageSquare,
+  Presentation,
+  Sparkles,
+  Target,
+  Users,
+  ChevronDown,
+  ChevronRight as ChevronRightIcon,
+} from 'lucide-react'
+import { BrandLogo } from '../layout/BrandLogo'
 
 interface SectionProps {
   title: string
@@ -12,7 +29,14 @@ function Section({ title, icon, children, defaultOpen = false }: SectionProps) {
   const [open, setOpen] = useState(defaultOpen)
 
   return (
-    <div style={{ background: '#0e0e13', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', overflow: 'hidden' }}>
+    <div
+      style={{
+        background: 'linear-gradient(180deg, rgba(15,23,42,0.94), rgba(8,12,20,0.96))',
+        border: '1px solid rgba(148,163,184,0.12)',
+        borderRadius: '24px',
+        overflow: 'hidden',
+      }}
+    >
       <button
         onClick={() => setOpen(!open)}
         style={{
@@ -20,24 +44,37 @@ function Section({ title, icon, children, defaultOpen = false }: SectionProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '1.25rem',
-          background: '#0e0e13',
+          padding: '1.25rem 1.35rem',
+          background: 'transparent',
           border: 'none',
           cursor: 'pointer',
           transition: 'background 0.2s',
-          textAlign: 'left'
+          textAlign: 'left',
         }}
-        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
-        onMouseLeave={(e) => e.currentTarget.style.background = '#0e0e13'}
+        onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.025)' }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <span style={{ color: '#e879f9' }}>{icon}</span>
-          <span style={{ fontWeight: '600', color: '#f1f5f9', fontSize: '0.875rem' }}>{title}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', minWidth: 0 }}>
+          <span style={{ color: '#67e8f9' }}>{icon}</span>
+          <span style={{ fontWeight: 600, color: '#f8fafc', fontSize: '0.94rem' }}>{title}</span>
         </div>
-        {open ? <ChevronDown size={16} style={{ color: '#475569' }} /> : <ChevronRightIcon size={16} style={{ color: '#475569' }} />}
+        {open
+          ? <ChevronDown size={16} style={{ color: '#64748b' }} />
+          : <ChevronRightIcon size={16} style={{ color: '#64748b' }} />}
       </button>
       {open && (
-        <div style={{ padding: '0.25rem 1.25rem 1.25rem 1.25rem', background: '#0e0e13', borderTop: '1px solid rgba(255,255,255,0.06)', fontSize: '0.875rem', color: '#94a3b8', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div
+          style={{
+            padding: '0.25rem 1.35rem 1.35rem 1.35rem',
+            borderTop: '1px solid rgba(148,163,184,0.1)',
+            fontSize: '0.9rem',
+            color: '#cbd5e1',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.8rem',
+            lineHeight: 1.7,
+          }}
+        >
           {children}
         </div>
       )}
@@ -45,220 +82,245 @@ function Section({ title, icon, children, defaultOpen = false }: SectionProps) {
   )
 }
 
-function Badge({ color, label }: { color: string; label: string }) {
-  const badgeStyles: { [key: string]: { background: string; color: string } } = {
-    'bg-indigo-100 text-indigo-700': { background: 'rgba(232,121,249,0.12)', color: '#e879f9' },
-    'bg-emerald-100 text-emerald-700': { background: 'rgba(16,185,129,0.12)', color: '#10b981' },
-    'bg-blue-100 text-blue-700': { background: 'rgba(59,130,246,0.12)', color: '#3b82f6' },
-    'bg-amber-100 text-amber-700': { background: 'rgba(245,158,11,0.12)', color: '#f59e0b' },
-    'bg-purple-100 text-purple-700': { background: 'rgba(168,85,247,0.12)', color: '#a855f7' },
+function Badge({ label, tone = 'cyan' }: { label: string; tone?: 'cyan' | 'green' | 'amber' | 'pink' | 'violet' }) {
+  const tones = {
+    cyan: { background: 'rgba(103,232,249,0.12)', color: '#67e8f9', border: '1px solid rgba(103,232,249,0.22)' },
+    green: { background: 'rgba(110,231,183,0.12)', color: '#6ee7b7', border: '1px solid rgba(110,231,183,0.2)' },
+    amber: { background: 'rgba(253,224,71,0.12)', color: '#fde047', border: '1px solid rgba(253,224,71,0.18)' },
+    pink: { background: 'rgba(244,114,182,0.12)', color: '#f9a8d4', border: '1px solid rgba(249,168,212,0.18)' },
+    violet: { background: 'rgba(196,181,253,0.12)', color: '#c4b5fd', border: '1px solid rgba(196,181,253,0.18)' },
   }
-
-  const style = badgeStyles[color] || { background: 'rgba(232,121,249,0.12)', color: '#e879f9' }
+  const style = tones[tone]
 
   return (
-    <span style={{ display: 'inline-block', fontSize: '0.75rem', fontWeight: '500', padding: '0.125rem 0.5rem', borderRadius: '9999px', ...style }}>
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        padding: '0.2rem 0.65rem',
+        borderRadius: '9999px',
+        fontSize: '0.74rem',
+        fontWeight: 600,
+        ...style,
+      }}
+    >
       {label}
     </span>
   )
 }
 
+function GuideList({ items, ordered = false }: { items: React.ReactNode[]; ordered?: boolean }) {
+  const ListTag = ordered ? 'ol' : 'ul'
+  return (
+    <ListTag style={{ paddingLeft: '1.2rem', display: 'flex', flexDirection: 'column', gap: '0.55rem', listStyleType: ordered ? 'decimal' : 'disc' }}>
+      {items.map((item, index) => (
+        <li key={index} style={{ color: '#cbd5e1' }}>{item}</li>
+      ))}
+    </ListTag>
+  )
+}
+
 export function GuideView() {
   return (
-    <div style={{ maxWidth: '48rem', marginLeft: 'auto', marginRight: 'auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      {/* Hero */}
-      <div style={{ background: 'linear-gradient(to bottom right, #e879f9, #a855f7)', borderRadius: '1rem', padding: '2rem', color: '#f8fafc' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-          <BookOpen size={28} />
-          <h1 style={{ fontSize: '1.5rem', fontWeight: '700' }}>Guia de Uso — VFT Studio</h1>
+    <div style={{ maxWidth: '54rem', marginLeft: 'auto', marginRight: 'auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <div
+        style={{
+          background: 'radial-gradient(circle at top left, rgba(14,165,233,0.22), rgba(15,23,42,0.96) 42%, rgba(8,12,20,0.98))',
+          borderRadius: '32px',
+          padding: '2rem',
+          border: '1px solid rgba(148,163,184,0.14)',
+          boxShadow: '0 26px 80px rgba(2,6,23,0.25)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+          <BrandLogo size={52} subtitle="Guide" />
+          <Badge label="VFT Studio" tone="cyan" />
+          <Badge label="Uso Atualizado" tone="green" />
         </div>
-        <p style={{ lineHeight: '1.625', color: '#e879f9' }}>
-          O VFT Studio é uma plataforma de apoio à decisão baseada no framework <strong style={{ color: '#f8fafc' }}>Value-Focused Thinking (VFT)</strong> de Vieira et al. Ele combina inteligência artificial e estruturação rigorosa de problemas para transformar decisões complexas em análises claras e fundamentadas.
+
+        <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#f8fafc', letterSpacing: '-0.04em', margin: 0 }}>
+          Guia de Uso
+        </h1>
+        <p style={{ marginTop: '0.9rem', color: '#cbd5e1', lineHeight: 1.8, maxWidth: '44rem' }}>
+          O VFT Studio estrutura problemas complexos com <strong style={{ color: '#f8fafc' }}>Value-Focused Thinking</strong>,
+          agentes especialistas, simulação social e uma facilitadora central chamada <strong style={{ color: '#f8fafc' }}>ARIA</strong>.
+          O objetivo do produto é transformar contexto difuso em stakeholders, objetivos, relações, alternativas e um relatório final realmente apresentável.
         </p>
       </div>
 
-      {/* Dois modos */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
-        <div style={{ background: '#0e0e13', borderRadius: '0.75rem', border: '1px solid rgba(232,121,249,0.2)', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#e879f9', fontWeight: '600' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+        <div style={{ background: 'rgba(15,23,42,0.82)', border: '1px solid rgba(103,232,249,0.14)', borderRadius: '24px', padding: '1.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#67e8f9', fontWeight: 600, marginBottom: '0.5rem' }}>
             <Cpu size={18} />
-            VFT com IA
+            VFT Completo com IA
           </div>
-          <p style={{ fontSize: '0.875rem', color: '#94a3b8' }}>
-            Análise automática completa. Os agentes especialistas executam todas as fases do VFT de forma autônoma — com debate em War Room e relatório final — sem intervenção do usuário.
+          <p style={{ color: '#cbd5e1', fontSize: '0.88rem', lineHeight: 1.7 }}>
+            O sistema pesquisa, estrutura e executa a análise quase inteira em background. Você acompanha o progresso por estados narrativos e recebe o relatório completo no final.
           </p>
-          <div style={{ paddingTop: '0.25rem' }}>
-            <Badge color="bg-indigo-100 text-indigo-700" label="Recomendado para exploração rápida" />
-          </div>
         </div>
-        <div style={{ background: '#0e0e13', borderRadius: '0.75rem', border: '1px solid rgba(16,185,129,0.2)', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#10b981', fontWeight: '600' }}>
+
+        <div style={{ background: 'rgba(15,23,42,0.82)', border: '1px solid rgba(110,231,183,0.14)', borderRadius: '24px', padding: '1.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#6ee7b7', fontWeight: 600, marginBottom: '0.5rem' }}>
             <BotMessageSquare size={18} />
             VFT Guiado
           </div>
-          <p style={{ fontSize: '0.875rem', color: '#94a3b8' }}>
-            ARIA facilita o processo passo a passo em conversa direta com o usuário. Você fornece os inputs, ARIA estrutura, valida e aciona os agentes especialistas conforme necessário.
+          <p style={{ color: '#cbd5e1', fontSize: '0.88rem', lineHeight: 1.7 }}>
+            Você conduz o processo junto com a ARIA, passo a passo. É o melhor modo quando quer validar decisões metodológicas, refinar objetivos ou trabalhar com mais controle humano.
           </p>
-          <div style={{ paddingTop: '0.25rem' }}>
-            <Badge color="bg-emerald-100 text-emerald-700" label="Recomendado para análise aprofundada" />
+        </div>
+
+        <div style={{ background: 'rgba(15,23,42,0.82)', border: '1px solid rgba(196,181,253,0.14)', borderRadius: '24px', padding: '1.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#c4b5fd', fontWeight: 600, marginBottom: '0.5rem' }}>
+            <MessageSquare size={18} />
+            Revisão Pós-Relatório
           </div>
+          <p style={{ color: '#cbd5e1', fontSize: '0.88rem', lineHeight: 1.7 }}>
+            Depois da análise completa, você pode pedir mudanças à ARIA no Chat IA. O relatório final passa a ser tratado como material de trabalho, não como artefato fechado.
+          </p>
         </div>
       </div>
 
-      {/* Seções expandíveis */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+        <Section title="O que o VFT Studio faz hoje" icon={<Sparkles size={18} />} defaultOpen>
+          <GuideList items={[
+            <>Ajuda a conduzir o processo VFT em <strong style={{ color: '#f8fafc' }}>3 fases</strong>, cobrindo enquadramento decisório, objetivos, atributos, alternativas e consequências.</>,
+            <>Permite análise automática com <strong style={{ color: '#f8fafc' }}>especialistas por fase</strong>, War Room, simulação social e relatório final.</>,
+            <>Mantém um <strong style={{ color: '#f8fafc' }}>Chat IA contínuo</strong> com ARIA e outros agentes para suporte metodológico e revisão do projeto.</>,
+            <>Gera artefatos visuais como <strong style={{ color: '#f8fafc' }}>nuvem de objetivos, hierarquia, rede meios-fins, mapa causal e simulação social</strong>.</>,
+            <>Exporta resultados em <strong style={{ color: '#f8fafc' }}>Markdown, PDF editorial, HTML interativo em formato de slides e PNGs dos diagramas</strong>.</>,
+          ]} />
+        </Section>
 
-        <Section title="O Framework VFT — Vieira et al." icon={<Brain size={18} />} defaultOpen>
-          <p style={{ color: '#94a3b8' }}>
-            O <strong style={{ color: '#f1f5f9' }}>Value-Focused Thinking</strong> é uma metodologia de apoio à decisão que inverte a lógica tradicional: em vez de partir das alternativas disponíveis, parte dos <strong style={{ color: '#f1f5f9' }}>valores e objetivos</strong> das partes envolvidas para então estruturar o problema e gerar alternativas superiores.
+        <Section title="Como começar um projeto" icon={<BookOpen size={18} />}>
+          <GuideList ordered items={[
+            <>Abra a tela <strong style={{ color: '#f8fafc' }}>Projetos</strong> e clique em <strong style={{ color: '#f8fafc' }}>Novo Projeto</strong>.</>,
+            <>Defina um <strong style={{ color: '#f8fafc' }}>nome claro</strong>, uma descrição do problema e, se possível, notas de contexto organizacional.</>,
+            <>Escolha a configuração inicial de stakeholders. Isso é um ponto de partida; a análise completa pode propor novos atores depois.</>,
+            <>Entre no projeto e use o cabeçalho superior para escolher entre <strong style={{ color: '#f8fafc' }}>VFT Completo com IA</strong>, <strong style={{ color: '#f8fafc' }}>VFT Guiado</strong>, <strong style={{ color: '#f8fafc' }}>Chat IA</strong> ou <strong style={{ color: '#f8fafc' }}>Diagramas</strong>.</>,
+          ]} />
+          <p style={{ color: '#94a3b8', fontSize: '0.82rem' }}>
+            Quanto melhor o contexto inicial, melhor a qualidade da definição de stakeholders, objetivos e alternativas.
           </p>
-          <p style={{ color: '#94a3b8' }}>O processo é dividido em <strong style={{ color: '#f1f5f9' }}>3 fases</strong>:</p>
-          <ol style={{ listStyleType: 'decimal', paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <li style={{ color: '#94a3b8' }}>
-              <strong style={{ color: '#f1f5f9' }}>Fase 1 — Quadro Decisório Inicial (IDF):</strong> Mapeamento de stakeholders, perspectivas e elaboração da declaração de decisão.
-            </li>
-            <li style={{ color: '#94a3b8' }}>
-              <strong style={{ color: '#f1f5f9' }}>Fase 2 — Valores e Hierarquia de Objetivos:</strong> Elicitação de valores, categorização de objetivos (estratégicos, fundamentais, meios), Teste WITI, Controle de Consequências (CoC), Rede de Meios-Fins e definição de atributos.
-            </li>
-            <li style={{ color: '#94a3b8' }}>
-              <strong style={{ color: '#f1f5f9' }}>Fase 3 — Alternativas:</strong> Identificação e geração criativa de alternativas baseadas nos objetivos fundamentais, produzindo uma Matriz de Consequências.
-            </li>
-          </ol>
-          <p style={{ color: '#64748b', fontSize: '0.75rem', paddingTop: '0.25rem' }}>
-            Referência: Vieira et al. — <em>Value-Focused Thinking: A Path to Creative Decisionmaking</em>
+        </Section>
+
+        <Section title="Como funciona o VFT Completo com IA" icon={<Cpu size={18} />}>
+          <GuideList ordered items={[
+            <>Clique em <strong style={{ color: '#f8fafc' }}>VFT Completo com IA</strong> no cabeçalho do projeto.</>,
+            <>Durante a execução, a interface mostra um <strong style={{ color: '#f8fafc' }}>console visual de status</strong>. O relatório não é exibido parcialmente; ele é montado em background.</>,
+            <>A análise pode passar por etapas como <strong style={{ color: '#f8fafc' }}>preparação do contexto, mapeamento de stakeholders, especialistas por fase, simulação social, War Room e síntese final</strong>.</>,
+            <>Ao fim da execução, o sistema exibe o <strong style={{ color: '#f8fafc' }}>relatório consolidado</strong> junto com os artefatos interativos.</>,
+            <>Depois disso, você pode clicar em <strong style={{ color: '#f8fafc' }}>Solicitar mudanças à ARIA</strong> para abrir o Chat IA já com contexto de revisão do relatório.</>,
+          ]} />
+          <div style={{ background: 'rgba(103,232,249,0.08)', borderRadius: '16px', padding: '0.85rem 1rem', color: '#cceff6', border: '1px solid rgba(103,232,249,0.12)' }}>
+            A intenção desse modo é chegar o mais perto possível de um VFT “completo de verdade”: preencher lacunas metodológicas, propor stakeholders, estruturar objetivos e articular alternativas e consequências.
+          </div>
+        </Section>
+
+        <Section title="Como funciona o VFT Guiado" icon={<BotMessageSquare size={18} />}>
+          <GuideList ordered items={[
+            <>Clique em <strong style={{ color: '#f8fafc' }}>VFT Guiado</strong>. A ARIA assume o papel de facilitadora principal.</>,
+            <>Use o chat para responder às perguntas, validar formulações e ajustar o rumo metodológico em cada passo.</>,
+            <>Quando necessário, a ARIA ajuda a transformar conversa em estrutura VFT: stakeholders, objetivos, relações, atributos e alternativas.</>,
+            <>Esse modo é o melhor quando você quer <strong style={{ color: '#f8fafc' }}>mais controle humano</strong> sobre a formulação do problema, especialmente em contextos sensíveis.</>,
+          ]} />
+        </Section>
+
+        <Section title="O que acontece depois do relatório final" icon={<MessageSquare size={18} />}>
+          <GuideList items={[
+            <>O botão <strong style={{ color: '#f8fafc' }}>Solicitar mudanças à ARIA</strong> envia você para o Chat IA com o relatório final como contexto inicial.</>,
+            <>A ARIA pode discutir mudanças em <strong style={{ color: '#f8fafc' }}>stakeholders, objetivos, relações causais, alternativas, consequências, recomendações e narrativa do relatório</strong>.</>,
+            <>Esse fluxo serve para transformar a análise automática em uma <strong style={{ color: '#f8fafc' }}>iteração facilitada</strong>, em vez de obrigar você a rerodar tudo sempre do zero.</>,
+          ]} />
+        </Section>
+
+        <Section title="Agentes e papéis" icon={<Users size={18} />}>
+          <GuideList items={[
+            <><strong style={{ color: '#f8fafc' }}>ARIA</strong>: facilitadora principal, revisora pós-relatório e mediadora da War Room.</>,
+            <><strong style={{ color: '#f8fafc' }}>FRAME</strong>: especialista da Fase 1, com foco em stakeholders, IDF e declaração de decisão.</>,
+            <><strong style={{ color: '#f8fafc' }}>AXIOM</strong>: especialista da Fase 2, com foco em valores, objetivos, WITI, CoC e estruturação de objetivos.</>,
+            <><strong style={{ color: '#f8fafc' }}>NOVA</strong>: especialista da Fase 3, com foco em alternativas e consequências.</>,
+            <><strong style={{ color: '#f8fafc' }}>ANALYST</strong>: leitura e análise de documentos para apoiar o processo com evidências.</>,
+            <>Além disso, a análise completa pode usar <strong style={{ color: '#f8fafc' }}>stakeholder agents</strong> e uma camada de simulação social para introduzir perspectivas, tensão, coalizões e votação.</>,
+          ]} />
+        </Section>
+
+        <Section title="Documentos e base contextual" icon={<FileText size={18} />}>
+          <GuideList ordered items={[
+            <>Abra a área <strong style={{ color: '#f8fafc' }}>Documentos</strong> com um projeto ativo.</>,
+            <>Envie PDFs, textos, atas, relatórios ou outros materiais relevantes.</>,
+            <>Use a análise documental para permitir que o <strong style={{ color: '#f8fafc' }}>ANALYST</strong> extraia valores, objetivos, tensões e fontes.</>,
+            <>Esses documentos podem ser usados tanto no <strong style={{ color: '#f8fafc' }}>VFT Guiado</strong> quanto no <strong style={{ color: '#f8fafc' }}>VFT Completo com IA</strong>.</>,
+          ]} />
+        </Section>
+
+        <Section title="Artefatos visuais e diagramas" icon={<Target size={18} />}>
+          <GuideList items={[
+            <><strong style={{ color: '#f8fafc' }}>Nuvem de Objetivos</strong>: visão rápida dos objetivos mais salientes.</>,
+            <><strong style={{ color: '#f8fafc' }}>Hierarquia</strong>: organização top-down de objetivos fundamentais e derivados.</>,
+            <><strong style={{ color: '#f8fafc' }}>Rede Meios-Fins</strong>: ligações de suporte entre meios e fins.</>,
+            <><strong style={{ color: '#f8fafc' }}>Mapa Causal</strong>: relações de influência entre objetivos e efeitos.</>,
+            <><strong style={{ color: '#f8fafc' }}>Simulação Social</strong>: coalizões, votos, trajetórias de posição e convergência/conflito.</>,
+          ]} />
+          <p style={{ color: '#94a3b8', fontSize: '0.82rem' }}>
+            Você pode acessar os diagramas pela aba lateral de <strong style={{ color: '#f8fafc' }}>Diagramas</strong> ou pelo bloco de artefatos interativos no relatório final.
           </p>
         </Section>
 
-        <Section title="Como usar o VFT com IA" icon={<Cpu size={18} />}>
-          <ol style={{ listStyleType: 'decimal', paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <li style={{ color: '#94a3b8' }}>Abra ou crie um projeto na tela <strong style={{ color: '#f1f5f9' }}>Projetos</strong>.</li>
-            <li style={{ color: '#94a3b8' }}>No cabeçalho do projeto, clique em <strong style={{ color: '#f1f5f9' }}>"VFT com IA"</strong>.</li>
-            <li style={{ color: '#94a3b8' }}>Se o projeto ainda não tiver descrição, um modal solicitará o contexto do problema de decisão.</li>
-            <li style={{ color: '#94a3b8' }}>O pipeline é iniciado: os agentes FRAME, AXIOM e NOVA analisam cada fase sequencialmente.</li>
-            <li style={{ color: '#94a3b8' }}>Em seguida, ocorre o <strong style={{ color: '#f1f5f9' }}>War Room</strong> — debate em 3 atos entre os especialistas, mediado por ARIA.</li>
-            <li style={{ color: '#94a3b8' }}>Ao final, um relatório completo é gerado e pode ser exportado em PDF ou Markdown.</li>
-          </ol>
-          <div style={{ background: 'rgba(232,121,249,0.08)', borderRadius: '0.5rem', padding: '0.75rem', color: '#e879f9', fontSize: '0.75rem', marginTop: '0.25rem' }}>
-            <strong>Dica:</strong> Quanto mais detalhada a descrição do projeto, mais precisa será a análise dos agentes.
-          </div>
-        </Section>
-
-        <Section title="Como usar o VFT Guiado" icon={<BotMessageSquare size={18} />}>
-          <ol style={{ listStyleType: 'decimal', paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <li style={{ color: '#94a3b8' }}>Abra um projeto e clique em <strong style={{ color: '#f1f5f9' }}>"VFT Guiado"</strong> no cabeçalho.</li>
-            <li style={{ color: '#94a3b8' }}>O painel de chat abre com <strong style={{ color: '#f1f5f9' }}>ARIA</strong> como facilitadora ativa.</li>
-            <li style={{ color: '#94a3b8' }}>ARIA guia você pelos passos do framework com perguntas direcionadas.</li>
-            <li style={{ color: '#94a3b8' }}>Responda naturalmente — ARIA interpreta suas respostas, estrutura os dados e os salva automaticamente no projeto.</li>
-            <li style={{ color: '#94a3b8' }}>Quando necessário, ARIA consulta os agentes especialistas internamente (você verá indicadores discretos de "consultando FRAME/AXIOM/NOVA...").</li>
-            <li style={{ color: '#94a3b8' }}>Ao concluir as três fases, ARIA consolida os resultados em um relatório estruturado.</li>
-          </ol>
-          <div style={{ background: 'rgba(16,185,129,0.08)', borderRadius: '0.5rem', padding: '0.75rem', color: '#10b981', fontSize: '0.75rem', marginTop: '0.25rem' }}>
-            <strong>Dica:</strong> Use este modo quando quiser controle granular sobre cada decisão ou quando o problema envolver múltiplos stakeholders reais.
-          </div>
-        </Section>
-
-        <Section title="Os Agentes Especialistas" icon={<Users size={18} />}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <Badge color="bg-indigo-100 text-indigo-700" label="ARIA" />
-              <p style={{ flex: 1, color: '#94a3b8' }}>Facilitadora principal. Orquestra o processo VFT, guia o usuário, media debates e sintetiza resultados. Sempre responde em português (PT-BR).</p>
+        <Section title="Exportações disponíveis" icon={<Presentation size={18} />}>
+          <GuideList items={[
+            <><strong style={{ color: '#f8fafc' }}>Markdown</strong>: ideal para documentação textual e versionamento.</>,
+            <><strong style={{ color: '#f8fafc' }}>PDF editorial</strong>: pronto para leitura, impressão e compartilhamento.</>,
+            <><strong style={{ color: '#f8fafc' }}>HTML interativo</strong>: apresentação em formato de slides, com foco executivo.</>,
+            <><strong style={{ color: '#f8fafc' }}>PNG dos diagramas</strong>: exportação em lote dos artefatos visuais do relatório.</>,
+          ]} />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem' }}>
+            <div style={{ borderRadius: '18px', padding: '0.9rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(148,163,184,0.08)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#67e8f9', marginBottom: '0.35rem' }}>
+                <FileText size={15} />
+                Relatório
+              </div>
+              <p style={{ margin: 0, color: '#cbd5e1', fontSize: '0.83rem' }}>Abre em janela separada e permite escolher onde salvar.</p>
             </div>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <Badge color="bg-blue-100 text-blue-700" label="FRAME" />
-              <p style={{ flex: 1, color: '#94a3b8' }}>Especialista da Fase 1. Foco em mapeamento de stakeholders, quadro decisório inicial (IDF) e declaração de decisão.</p>
+            <div style={{ borderRadius: '18px', padding: '0.9rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(148,163,184,0.08)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fde047', marginBottom: '0.35rem' }}>
+                <FileImage size={15} />
+                Diagramas PNG
+              </div>
+              <p style={{ margin: 0, color: '#cbd5e1', fontSize: '0.83rem' }}>Gera pré-visualização dos diagramas e salva todos os arquivos em lote.</p>
             </div>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <Badge color="bg-amber-100 text-amber-700" label="AXIOM" />
-              <p style={{ flex: 1, color: '#94a3b8' }}>Especialista da Fase 2. Elicitação de valores, categorização de objetivos, Teste WITI, CoC, Rede de Meios-Fins e atributos.</p>
-            </div>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <Badge color="bg-emerald-100 text-emerald-700" label="NOVA" />
-              <p style={{ flex: 1, color: '#94a3b8' }}>Especialista da Fase 3. Identificação e geração criativa de alternativas, Matriz de Consequências.</p>
-            </div>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <Badge color="bg-purple-100 text-purple-700" label="ANALYST" />
-              <p style={{ flex: 1, color: '#94a3b8' }}>Analista de documentos. Extrai valores, objetivos e posicionamentos de documentos organizacionais carregados no projeto.</p>
-            </div>
-          </div>
-          <div style={{ background: '#07070c', borderRadius: '0.5rem', padding: '0.75rem', color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem', border: '1px solid rgba(255,255,255,0.06)' }}>
-            No chat, você pode convocar qualquer agente usando <code style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 6px', borderRadius: '3px', color: '#a78bfa' }}>@ARIA</code>, <code style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 6px', borderRadius: '3px', color: '#a78bfa' }}>@FRAME</code>, <code style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 6px', borderRadius: '3px', color: '#a78bfa' }}>@AXIOM</code>, <code style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 6px', borderRadius: '3px', color: '#a78bfa' }}>@NOVA</code> ou <code style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 6px', borderRadius: '3px', color: '#a78bfa' }}>@ANALYST</code> na mensagem.
-          </div>
-        </Section>
-
-        <Section title="Documentos e Análise Organizacional" icon={<FileText size={18} />}>
-          <p style={{ color: '#94a3b8' }}>
-            O VFT Studio permite carregar documentos organizacionais (PDFs, relatórios, atas) para contextualizar a análise.
-          </p>
-          <ol style={{ listStyleType: 'decimal', paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <li style={{ color: '#94a3b8' }}>Acesse <strong style={{ color: '#f1f5f9' }}>Documentos</strong> na barra lateral com um projeto ativo.</li>
-            <li style={{ color: '#94a3b8' }}>Carregue os arquivos relevantes.</li>
-            <li style={{ color: '#94a3b8' }}>Clique em <strong style={{ color: '#f1f5f9' }}>"Analisar documentos"</strong> — o agente ANALYST extrai valores, objetivos e posições relevantes, citando fontes.</li>
-            <li style={{ color: '#94a3b8' }}>No modo <strong style={{ color: '#f1f5f9' }}>"VFT com IA"</strong>, a Fase 4 automaticamente cruza os documentos com as análises das fases anteriores.</li>
-          </ol>
-        </Section>
-
-        <Section title="Conceitos-Chave do VFT" icon={<Target size={18} />}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <div>
-              <strong style={{ color: '#f1f5f9' }}>IDF — Initial Decision Frame</strong>
-              <p style={{ color: '#94a3b8', marginTop: '0.125rem' }}>Enquadramento inicial do problema: quem decide, qual o escopo, qual a perspectiva. Define os limites da análise.</p>
-            </div>
-            <div>
-              <strong style={{ color: '#f1f5f9' }}>Teste WITI (Why Is That Important?)</strong>
-              <p style={{ color: '#94a3b8', marginTop: '0.125rem' }}>Técnica para identificar objetivos fundamentais: pergunta-se "por que isso é importante?" até chegar em valores que são fins em si mesmos.</p>
-            </div>
-            <div>
-              <strong style={{ color: '#f1f5f9' }}>CoC — Controle de Consequências</strong>
-              <p style={{ color: '#94a3b8', marginTop: '0.125rem' }}>Duas perguntas que validam se um objetivo é realmente fundamental: (1) Você pode controlar as consequências? (2) O objetivo é um fim em si mesmo?</p>
-            </div>
-            <div>
-              <strong style={{ color: '#f1f5f9' }}>Rede de Meios-Fins</strong>
-              <p style={{ color: '#94a3b8', marginTop: '0.125rem' }}>Mapa visual das relações de suporte entre objetivos de meios e fundamentais.</p>
-            </div>
-            <div>
-              <strong style={{ color: '#f1f5f9' }}>Matriz de Consequências</strong>
-              <p style={{ color: '#94a3b8', marginTop: '0.125rem' }}>Tabela que cruza as alternativas geradas com os objetivos fundamentais e seus atributos de medição.</p>
+            <div style={{ borderRadius: '18px', padding: '0.9rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(148,163,184,0.08)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6ee7b7', marginBottom: '0.35rem' }}>
+                <Globe size={15} />
+                Slides HTML
+              </div>
+              <p style={{ margin: 0, color: '#cbd5e1', fontSize: '0.83rem' }}>Abre como apresentação interativa em janela própria antes do salvamento.</p>
             </div>
           </div>
         </Section>
 
-        <Section title="Dicas de Uso Avançado" icon={<Lightbulb size={18} />}>
-          <ul style={{ listStyleType: 'disc', paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <li style={{ color: '#94a3b8' }}>
-              <strong style={{ color: '#f1f5f9' }}>Chat livre com agentes:</strong> Além dos modos estruturados, você pode conversar livremente com qualquer agente pelo botão <strong style={{ color: '#f1f5f9' }}>"Chat IA"</strong> no cabeçalho do projeto.
-            </li>
-            <li style={{ color: '#94a3b8' }}>
-              <strong style={{ color: '#f1f5f9' }}>Exportação:</strong> Relatórios podem ser exportados em <strong style={{ color: '#f1f5f9' }}>Markdown</strong> ou <strong style={{ color: '#f1f5f9' }}>PDF</strong> pelo botão de exportação na visualização do relatório.
-            </li>
-            <li style={{ color: '#94a3b8' }}>
-              <strong style={{ color: '#f1f5f9' }}>Múltiplos projetos:</strong> Crie projetos separados para diferentes decisões. Cada projeto mantém seu próprio histórico de análise, documentos e chat.
-            </li>
-            <li style={{ color: '#94a3b8' }}>
-              <strong style={{ color: '#f1f5f9' }}>Roteamento automático:</strong> No chat, se você não especificar um agente com <code style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 6px', borderRadius: '3px', color: '#a78bfa', fontSize: '0.75rem' }}>@</code>, o sistema roteia automaticamente para o agente mais adequado com base no conteúdo da mensagem.
-            </li>
-            <li style={{ color: '#94a3b8' }}>
-              <strong style={{ color: '#f1f5f9' }}>Histórico de análises:</strong> Cada execução do pipeline fica salva no histórico do projeto, permitindo comparar diferentes análises ao longo do tempo.
-            </li>
-          </ul>
+        <Section title="Conceitos-chave do framework VFT" icon={<Brain size={18} />}>
+          <GuideList items={[
+            <><strong style={{ color: '#f8fafc' }}>IDF</strong>: enquadramento inicial do problema decisório, com propósito, escopo, perspectiva e declaração de decisão.</>,
+            <><strong style={{ color: '#f8fafc' }}>WITI</strong>: pergunta “Why Is That Important?” para distinguir meios de fins.</>,
+            <><strong style={{ color: '#f8fafc' }}>CoC</strong>: verificação complementar para validar se um objetivo é realmente fundamental.</>,
+            <><strong style={{ color: '#f8fafc' }}>Atributos</strong>: forma de medir o desempenho das alternativas sobre os objetivos fundamentais.</>,
+            <><strong style={{ color: '#f8fafc' }}>Matriz de Consequências</strong>: cruzamento entre alternativas e objetivos, apoiando a comparação final.</>,
+          ]} />
         </Section>
 
-        <Section title="Chat de Suporte" icon={<MessageSquare size={18} />}>
-          <p style={{ color: '#94a3b8' }}>
-            Em qualquer momento, você pode abrir o chat com ARIA para tirar dúvidas sobre o processo VFT, pedir orientação sobre qual passo executar a seguir, ou solicitar explicações sobre conceitos do framework.
-          </p>
-          <p style={{ color: '#94a3b8' }}>
-            ARIA tem acesso ao contexto completo do seu projeto — incluindo stakeholders, objetivos e alternativas já registrados — e pode buscar informações na web quando necessário.
-          </p>
-          <div style={{ background: 'rgba(232,121,249,0.08)', borderRadius: '0.5rem', padding: '0.75rem', color: '#e879f9', fontSize: '0.75rem' }}>
-            Clique em <strong>"Chat IA"</strong> no cabeçalho do projeto para abrir o painel de chat a qualquer momento.
-          </div>
+        <Section title="Boas práticas para obter melhores análises" icon={<Lightbulb size={18} />}>
+          <GuideList items={[
+            <>Escreva uma descrição de projeto que explique <strong style={{ color: '#f8fafc' }}>quem decide, o que está em jogo, quais restrições existem e quais tensões já são percebidas</strong>.</>,
+            <>Envie documentos sempre que houver base institucional, regulatória ou histórica relevante.</>,
+            <>Use o <strong style={{ color: '#f8fafc' }}>VFT Completo com IA</strong> para gerar uma primeira estrutura ampla e depois refine com a ARIA via chat.</>,
+            <>Não trate o relatório final como encerramento obrigatório. Ele deve ser usado como <strong style={{ color: '#f8fafc' }}>base para iteração</strong>.</>,
+            <>Se um diagrama aparecer vazio, isso normalmente indica falta de dados persistidos naquela camada metodológica, não apenas um problema visual.</>,
+          ]} />
         </Section>
-
       </div>
 
-      {/* Footer */}
-      <div style={{ textAlign: 'center', fontSize: '0.75rem', color: '#64748b', paddingBottom: '1rem' }}>
-        VFT Studio · Baseado no framework Value-Focused Thinking de Vieira et al.
+      <div style={{ textAlign: 'center', fontSize: '0.78rem', color: '#94a3b8', paddingBottom: '1rem' }}>
+        VFT Studio · Guia alinhado ao fluxo atual de análise completa, revisão via ARIA e exportações nativas
       </div>
     </div>
   )

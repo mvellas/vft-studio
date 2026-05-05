@@ -1,73 +1,95 @@
-# React + TypeScript + Vite
+# VFT Studio — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 18 + TypeScript + Vite + Tailwind CSS v4. Interface do VFT Studio: análise de decisão com suporte de agentes IA.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+| Tecnologia | Versão | Uso |
+|------------|--------|-----|
+| React | 18 | Framework de UI |
+| TypeScript | 5 | Tipagem estática |
+| Vite | 6 | Build e dev server |
+| Tailwind CSS | v4 (via `@tailwindcss/vite`) | Estilo — sem postcss.config nem tailwind.config |
+| Zustand | — | Estado global (projeto, chat, UI, progresso de fases) |
+| Framer Motion | — | Transições de página e animações |
+| React Flow + Dagre | — | Diagramas interativos (hierarquia, rede meios-fins, mapa causal) |
+| Axios | — | Cliente HTTP para a API FastAPI |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Estrutura
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── api/             # Clientes Axios por domínio (projects, chat, phases, pipeline, ...)
+├── components/
+│   ├── diagrams/    # Diagramas react-flow (WarRoomGraph, WarRoomTimeline, ObjectivesCloud, ...)
+│   ├── documents/   # DocumentPanel — upload e análise documental
+│   ├── guide/       # GuideView — guia de uso completo do app
+│   ├── layout/      # AppShell, Sidebar, ChatPanel, BrandLogo, AppIntroSplash
+│   ├── phase/       # StepGuide, StepTool — modo VFT Guiado (passos 1-33)
+│   ├── phase1/      # Componentes específicos da Fase 1 (stakeholders, IDF, Decision Frame)
+│   ├── phase2/      # Componentes específicos da Fase 2 (objetivos, WITI, CoC, atributos)
+│   ├── phase3/      # Phase3View — alternativas e matriz de consequências
+│   ├── pipeline/    # PipelineButton, PipelinePanel, PipelineStageScene, ReportView, ...
+│   └── project/     # ProjectList, SettingsView, OnboardingFlow
+├── hooks/           # useChat, useResize
+├── lib/             # Utilitários
+├── pages/           # (sem router; navegação via Zustand uiStore)
+├── stores/          # projectStore, chatStore, uiStore, phaseProgressStore
+└── types/           # Interfaces TypeScript
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Views principais
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| View (uiStore) | Componente | Descrição |
+|----------------|------------|-----------|
+| `project-list` | `ProjectList` | Lista e criação de projetos |
+| `project-detail` | `ProjectDetailView` | Modo guiado (StepTool) ou Fase 3 (Phase3View) |
+| `guide` | `GuideView` | Guia de uso completo |
+| `documents` | `DocumentPanel` | Upload e análise de documentos |
+| `settings` | `SettingsView` | Configuração de API keys e preferências |
+
+O `AppShell` envolve todas as views e contém a `Sidebar` (navegação) e o `ChatPanel` (chat lateral com agentes IA).
+
+---
+
+## Modo Pipeline (VFT Completo com IA)
+
+`PipelineButton` → inicia pipeline via `POST /api/pipeline/start`  
+`PipelinePanel` → mostra status SSE do progresso narrativo  
+`PipelineStageScene` → console visual de cada etapa (War Room, simulação social, etc.)  
+`ReportView` → exibe o relatório consolidado com artefatos interativos e opções de exportação  
+`SocialSimulationArtifacts` → coalizões, votos, trajetórias e resumo executivo  
+`ArtifactExportSurface` → exportação em lote dos diagramas como PNG  
+`reportExport.ts` → geração de PDF editorial e HTML interativo (slides executivos)
+
+---
+
+## Diagramas interativos
+
+| Componente | Conteúdo |
+|------------|----------|
+| `ObjectivesCloud` | Nuvem de objetivos por saliência |
+| `InteractiveArtifacts` | Hierarquia, rede meios-fins e mapa causal (React Flow) |
+| `WarRoomGraph` | Grafo de relações da War Room |
+| `WarRoomTimeline` | Timeline narrativa da War Room |
+| `SocialSimulationArtifacts` | Coalizões, votos, convergência e sumário executivo |
+
+---
+
+## Dev
+
+```bash
+npm install
+npm run dev       # http://localhost:5173 (proxy → backend :8000)
+npm run build     # gera frontend/dist/ para o pywebview
+npm run typecheck # tsc --noEmit
 ```
+
+> `react-router-dom` **não está no package.json**. Navegação é feita via `uiStore.setView()`.  
+> Tailwind v4: sem `postcss.config.js` nem `tailwind.config.js` — configurado direto no `vite.config.ts`.

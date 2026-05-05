@@ -1,83 +1,100 @@
 # VFT Studio
 
-Decision analysis tool built on the **Value-Focused Thinking (VFT)** methodology by Ralph Keeney. It guides facilitators and analysts through a structured multi-phase process — from stakeholder mapping to value hierarchy construction — assisted by specialized AI agents.
+Ferramenta de análise de decisão baseada no framework **Value-Focused Thinking (VFT)** de Ralph Keeney. Guia facilitadores e analistas por um processo estruturado em 3 fases — do mapeamento de stakeholders à síntese de alternativas — com suporte de agentes IA especializados.
+
+---
+
+## Modos de uso
+
+| Modo | Descrição |
+|------|-----------|
+| **VFT Completo com IA** | Pipeline automático: pesquisa, stakeholders, especialistas por fase, War Room, simulação social e relatório final em background |
+| **VFT Guiado** | Processo conduzido passo a passo com a facilitadora ARIA; ideal para controle metodológico detalhado |
+| **Chat IA** | Chat contínuo com ARIA e agentes especializados para suporte, revisão e iteração pós-relatório |
 
 ---
 
 ## Features
 
-- **Guided VFT workflow** — 9-step process across phases (Stakeholders → Objectives → Alternatives → Evaluation → Synthesis)
-- **Multi-agent AI** — ARIA (facilitator), FRAME (analyst), AXIOM (strategist), NOVA (synthesis), ANALYST (document proxy)
-- **Web search** — agents perform live Brave Search queries and cite sources inline
-- **Proxy documental** — upload PDFs/documents; ANALYST extracts stakeholder values and positions
-- **Streaming chat** — real-time SSE token streaming with tool-use indicators
-- **Resizable panels** — drag to resize sidebar and chat panel
-- **Phase 3 specialization** — dedicated UI for value hierarchy construction and weight elicitation
+- **Pipeline automático** — executa o processo VFT completo em background com console de status narrativo; relatório consolidado ao final
+- **VFT Guiado** — 33 passos estruturados em 3 fases (Decision Frame → Objectives → Alternatives)
+- **Multi-agent IA** — ARIA (facilitadora), FRAME (Fase 1), AXIOM (Fase 2), NOVA (Fase 3), ANALYST (documentos), stakeholder agents
+- **War Room** — análise multi-perspectiva com agentes CEO, CFO, COO, CTO, CMO em janela flutuante redimensionável
+- **Simulação social** — modelagem de coalizões, trajetórias de posição, votação e convergência/conflito entre stakeholders
+- **Proxy documental** — upload de PDFs/documentos; ANALYST extrai stakeholders, valores e posições com citação de fontes
+- **Streaming SSE** — tokens em tempo real com indicadores de uso de ferramentas
+- **Artefatos visuais** — nuvem de objetivos, hierarquia, rede meios-fins, mapa causal, timeline e grafo da War Room
+- **Exportações** — Markdown, PDF editorial, HTML interativo (slides executivos), PNG em lote dos diagramas
+- **Revisão pós-relatório** — botão "Solicitar mudanças à ARIA" reabre chat com contexto do relatório para iteração
+- **Settings com Keychain** — API keys armazenadas no macOS Keychain via `keyring`; onboarding guiado no primeiro boot
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
+| Camada | Tecnologia |
+|--------|------------|
 | Backend | FastAPI + SQLAlchemy (async) + SQLite + Alembic |
-| AI | Anthropic Claude (claude-sonnet-4-6) via `anthropic` SDK |
-| Search | Brave Search API |
-| Frontend | React 18 + TypeScript + Vite + Tailwind CSS + Zustand |
-| Desktop | pywebview (wraps FastAPI + React as a native window) |
-| Package mgr | uv (Python), npm (Node) |
+| IA | Anthropic Claude (claude-sonnet-4-6 / claude-opus-4-6) via SDK `anthropic` |
+| Busca | Brave Search API (opcional) |
+| Frontend | React 18 + TypeScript + Vite + Tailwind CSS v4 + Zustand + Framer Motion |
+| Diagramas | React Flow + Dagre |
+| Desktop | pywebview (janela nativa macOS sobre FastAPI + React) |
+| Gerenciadores | uv (Python), npm (Node) |
 
 ---
 
 ## Setup
 
-### Prerequisites
+### Pré-requisitos
 
 - Python ≥ 3.12
 - Node.js ≥ 18
 - [uv](https://docs.astral.sh/uv/) (`pip install uv`)
 
-### 1. Clone & install
+### 1. Clonar e instalar
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/mvellas/vft-studio.git
 cd vft-studio
 
-# Python dependencies
+# Dependências Python
 uv sync
 
-# Frontend dependencies
+# Dependências frontend
 cd frontend && npm install && cd ..
 ```
 
-### 2. Configure environment
+### 2. Configurar ambiente
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env`:
+Editar `.env`:
 
 ```env
 ANTHROPIC_API_KEY=sk-ant-...
-BRAVE_SEARCH_API_KEY=BSA...       # optional — enables web search
+BRAVE_SEARCH_API_KEY=BSA...       # opcional — habilita busca web nos agentes
 DATABASE_URL=sqlite+aiosqlite:///./vft_studio.db
 ```
 
-### 3. Run database migrations
+> As API keys também podem ser configuradas via Settings dentro do app (armazenadas no macOS Keychain).
+
+### 3. Rodar migrações do banco
 
 ```bash
 uv run alembic upgrade head
 ```
 
-### 4. Start
+### 4. Iniciar
 
-**Desktop app (pywebview):**
+**App desktop (pywebview):**
 ```bash
 uv run python main.py
 ```
 
-**Development mode (hot reload):**
+**Modo desenvolvimento (hot reload):**
 ```bash
 # Terminal 1 — backend
 uv run uvicorn backend.main:app --reload --port 8000
@@ -86,60 +103,93 @@ uv run uvicorn backend.main:app --reload --port 8000
 cd frontend && npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173).
+Abrir [http://localhost:5173](http://localhost:5173).
 
 ---
 
-## Project Structure
+## Estrutura do projeto
 
 ```
 vft-studio/
 ├── backend/
-│   ├── agents/          # AI agent definitions (ARIA, FRAME, AXIOM, NOVA, ANALYST)
-│   ├── api/             # FastAPI routers (chat, phases, projects, documents, settings)
-│   ├── db/              # SQLAlchemy models + Alembic migrations
-│   ├── repositories/    # Repository pattern — data access layer
-│   └── tools/           # Tool implementations (brave_search)
+│   ├── agents/          # Agentes IA (ARIA, FRAME, AXIOM, NOVA, ANALYST, stakeholder)
+│   ├── api/             # Routers FastAPI (chat, phases, projects, documents, pipeline, settings, ...)
+│   ├── db/              # SQLAlchemy models + migrações Alembic
+│   ├── engine/          # Engine de processamento interno
+│   ├── pipeline/        # Orquestrador do pipeline automático (orchestrator, materializer, war_room, social_simulation, report)
+│   ├── repositories/    # Padrão Repository — camada de acesso a dados
+│   ├── schemas/         # Schemas Pydantic
+│   ├── services/        # Serviços transversais
+│   └── tools/           # Implementações de ferramentas (brave_search)
 ├── frontend/
-│   ├── src/
-│   │   ├── api/         # Axios API clients
-│   │   ├── components/  # React components
-│   │   ├── hooks/       # Custom hooks (useChat, useResize)
-│   │   ├── stores/      # Zustand state stores
-│   │   └── types/       # TypeScript interfaces
-│   └── vite.config.ts
-├── tests/               # pytest test suite (backend)
-├── docs/                # Planning docs and ADRs
-├── main.py              # Desktop entry point (pywebview)
+│   └── src/
+│       ├── api/         # Clientes Axios
+│       ├── components/  # Componentes React (guide, layout, phase, pipeline, diagrams, documents, ...)
+│       ├── hooks/       # Custom hooks (useChat, useResize)
+│       ├── stores/      # Zustand stores (project, chat, ui, phaseProgress)
+│       └── types/       # Interfaces TypeScript
+├── tests/               # Suite pytest (backend)
+├── docs/                # Documentação e ADRs
+├── main.py              # Entry point desktop (pywebview)
 └── alembic.ini
 ```
 
 ---
 
-## AI Agents
+## Agentes IA
 
-| Agent | Type | Role |
-|---|---|---|
-| ARIA | `facilitator` | Guides the VFT process step by step |
-| FRAME | `analyst` | Structured analysis and frameworks |
-| AXIOM | `strategist` | Strategic perspective and trade-offs |
-| NOVA | `synthesis` | Synthesis and decision recommendation |
-| ANALYST | `analyst` | Documental proxy — extracts values from uploaded documents |
+| Agente | Tipo | Papel |
+|--------|------|-------|
+| ARIA | `facilitator` | Facilitadora principal, mediadora da War Room e revisora pós-relatório |
+| FRAME | `analyst` | Especialista Fase 1: stakeholders, IDF, Decision Statement |
+| AXIOM | `strategist` | Especialista Fase 2: elicitação de valores, WITI, CoC, hierarquia de objetivos |
+| NOVA | `analyst` | Especialista Fase 3: alternativas, atributos, matriz de consequências |
+| ANALYST | `analyst` | Proxy documental: extrai valores e posições de PDFs/documentos com citação de fontes |
+| Stakeholder Agents | `stakeholder` | Representam perspectivas individuais na simulação social e War Room |
 
-All agents use `ToolAwareAgent` — capable of calling `web_search` (Brave API) and streaming results back token by token.
+Todos os agentes usam `ToolAwareAgent` com suporte a `web_search` (Brave API) e streaming SSE.
 
 ---
 
-## Running Tests
+## Pipeline automático
+
+O modo **VFT Completo com IA** executa um pipeline multi-fase:
+
+1. **Preparação de contexto** — agrega dados do projeto, documentos e stakeholders
+2. **Mapeamento de stakeholders** — propõe e valida atores via agentes
+3. **Especialistas por fase** — FRAME (Fase 1) → AXIOM (Fase 2) → NOVA (Fase 3)
+4. **War Room** — debate multi-perspectiva com CEO/CFO/COO/CTO/CMO
+5. **Simulação social** — modela dinâmicas de coalizão e convergência entre stakeholders
+6. **Síntese e relatório** — consolida artefatos em relatório estruturado com diagramas
+
+---
+
+## Testes
 
 ```bash
 uv run pytest
 ```
 
-Coverage report:
+Relatório de cobertura:
 ```bash
 uv run pytest --cov=backend --cov-report=term-missing
 ```
+
+---
+
+## Packaging macOS
+
+```bash
+python build.py
+```
+
+Gera `VFT Studio.app` em `dist/` via PyInstaller.
+
+---
+
+## Status
+
+**MVP v1.0 — Completo** (4/4 fases GSD executadas)
 
 ---
 

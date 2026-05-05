@@ -1,7 +1,7 @@
 ---
 title: "Guia de Colaboração — VFT Studio com Claude Code"
 author: "VFT Studio"
-date: "2026-04-09"
+date: "2026-05-05"
 geometry: margin=2.5cm
 fontsize: 11pt
 ---
@@ -15,8 +15,10 @@ fontsize: 11pt
 ### Pré-requisitos
 
 ```bash
-# Python via Anaconda (obrigatório — o projeto usa /opt/anaconda3/bin/python)
-# Node.js 18+
+# Python ≥ 3.12 + uv
+pip install uv
+
+# Node.js ≥ 18
 
 # Claude Code CLI
 npm install -g @anthropic-ai/claude-code
@@ -31,24 +33,36 @@ brew install gh && gh auth login
 git clone https://github.com/mvellas/vft-studio.git
 cd vft-studio
 
-# Backend
-/opt/anaconda3/bin/pip install -r backend/requirements.txt
+# Backend (Python via uv)
+uv sync
 
 # Frontend
-cd frontend && npm install
+cd frontend && npm install && cd ..
 
 # Criar pasta de dados
 mkdir -p ~/VFTStudio
 
-# Rodar
-/opt/anaconda3/bin/python main.py
+# Rodar migrações
+uv run alembic upgrade head
+
+# Iniciar
+uv run python main.py
 ```
+
+### Variáveis de ambiente
+
+```bash
+cp .env.example .env
+# Editar .env com ANTHROPIC_API_KEY e (opcional) BRAVE_SEARCH_API_KEY
+```
+
+> As API keys também podem ser configuradas dentro do app em Settings (armazenadas no macOS Keychain).
 
 ---
 
 ## 2. Workflow de colaboração no GitHub
 
-### Regra principal: nunca commitar direto no `master`
+### Regra principal: nunca commitar direto no `main`
 
 Cada pesquisador trabalha em branch própria:
 
@@ -87,9 +101,9 @@ claude  # abre sessão interativa
 | Comando | Descrição |
 |---------|-----------|
 | `/gsd:progress` | Ver onde o projeto está |
-| `/gsd:plan-phase 4` | Planejar o próximo conjunto de tasks |
-| `/gsd:execute-phase 4` | Executar os plans da fase |
-| `/gsd:verify-work 4` | Validar o que foi feito |
+| `/gsd:plan-phase 5` | Planejar o próximo conjunto de tasks |
+| `/gsd:execute-phase 5` | Executar os plans da fase |
+| `/gsd:verify-work 5` | Validar o que foi feito |
 
 ### Antes de começar qualquer sessão
 
@@ -107,22 +121,38 @@ O arquivo de handoff fica em `.planning/` e vai junto no commit — o outro pesq
 
 ---
 
-## 4. Evitar conflitos
+## 4. Estado atual do projeto (2026-05-05)
+
+**MVP v1.0 completo.** Todas as 4 fases GSD executadas:
+
+| Fase | Nome | Status |
+|------|------|--------|
+| 1 | Foundation | ✅ Completa |
+| 2 | VFT Phase 1 — Initial Decision Frame | ✅ Completa |
+| 3 | VFT Phase 2 — Decision Objectives | ✅ Completa |
+| 4 | MVP Completion (pipeline, War Room, simulação social, relatório, exportações, settings, packaging) | ✅ Completa |
+
+Próximos passos sugeridos: validação/testes no macOS, correções de bugs pós-uso, novas funcionalidades via novos milestones.
+
+---
+
+## 5. Evitar conflitos
 
 | Situação | O que fazer |
 |----------|-------------|
 | Dois trabalhando no mesmo arquivo | Dividir por plan — um faz backend, outro frontend |
-| Conflito de merge | `git pull --rebase origin master` antes de push |
+| Conflito de merge | `git pull --rebase origin main` antes de push |
 | STATE.md ou ROADMAP.md divergiu | Pull + revisar manualmente — esses arquivos são a fonte da verdade |
 | Dúvida sobre o que está feito | Ler `.planning/phases/` — cada `*-SUMMARY.md` documenta o que foi executado |
 
 ---
 
-## 5. Referências do projeto
+## 6. Referências do projeto
 
 | Recurso | Localização |
 |---------|-------------|
 | Spec completo | Vault Mestrado → `PSM/VFT Software/` |
-| Plano detalhado fases 4-7 | Obsidian → `Claude Knowledge/vft-studio/phases-4-7-original.md` |
+| Plano detalhado fases 4-7 original | Obsidian → `Claude Knowledge/vft-studio/phases-4-7-original.md` |
 | Decisões arquiteturais | `.planning/STATE.md` → seção Decisions |
 | Roadmap simplificado | `.planning/ROADMAP.md` |
+| Overview do projeto | `Claude Knowledge/vft-studio/overview.md` |
