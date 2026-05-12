@@ -21,7 +21,7 @@ from backend.db.base import get_session
 from backend.db.models import ChatMessage, ChatSession
 from backend.db.repository import BaseRepository
 from backend.schemas.chat import ChatMessageRequest, ChatMessageResponse
-from backend.agents.base_agent import BaseAgent, ToolAwareAgent, ToolUseEvent, ToolResultEvent
+from backend.agents.base_agent import AIServiceError, BaseAgent, ToolAwareAgent, ToolUseEvent, ToolResultEvent
 from backend.agents.phase1_specialist import Phase1SpecialistAgent
 from backend.agents.facilitator import FacilitatorAgent
 from backend.agents.phase2_specialist import Phase2SpecialistAgent
@@ -189,8 +189,14 @@ async def chat_message(
                 async for chunk in agent.stream(messages):
                     full_response += chunk
                     yield ServerSentEvent(data=chunk, event="delta")
-        except Exception as exc:
-            yield ServerSentEvent(data=str(exc), event="error")
+        except AIServiceError as exc:
+            yield ServerSentEvent(data=exc.user_message, event="error")
+            return
+        except Exception:
+            yield ServerSentEvent(
+                data="Falha inesperada ao falar com a IA. Tente novamente em instantes.",
+                event="error",
+            )
             return
 
         await msg_repo.create(

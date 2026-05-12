@@ -195,4 +195,4 @@ Gera `VFT Studio.app` em `dist/` via PyInstaller.
 
 ## License
 
-MIT
+Desenvolvido no ITA — Instituto Tecnológico de Aeronáutica.

@@ -23,6 +23,7 @@ from backend.db.models import (
     Stakeholder,
     StepCompletion,
 )
+from backend.agents.base_agent import AIServiceError
 from backend.schemas.pipeline import (
     PipelineRunRequest,
     PipelineRunResponse,
@@ -487,8 +488,32 @@ async def start_pipeline(
                 event_name = event_dict["event"]
                 data = json.dumps(event_dict["data"])
                 yield ServerSentEvent(data=data, event=event_name)
+        except AIServiceError as exc:
+            failed_run = await session.get(PipelineRun, run_id)
+            if failed_run:
+                failed_run.status = "error"
+                failed_run.completed_at = datetime.now(timezone.utc).isoformat()
+                await session.commit()
+
+            payload = {
+                "message": exc.user_message,
+                "status_code": exc.status_code,
+                "request_id": exc.request_id,
+            }
+            yield ServerSentEvent(data=json.dumps(payload), event="error")
         except Exception as exc:
-            yield ServerSentEvent(data=json.dumps({"message": str(exc)}), event="error")
+            failed_run = await session.get(PipelineRun, run_id)
+            if failed_run:
+                failed_run.status = "error"
+                failed_run.completed_at = datetime.now(timezone.utc).isoformat()
+                await session.commit()
+
+            yield ServerSentEvent(
+                data=json.dumps({
+                    "message": "Falha inesperada ao executar a analise com IA. Tente novamente.",
+                }),
+                event="error",
+            )
 
     return EventSourceResponse(generate())
 

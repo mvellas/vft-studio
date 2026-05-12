@@ -101,9 +101,17 @@ export function streamPipeline(
             const parsed = JSON.parse(raw)
             onEvent(currentEvent, parsed)
             if (currentEvent === 'pipeline_done') onDone()
-            if (currentEvent === 'error') onError(parsed.message ?? 'Unknown error')
+            if (currentEvent === 'error') {
+              const message =
+                typeof parsed.message === 'string' && parsed.message
+                  ? parsed.message
+                  : 'Falha ao executar a analise com IA.'
+              onError(message)
+            }
           } catch {
-            // skip malformed
+            if (currentEvent === 'error' && raw) {
+              onError(raw)
+            }
           }
         }
       }
