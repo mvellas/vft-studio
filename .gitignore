@@ -27,3 +27,6 @@ frontend/.vite/
 
 # Data
 ~/VFTStudio/
+
+# Local-only secrets / packaging inputs
+.local/

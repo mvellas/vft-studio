@@ -1,0 +1,39 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-06-18T16:52:24Z",
+  "phase": "packaging",
+  "phase_name": "desktop-installers-and-serial-activation",
+  "status": "paused",
+  "next_action": "Build the Windows installer on a Windows machine with `python build.py --target windows --package` and verify first-run activation there.",
+  "completed_tasks": [
+    "Added local serial-key activation gate before onboarding/app content.",
+    "Generated 25 accepted serial keys in `.local/serial-keys.json` and ignored `.local/` in Git.",
+    "Bundled the local serial catalog into PyInstaller builds under `license/serial-keys.json`.",
+    "Added macOS DMG packaging path and Windows PyInstaller/Inno Setup packaging files.",
+    "Built `dist/VFT Studio.app` and `dist/VFT-Studio-macOS.dmg` on macOS.",
+    "Added reproducible app icons in `packaging/icons/`, wired `.icns` into macOS spec and `.ico` into Windows/Inno Setup packaging.",
+    "Rebuilt macOS `.app` and DMG after confirming `CFBundleIconFile` is `app-icon.icns`.",
+    "Verified focused backend license/API tests and frontend production build.",
+    "Created patent-support technical documentation dossier under `docs/deposito-patente/documentacao-tecnica-vft-studio/` with manual, technical report, lab notebook, evidence register, artifact inventory, confidentiality controls, and visual evidence checklist."
+  ],
+  "remaining_tasks": [
+    "Run Windows build on Windows; PyInstaller cannot reliably cross-compile from macOS.",
+    "Optionally install Inno Setup on Windows to produce `dist/VFT-Studio-Setup.exe`; otherwise build.py creates a zip fallback.",
+    "Smoke-test double-click launch and activation from the generated macOS DMG.",
+    "Add sanitized screenshots/videos to `docs/deposito-patente/documentacao-tecnica-vft-studio/assets/` and `evidencias/` if required by the patent form."
+  ],
+  "blockers": [
+    "Windows installer artifact requires a Windows host.",
+    "The macOS build was produced with Python 3.14 via uv; if runtime issues appear, rebuild with Python 3.12 or 3.13.",
+    "`iconutil` needed to run outside the sandbox here; local terminal usage should work normally.",
+    "Patent documentation dossier intentionally avoids sensitive results from the FAB pilot-evasion study."
+  ],
+  "decisions": [
+    "Serial catalog lives in `.local/serial-keys.json`, ignored by Git, and is copied only into local build artifacts.",
+    "Activation state is stored locally in `~/VFTStudio/db.sqlite` via `app_settings`.",
+    "The app gates UI access with `/api/license/status` before showing onboarding or project content.",
+    "Windows packaging uses `VFTStudio.Windows.spec` and an optional Inno Setup script.",
+    "App icon source assets live in `packaging/icons/`; regenerate with `python3 scripts/generate_app_icons.py` if Pillow is available."
+  ],
+  "context_notes": "The source code contains only the license mechanism, not the accepted serial list. `.local/serial-keys.json` and `dist/` are ignored and should remain local-only."
+}

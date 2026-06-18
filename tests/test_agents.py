@@ -47,7 +47,7 @@ class TestBaseAgent:
             nonlocal call_count
             call_count += 1
             if call_count < 3:
-                raise ConnectionError("Transient error")
+                raise ConnectionError("connection reset")
             return mock_response
 
         with patch.object(agent.client.messages, "create", side_effect=failing_then_ok):
@@ -59,14 +59,15 @@ class TestBaseAgent:
 
     @pytest.mark.asyncio
     async def test_invoke_raises_after_3_failures(self):
+        from backend.agents.base_agent import AIServiceError
         agent = BaseAgent()
 
         async def always_fail(**kwargs):
-            raise ConnectionError("Permanent error")
+            raise ConnectionError("connection reset")
 
         with patch.object(agent.client.messages, "create", side_effect=always_fail):
             with patch("asyncio.sleep", new=AsyncMock()):
-                with pytest.raises(ConnectionError):
+                with pytest.raises(AIServiceError):
                     await agent.invoke([{"role": "user", "content": "test"}])
 
     @pytest.mark.asyncio

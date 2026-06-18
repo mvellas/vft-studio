@@ -17,20 +17,27 @@ block_cipher = None
 ROOT = Path(SPECPATH)
 FRONTEND_DIST = ROOT / "frontend" / "dist"
 PROMPTS_DIR = ROOT / "backend" / "prompts"
+SERIAL_KEYS = ROOT / ".local" / "serial-keys.json"
+APP_ICON = ROOT / "packaging" / "icons" / "app-icon.icns"
+
+datas = [
+    # Bundle pre-built frontend
+    (str(FRONTEND_DIST), "frontend/dist"),
+    # Bundle AI agent prompts
+    (str(PROMPTS_DIR), "backend/prompts"),
+    # Alembic migrations (for first-run DB init)
+    (str(ROOT / "alembic"), "alembic"),
+    (str(ROOT / "alembic.ini"), "."),
+]
+
+if SERIAL_KEYS.exists():
+    datas.append((str(SERIAL_KEYS), "license"))
 
 a = Analysis(
     [str(ROOT / "main.py")],
     pathex=[str(ROOT)],
     binaries=[],
-    datas=[
-        # Bundle pre-built frontend
-        (str(FRONTEND_DIST), "frontend/dist"),
-        # Bundle AI agent prompts
-        (str(PROMPTS_DIR), "backend/prompts"),
-        # Alembic migrations (for first-run DB init)
-        (str(ROOT / "alembic"), "alembic"),
-        (str(ROOT / "alembic.ini"), "."),
-    ],
+    datas=datas,
     hiddenimports=[
         # SQLAlchemy async drivers
         "aiosqlite",
@@ -90,7 +97,7 @@ exe = EXE(
     target_arch=None,       # universal2 for Apple Silicon + Intel
     codesign_identity=None,
     entitlements_file=None,
-    icon=None,              # Add .icns file path here when available
+    icon=str(APP_ICON) if APP_ICON.exists() else None,
 )
 
 coll = COLLECT(
@@ -107,7 +114,7 @@ coll = COLLECT(
 app = BUNDLE(
     coll,
     name="VFT Studio.app",
-    icon=None,              # Add .icns file path here when available
+    icon=str(APP_ICON) if APP_ICON.exists() else None,
     bundle_identifier="com.vftstudio.app",
     info_plist={
         "CFBundleShortVersionString": "1.0.0",

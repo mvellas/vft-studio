@@ -20,7 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from backend.db.base import init_db
-from backend.api import projects, stakeholders, phases, chat, frame, decision_frame, objectives, axiom, attributes, alternatives, export, settings, documents
+from backend.api import projects, stakeholders, phases, chat, frame, decision_frame, objectives, axiom, attributes, alternatives, export, settings, documents, license
 from backend.api.pipeline import router as pipeline_router
 from backend.api.settings import _KEYRING_SERVICE, _KEYRING_USERNAME, _BRAVE_KEYRING_USERNAME
 
@@ -91,6 +91,7 @@ app.include_router(alternatives.router, prefix="/api")
 app.include_router(export.router, prefix="/api")
 app.include_router(settings.router, prefix="/api")
 app.include_router(documents.router, prefix="/api")
+app.include_router(license.router, prefix="/api")
 app.include_router(pipeline_router, prefix="/api")
 
 

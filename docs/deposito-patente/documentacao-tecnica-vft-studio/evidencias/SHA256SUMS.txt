@@ -1,0 +1,4 @@
+841e3935f810d3a8e39ef408db14ffbd8e54e5a3ca96af4d8c15b663ee7ea9d4  dist/VFT-Studio-macOS.dmg
+9b4a7075fc58f14f304507d71e1c4940f8f804b657e8423507a837e68f58b464  packaging/icons/app-icon.icns
+8f8afd390406e6eab225d461438ff771c4880c0230e6b62bda520806b024fd95  packaging/icons/app-icon.ico
+1847e22d4ad2cc490b159d43f03f69f5669e567c5805ccc4e333e47a19f99513  docs/deposito-patente/documentacao-tecnica-vft-studio/assets/app-icon-1024.png

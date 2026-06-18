@@ -6,6 +6,7 @@ import { AppIntroSplash } from './components/layout/AppIntroSplash'
 import { ProjectList } from './components/project/ProjectList'
 import { SettingsView } from './components/project/SettingsView'
 import { OnboardingFlow } from './components/project/OnboardingFlow'
+import { LicenseGate } from './components/project/LicenseGate'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { StepGuide } from './components/phase/StepGuide'
 import { StepTool } from './components/phase/StepTool'
@@ -156,6 +157,9 @@ function App() {
   const { projects, activeProjectId } = useProjectStore()
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [onboardingChecked, setOnboardingChecked] = useState(false)
+  const [licenseChecked, setLicenseChecked] = useState(false)
+  const [licenseActivated, setLicenseActivated] = useState(false)
+  const [serialCatalogLoaded, setSerialCatalogLoaded] = useState(false)
   const [showIntro, setShowIntro] = useState(() => {
     if (typeof window === 'undefined') return false
     return sessionStorage.getItem('vftstudio-intro-seen') !== '1'
@@ -172,6 +176,15 @@ function App() {
 
   useEffect(() => {
     apiClient
+      .get<{ activated: boolean; serial_catalog_loaded: boolean }>('/api/license/status')
+      .then(r => {
+        setLicenseActivated(r.data.activated)
+        setSerialCatalogLoaded(r.data.serial_catalog_loaded)
+      })
+      .catch(() => {})
+      .finally(() => setLicenseChecked(true))
+
+    apiClient
       .get<{ completed: boolean }>('/api/settings/onboarding-completed')
       .then(r => {
         if (!r.data.completed) setShowOnboarding(true)
@@ -180,7 +193,16 @@ function App() {
       .finally(() => setOnboardingChecked(true))
   }, [])
 
-  if (!onboardingChecked) return null
+  if (!licenseChecked || !onboardingChecked) return null
+
+  if (!licenseActivated) {
+    return (
+      <LicenseGate
+        catalogLoaded={serialCatalogLoaded}
+        onActivated={() => setLicenseActivated(true)}
+      />
+    )
+  }
 
   return (
     <>

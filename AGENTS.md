@@ -1,13 +1,13 @@
 <claude-mem-context>
 # Memory Context
 
-# [vft-studio] recent context, 2026-05-12 4:53pm GMT-3
+# [vft-studio] recent context, 2026-05-25 1:34pm GMT-3
 
 Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision 🚨security_alert 🔐security_note
 Format: ID TIME TYPE TITLE
 Fetch details: get_observations([IDs]) | Search: mem-search skill
 
-Stats: 20 obs (7,897t read) | 267,196t work | 97% savings
+Stats: 21 obs (8,405t read) | 274,471t work | 97% savings
 
 ### May 5, 2026
 230 2:41p 🔵 vft-studio — Documentation Inventory Before Update
@@ -40,6 +40,7 @@ S91 vft-studio README license updated from MIT to ITA institutional attribution 
 ### May 12, 2026
 493 4:51p 🔵 vft-studio — New Project Encountered, No Handoff State
 494 4:52p 🔵 vft-studio — Project State: MVP v1.0 Complete (4 Phases, 20 Plans)
+495 " 🔵 vft-studio — Attributes API + Phase 2 Gate Architecture (Plan 03-05)
 
-Access 267k tokens of past work via get_observations([IDs]) or mem-search skill.
+Access 274k tokens of past work via get_observations([IDs]) or mem-search skill.
 </claude-mem-context>
