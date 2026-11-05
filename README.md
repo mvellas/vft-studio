@@ -145,4 +145,4 @@ uv run pytest --cov=backend --cov-report=term-missing
 
 ## License
 
-MIT
+undefined
